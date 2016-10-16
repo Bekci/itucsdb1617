@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+	<link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}" />
+	<div class="form-panel">
+		<!-- Sign In -->
+		<form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+			<div class="form-group">
+				<input type="email" class="form-control" placeholder="Email or username" required>
+			</div>
+			<div class="form-group" id="inLine">
+				<input type="password" class="form-control" style="margin-right:10px;width:auto;" placeholder="Password" required>
+				<input type="submit" value = "Login" class="btn btn-primary btn-block" style="align:right;">
+			</div>
+			<div class="checkbox" id="inLine-2">
+				<label>
+      <input type="checkbox"> Keep me logged-in</input>
+      </label>
+				<a href="" style="margin-left:10px;">Forget the password ?</a>
+			</div>
+		</form>
+
+		<!-- sign up -->
+		<form class="form" role="form" method="post" action="login" accept-charset="UTF-8" id="login-nav">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Name and surname" required>
+			</div>
+			<div class="form-group">
+				<input type="email" class="form-control" placeholder="Email address" required>
+			</div>
+			<div class="form-group">
+				<input type="password" class="form-control" placeholder="Password" required>
+			</div>
+			<button type="submit" class="btn btn-primary btn-block" style="width:auto;right:0px;">Sign up Knitter!</button>
+		</form>
+	</div>
+{% endblock %}

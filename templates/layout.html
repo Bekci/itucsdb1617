@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>Home Page</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='layout_style.css') }}" />
+	<!-- Import jQuery -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<!-- Import Latest Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+		crossorigin="anonymous">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+	{% if signedin == true %}
+	<nav class="navbar navbar-default navbar-inverse" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="{{ url_for('site.home_page') }}"><i class="fa fa-home" style="font-size:18px"></i> Home</a></li>
+					<li><a href="{{ url_for('site.login_page') }}"><i class="fa fa-bell" style="font-size:18px"></i> Notifications</a></li>
+					<li><a href="#"><i class="glyphicon glyphicon-envelope" style="font-size:18px"></i> Messages</a></li>
+				</ul>
+				<i class="fa fa-twitter" style="font-size:36px;color:white"></i>
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<div class="dropdown">
+							<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+								<img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" style="width:36px;height:36px;border-radius:12px">
+  							</button>
+							<ul class="dropdown-menu">
+								<li><a href="#">HTML</a></li>
+								<li><a href="#">CSS</a></li>
+								<li><a href="#">JavaScript</a></li>
+							</ul>
+						</div>
+					</li>
+					<li>
+						<button class="tweet">
+							<span class = "fa fa-edit"></span> Tweet
+						</button>
+					</li>
+				</ul>
+				<form class="navbar-form navbar-right" role="search">
+					<div id="custom-search-input">
+						<div class="input-group col-md-12">
+							<input type="text" class="  search-query form-control" placeholder="Search Knitter" />
+							<span class="input-group-btn">
+                                    <button class="btn" type="button">
+                                        <span class=" glyphicon glyphicon-search black" ></span>
+							</button>
+							</span>
+						</div>
+					</div>
+				</form>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+	{% else %}
+	<nav class="navbar navbar-default navbar-inverse" role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#"><i class="fa fa-home" style="font-size:18px"></i> Home</a></li>
+					<li><a href="{{ url_for('site.home_page') }}"> About Us</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li>
+						<p class="navbar-text">Language:</p>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>English</b> <span class="caret"></span></a>
+						<ul id="login-dp" class="dropdown-menu">
+							<li>
+								<div class="row">
+									<div class="col-md-12">
+										Login via
+										<div class="social-buttons">
+											<a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i>                    Facebook</a>
+											<a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
+										</div>
+										or
+										</form>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- /.navbar-collapse -->
+		</div>
+		<!-- /.container-fluid -->
+	</nav>
+	{% endif %} {% block content %} {% endblock %}
+</body>
+
+</html>
