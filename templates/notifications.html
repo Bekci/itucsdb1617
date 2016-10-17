@@ -1,19 +1,27 @@
-{% extends "layout.html" %}
-{% block title %}Movie List{% endblock %}
+{% extends "layout.html" %} 
+{% block title %}Notifications{% endblock %} 
 {% block content %}
-      <div class="page-header">
-        <h1>Movies</h1>
+<div class="container">
+	<div class="row">
+		<div name='trends' class="col-sm-4">
+      Istanbul Trends · <a href='#'>Change</a>
+      {% for trend in trends %}
+        <div name = 'trend'class="row"><a href="#">#{{trend.name}}</a><br>{{trend.info}}</div>
+      {% endfor %}
+		</div>
+		<div name='notifications' class="col-sm-4">
+			{% for notification in notifications %}
+      <div class="row" name="notification">
+        <div>{{notification.source}}</div>
+        <div>{{notification.tweet}}</div>
       </div>
-
-      <table>
-        {% for key, movie in movies %}
-        <tr>
-          <td>
-            <a href="{{ url_for('site.movie_page', key=key) }}">
-              {{ movie.title }} ({{ movie.year }})
-            </a>
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
+      {% endfor %}
+		</div>
+		<div name='who_to_follow' class="col-sm-4">
+			{% for person in people %}
+        <h3>{{ person }}</h3><br>
+      {% endfor %}
+		</div>
+	</div>
+</div>
 {% endblock %}

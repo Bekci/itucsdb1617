@@ -10,13 +10,14 @@
 	<!-- Import Latest Bootstrap -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
 		crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
 	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 
 <body>
 	{% if signedin == true %}
-	<nav class="navbar navbar-default navbar-inverse" role="navigation">
+	<nav style = 'margin-bottom:0' class="navbar navbar-default navbar-inverse" role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -31,7 +32,7 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="{{ url_for('site.home_page') }}"><i class="fa fa-home" style="font-size:18px"></i> Home</a></li>
-					<li><a href="{{ url_for('site.login_page') }}"><i class="fa fa-bell" style="font-size:18px"></i> Notifications</a></li>
+					<li><a href="{{ url_for('site.notifications_page') }}"><i class="fa fa-bell" style="font-size:18px"></i> Notifications</a></li>
 					<li><a href="#"><i class="glyphicon glyphicon-envelope" style="font-size:18px"></i> Messages</a></li>
 				</ul>
 				<i class="fa fa-twitter" style="font-size:36px;color:white"></i>
@@ -42,9 +43,10 @@
 								<img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" style="width:36px;height:36px;border-radius:12px">
   							</button>
 							<ul class="dropdown-menu">
-								<li><a href="#">HTML</a></li>
-								<li><a href="#">CSS</a></li>
-								<li><a href="#">JavaScript</a></li>
+								<li><a href="{{ url_for('site.user_profile_page') }}"><span><b>{{ username }}</b><br>View Profile</span></a></li>
+								<li><a href="{{ url_for('site.help_page') }}">Help</a></li>
+								<li><a href="{{ url_for('site.settings_page') }}">Settings</a></li>
+								<li><a href="{{ url_for('site.login_page') }}">Log Out</a></li>
 							</ul>
 						</div>
 					</li>
@@ -72,7 +74,7 @@
 		<!-- /.container-fluid -->
 	</nav>
 	{% else %}
-	<nav class="navbar navbar-default navbar-inverse" role="navigation">
+	<nav style = 'margin-bottom:0' class="navbar navbar-default navbar-inverse" role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -101,7 +103,7 @@
 									<div class="col-md-12">
 										Login via
 										<div class="social-buttons">
-											<a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i>Facebook</a>
+											<a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i>                    Facebook</a>
 											<a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
 										</div>
 										or

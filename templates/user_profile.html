@@ -1,7 +1,6 @@
-<head>
-  <meta charset="utf-8" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}" />
-</head>
+{% extends "layout.html" %} 
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}" /> 
 <div class="twPc-div">
   <a class="twPc-bg twPc-block"></a>
 	<div>
@@ -49,3 +48,4 @@
 		</div>
 	</div>
 </div>
+{% endblock %}
