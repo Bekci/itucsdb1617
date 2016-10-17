@@ -6,6 +6,10 @@ body{
     height: auto;
 }
 
+.navbar {
+    margin-bottom: 0 !important;
+}
+
 .btn-primary dropdown-toggle{
     width:36px;
     height:36px;

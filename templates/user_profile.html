@@ -1,51 +1,113 @@
-{% extends "layout.html" %} 
+{% extends "layout.html" %}
+{% block title %}Ozan Ata-{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}"/>
+{% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}" /> 
-<div class="twPc-div">
-  <a class="twPc-bg twPc-block"></a>
-	<div>
-		<div class="twPc-button">
-            <!-- Twitter Button | you can get from: https://about.twitter.com/tr/resources/buttons#follow -->
-            <a href="https://twitter.com/chatslock" class="twitter-follow-button" data-show-count="false" data-size="large" data-show-screen-name="false" data-dnt="true">Follow @mertskaplan</a>
-            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            <!-- Twitter Button -->
-		</div>
+    <img src="https://pbs.twimg.com/profile_banners/626892198/1476549918/1500x500"
+         style="width:100%;height: 500px;position: relative;">
 
-		<a title="Ozan Ata" href="https://twitter.com/chatslock" class="twPc-avatarLink">
-			<img alt="Ozan Ata" src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" class="twPc-avatarImg">
-		</a>
+    <div class="container">
+        <div class="row">
 
-		<div class="twPc-divUser">
-			<div class="twPc-divName">
-				<a href="https://twitter.com/chatslock">Ozan ATA</a>
-			</div>
-			<span>
-				<a href="https://twitter.com/chatslock">@<span>chatslock</span></a>
-			</span>
-		</div>
+            <div class="col-md-4" style="text-align: center">
+                <h3>Ozan Ata</h3>
+                <h4><span class="glyphicon glyphicon-link"></span>saykolover</h4>
+            </div>
 
-		<div class="twPc-divStats">
-			<ul class="twPc-Arrange">
-				<li class="twPc-ArrangeSizeFit">
-					<a href="https://twitter.com/chatslock" title="811 Tweet">
-						<span class="twPc-StatLabel twPc-block">Tweets</span>
-						<span class="twPc-StatValue">811</span>
-					</a>
-				</li>
-				<li class="twPc-ArrangeSizeFit">
-					<a href="https://twitter.com/chatslock/following" title="96 Following">
-						<span class="twPc-StatLabel twPc-block">Following</span>
-						<span class="twPc-StatValue">96</span>
-					</a>
-				</li>
-				<li class="twPc-ArrangeSizeFit">
-					<a href="https://twitter.com/chatslock/followers" title="100 Followers">
-						<span class="twPc-StatLabel twPc-block">Followers</span>
-						<span class="twPc-StatValue">100</span>
-					</a>
-				</li>
-			</ul>
-		</div>
-	</div>
-</div>
+            <div class="col-md-4">
+                <p style="text-align: center"><img
+                        src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                        height="200px"
+                        width="200px"
+                        style="margin-top: -125px; border-radius: 25px; border: 5px solid turquoise; text-align: center">
+                </p>
+            </div>
+
+            <div class="col-md-4" style="text-align: center; padding-top: 15px">
+                <p><span class="glyphicon glyphicon-resize-small"></span><a> web.itu.edu.tr/saykolover</a></p>
+                <p><span class="glyphicon glyphicon-share-alt"></span> Joined July 2012</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <ul class="nav nav-tabs nav-justified" style="background-color: white">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Knots <span class="badge">3</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Following <span class="badge">3</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('site.followers_page') }}">Followers <span
+                            class="badge">4</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Likes <span class="badge">2</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profile Settings</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4"
+                 style="margin-top: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+                <h4>Why Knot ?</h4>
+
+                <div class="media" style="margin-top: 30px">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object"
+                                 src="https://s-media-cache-ak0.pinimg.com/564x/d3/98/3e/d3983e83c8b95cbedadd03c181abbb53.jpg"
+                                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>adrian_smith</h4>
+                        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
+                        </button>
+                    </div>
+                </div>
+
+                <div class="media" style="margin-top: 30px">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object"
+                                 src="http://optimusprime.fansector.com/images/gallery/optimus_prime_gallery_0003.jpg"
+                                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>iamoptimusprime</h4>
+                        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
+                        </button>
+                    </div>
+                </div>
+
+                <div class="media" style="margin-top: 30px">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object"
+                                 src="https://pbs.twimg.com/profile_images/3185300157/8ffee78995192b6be24a293341519902.jpeg"
+                                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>hakan_tasiyan_01</h4>
+                        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-7"
+                 style="margin-top: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+                {% block users_content %} {% endblock %}
+            </div>
+        </div>
+
+    </div>
 {% endblock %}

@@ -24,6 +24,7 @@ def notifications_page():
 def user_profile_page():
     return render_template('user_profile.html',signedin=True)
 
+
 @site.route('/help')
 def help_page():
     return render_template('help_page.html',signedin=True)
@@ -31,6 +32,10 @@ def help_page():
 @site.route('/settings')
 def settings_page():
     return render_template('settings_page.html',signedin=True)
+
+@site.route('/user_profile/user_followers')
+def followers_page():
+    return render_template('user_followers.html',signedin=True)
 
 @site.route('/about_us')
 def about_us_page():

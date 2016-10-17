@@ -1,0 +1,51 @@
+{% extends "user_profile.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}"/>
+{% endblock %}
+{% block users_content %}
+<div class="media" style="margin-top: 30px">
+    <div class="media-left">
+        <a href="#">
+            <img class="media-object"
+                 src="https://pbs.twimg.com/profile_images/3185300157/8ffee78995192b6be24a293341519902.jpeg"
+                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+        </a>
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>hakan_tasiyan_01</h4>
+        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
+        </button>
+    </div>
+</div>
+
+<div class="media" style="margin-top: 30px">
+    <div class="media-left">
+        <a href="#">
+            <img class="media-object"
+                 src="https://pbs.twimg.com/profile_images/3185300157/8ffee78995192b6be24a293341519902.jpeg"
+                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+        </a>
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>hakan_tasiyan_01</h4>
+        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
+        </button>
+    </div>
+</div>
+
+<div class="media" style="margin-top: 30px">
+    <div class="media-left">
+        <a href="#">
+            <img class="media-object"
+                 src="https://pbs.twimg.com/profile_images/3185300157/8ffee78995192b6be24a293341519902.jpeg"
+                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+        </a>
+    </div>
+    <div class="media-body">
+        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>hakan_tasiyan_01</h4>
+        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
+        </button>
+    </div>
+</div>
+{% endblock %}

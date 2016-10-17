@@ -2,9 +2,11 @@
 <html lang="en-US">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-	<title>Home Page</title>
-	<link rel="stylesheet" href="{{ url_for('static', filename='layout_style.css') }}" />
+    {% block head %}
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>{% block title %}{% endblock %}Knitter</title>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='layout_style.css') }}" />
 	<!-- Import jQuery -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<!-- Import Latest Bootstrap -->
@@ -12,12 +14,22 @@
 		crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+        <style>
+        body {
+            background-color: #F5F8FA !important;
+        }
+        </style>
+
+
+    {% endblock %}
 </head>
 
 <body>
 	{% if signedin == true %}
-	<nav style = 'margin-bottom:0' class="navbar navbar-default navbar-inverse" role="navigation">
+
+	<nav class="navbar navbar-default navbar-inverse" role="navigation" style="margin-bottom: 0">
+
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -40,7 +52,7 @@
 					<li>
 						<div class="dropdown">
 							<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #222222">
-								<img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" style="width:36px;height:36px;border-radius:12px">
+								<img src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg" style="width:36px;height:36px;border-radius:12px">
   							</button>
 							<ul class="dropdown-menu">
 								<li><a href="{{ url_for('site.user_profile_page') }}"><span><b>{{ username }}</b><br>View Profile</span></a></li>
@@ -74,7 +86,7 @@
 		<!-- /.container-fluid -->
 	</nav>
 	{% else %}
-	<nav style = 'margin-bottom:0' class="navbar navbar-default navbar-inverse" role="navigation">
+	<nav class="navbar navbar-default navbar-inverse" role="navigation" style="margin-bottom: 0">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -106,8 +118,6 @@
 											<a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i>                    Facebook</a>
 											<a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
 										</div>
-										or
-										</form>
 									</div>
 								</div>
 							</li>
