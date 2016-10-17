@@ -1,10 +1,8 @@
 body{
     background:url("//abs.twimg.com/b/front_page/v1/EU_3.jpg");
-    min-width: 100%;
-    min-height: 100%;
     background-size: cover;
-    width: 100%;
-    height: auto;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 #inLine{
@@ -46,7 +44,7 @@ body{
     background-color:rgba(255,255,255,.8);
 }
 #login-dp .help-block{
-    font-size:12px    
+    font-size:12px
 }
 #login-dp .bottom{
     background-color:rgba(255,255,255,.8);
@@ -55,7 +53,7 @@ body{
     padding:14px;
 }
 #login-dp .social-buttons{
-    margin:12px 0    
+    margin:12px 0
 }
 #login-dp .social-buttons a{
     width: 49%;
@@ -69,7 +67,7 @@ body{
 }
 .btn-fb:hover{
     color: #fff;
-    background-color:#496ebc 
+    background-color:#496ebc
 }
 .btn-tw{
     color: #fff;
@@ -127,6 +125,5 @@ body{
 }
 
 .search-query:focus + button {
-    z-index: 3;   
+    z-index: 3;
 }
-

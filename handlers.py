@@ -36,6 +36,13 @@ def settings_page():
 def about_us_page():
     return render_template('about_us.html',signedin=True)
 
+@site.route('/account/change/password')
+def change_password_page():
+    return render_template('password_change.html', signedin=True)
+
+@site.route('/account/delete/confirm')
+def confirm_delete_account_page():
+    return render_template('account_delete_confirm.html', signedin=True)
 
 
 class Trend:

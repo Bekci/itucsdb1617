@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <div class="row" style="padding-top:50px;">
+        <div class="col-md-4">
+            <a href="http://">
+                <div class="well well-lg" style="background-color:#0084b4;margin-bottom:0;">
+</div>
+            </a>
+            <div class="well" style="background-color:white;">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" class="img-thumbnail img-responsive"/>
+                    </div>
+                    <div class="col-md-8">
+                        <div style="float:left;">
+                            <h3><b>Knitter Official</b></h3>
+
+                            <h4><small>@Knitter_Official</small></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item active"><a href="{{ url_for('site.settings_page') }} " style="color:white;">Account Settings</a></li>
+                <li class="list-group-item"><a href="{{ url_for('site.change_password_page') }}">Change Password</a></li>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <h3>Account Settings</h3>
+            <form role="form" class="form-normal" method="post" action="" accept-charset="UTF-8">
+                <div class="form-group">
+                    <label class="control-label" for="UsernameField">Username</label>
+                    <div>
+                        <input type="text" class="form-control" id="UsernameField" placeholder="Username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="EmailField">Email address</label>
+                    <div>
+                        <input type="email" class="form-control" id="EmailField" placeholder="Email Address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <div class="checkbox">
+                            <label class="control-label">
+                                <input type="checkbox"> Hide my tweets
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                    <hr />
+                    <a href="{{ url_for('site.confirm_delete_account_page') }}" style="text-align:center;display:block;">Delete my account</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
