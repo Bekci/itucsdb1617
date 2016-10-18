@@ -11,7 +11,7 @@ def login_page():
 
 @site.route('/home')
 def home_page():
-    return render_template('home_page.html', signedin=True,username="Ozan ATA")
+    return render_template('home_page.html', signedin=True)
 
 @site.route('/notifications')
 def notifications_page():
