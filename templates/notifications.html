@@ -7,28 +7,28 @@
 			<div class="col-sm-3">
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
-						<a href="#">something</a>
+					<a href="#">something</a>
 				</div>
 				<div class="col-sm-4"></div>
 			</div>
 			<div class="col-sm-3">
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
-						<a href="#">something</a>
+					<a href="#">something</a>
 				</div>
 				<div class="col-sm-4"></div>
 			</div>
 			<div class="col-sm-3">
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
-						<a href="#">something</a>
+					<a href="#">something</a>
 				</div>
 				<div class="col-sm-4"></div>
 			</div>
 			<div class="col-sm-3">
 				<div class="col-sm-4"></div>
 				<div class="col-sm-4">
-						<a href="#">something</a>
+					<a href="#">something</a>
 				</div>
 				<div class="col-sm-4"></div>
 			</div>
@@ -81,18 +81,23 @@
 				<div class="row">
 					<h5>Can you Knot?</h5>
 				</div>
-			{% for notification in notifications %}
-			<!-- style="margin-bottom:5px;padding:2px;border-radius:12px;" -->
+				{% for notification in notifications %}
+				<!-- style="margin-bottom:5px;padding:2px;border-radius:12px;" -->
 				<div class="row" style="margin-bottom:5px;background-color:#eee;border-radius:8px;padding:4px;">
-						<div class="col-xs-12 col-sm-6 col-md-3">
-							<img class="media-object" src="{{notification.img}}" style='width:48px;height:48px;border-radius:60%;margin:4px;'>
+
+					<div class="media" style="margin-top: 30px">
+						<div class="media-left">
+							<a href="#">
+								<img class="media-object" src="{{notification.img}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+							</a>
 						</div>
-						<div class="col-xs-12 col-sm-6 col-md-3">
-							<div class="row" style="color:#ccc;"><i class="glyphicon glyphicon-link">{{notification.username}}</i></div>
-							<div class="row"><button type="button" class="btn btn-info" style='padding:2px;border-radius:8px;'><i class="glyphicon glyphicon-plus">Knot</i></button></div>
+						<div class="media-body">
+							<h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{notification.username}}</h4>
+							<button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot</button>
 						</div>
+					</div>
 				</div>
-			{% endfor %}
+				{% endfor %}
 			</div>
 		</div>
 

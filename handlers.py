@@ -24,7 +24,6 @@ def notifications_page():
 def user_profile_page():
     return render_template('user_profile.html',signedin=True)
 
-
 @site.route('/help')
 def help_page():
     return render_template('help_page.html',signedin=True)
