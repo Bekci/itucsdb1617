@@ -2,6 +2,33 @@ body{
   background: #FFFFF0;
 }
 
-.media{
-  background-color: #eee;
+.row{
+  margin-top:15px;
 }
+
+.media{
+  background-color: white;
+  margin:5px;
+  padding:10px;
+  border-radius:12px;
+}
+
+.userPanel{
+  background-color: white;
+}
+
+i.btn{
+  margin-left:5px;
+}
+
+.trends{
+  background-color: white;
+  padding:10px;
+  border-radius: 8px;
+}
+
+.trend{
+  border-bottom:0.1em  #ccc solid;
+  margin-bottom:10px;
+}
+

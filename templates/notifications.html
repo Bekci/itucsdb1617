@@ -1,54 +1,34 @@
-{% extends "layout.html" %} {% block title %}Notifications{% endblock %} {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='notification_style.css') }}" />
+{% extends "layout.html" %} {% block title %}Notifications{% endblock %} {% block head %} {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='notification_style.css') }}" /> {% endblock %} {% block content %}
 
 <div class="container" style="width:90%;">
-	<div class="row" style="margin-top:20px;margin-bottom:20px;align:">
-		<div class="container">
-			<div class="col-sm-3">
-				<div class="col-sm-4"></div>
-				<div class="col-sm-4">
-					<a href="#">something</a>
-				</div>
-				<div class="col-sm-4"></div>
-			</div>
-			<div class="col-sm-3">
-				<div class="col-sm-4"></div>
-				<div class="col-sm-4">
-					<a href="#">something</a>
-				</div>
-				<div class="col-sm-4"></div>
-			</div>
-			<div class="col-sm-3">
-				<div class="col-sm-4"></div>
-				<div class="col-sm-4">
-					<a href="#">something</a>
-				</div>
-				<div class="col-sm-4"></div>
-			</div>
-			<div class="col-sm-3">
-				<div class="col-sm-4"></div>
-				<div class="col-sm-4">
-					<a href="#">something</a>
-				</div>
-				<div class="col-sm-4"></div>
-			</div>
-		</div>
+	<div class="row">
+		<ul class="nav nav-tabs nav-justified" style="background-color: white">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Mentions <span class="badge">3</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Re-knots <span class="badge">0</span></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Likes <span class="badge">33</span></a>
+			</li>
+		</ul>
 	</div>
 
 	<div class="row">
 
 		<div name='trends' class="col-sm-2">
-			<div class="row">
-				<div class="alert alert-danger">This column of the page will show trends related with the user</div>
+			<div class="alert alert-danger">This column of the page will show trends related with the user</div>
+			<div class="trends">
+				<h5>Istanbul Trends · <a href='#'>Change</a></h5>
+				{% for trend in trends %}
+				<div class="trend">
+					<a href="#">#{{trend.name}}</a><br>
+					<span>{{trend.info}}</span>
+				</div>
+				{% endfor %}
 			</div>
-			<div class="row">
-				<h3>Istanbul Trends · <a href='#'>Change</a></span>
-			</div>
-			{% for trend in trends %}
-			<div class="row">
-				<a href="#">#{{trend.name}}</a><br>{{trend.info}}
-			</div>
-			{% endfor %}
 		</div>
 
 		<div class="col-sm-1"></div>
@@ -56,51 +36,47 @@
 		<div name='notifications' class="col-sm-5">
 			<div class="alert alert-danger">This column of the page will show knots related with the user</div>
 			{% for notification in notifications %}
-			<div class="row">
-				<div class="media" style="margin:5px;padding:10px;border-radius:12px;">
-					<div class="media-left">
-						<a href="#">
-							<img class="media-object" src="{{notification.img}}" style='width:48px;height:48px;border-radius:8px;'>
-						</a>
-					</div>
-					<div class="media-body">
-						<h4 class="media-heading">{{notification.name}} <span class="userNameTag" style="color:#ccc;"> @{{notification.username}}</span></h4>
-						<div class='dataContent'>{{notification.tweet}}</div>
+			<div class="media">
+				<div class="media-left">
+					<a href="#">
+						<img class="media-object" src="{{notification.img}}" style='width:48px;height:48px;border-radius:8px;'>
+					</a>
+				</div>
+				<div class="media-body">
+					<h4 class="media-heading">{{notification.name}} <span class="userNameTag" style="color:#ccc;"> @{{notification.username}}</span></h4>
+					<div class='dataContent'>{{notification.tweet}}</div>
+					<div class="btn-group btn-group-justified">
+						<i class="btn btn-primary"><i class="glyphicon glyphicon-link"> Re-Knot</i></i>
+						<i class="btn btn-danger"><i class="glyphicon glyphicon-heart"> Like</i></i>
+						<i class="btn btn-success"><i class="glyphicon glyphicon-share"> Reply</i></i>
 					</div>
 				</div>
 			</div>
 			{% endfor %}
 		</div>
+
 		<div class="col-sm-1"></div>
 
 		<div name='users' class="col-sm-3">
-			<div class="row">
-				<div class="alert alert-danger">This column of the page will show people related with the user</div>
-			</div>
-			<div class="container-fluid">
-				<div class="row">
-					<h5>Can you Knot?</h5>
-				</div>
+			<div class="alert alert-danger">This column of the page will show people related with the user</div>
+			<div class="userPanel">
+				<h5 style="padding:10px;padding-bottom:0px;">Can you Knot?</h5>
 				{% for notification in notifications %}
 				<!-- style="margin-bottom:5px;padding:2px;border-radius:12px;" -->
-				<div class="row" style="margin-bottom:5px;background-color:#eee;border-radius:8px;padding:4px;">
-
-					<div class="media" style="margin-top: 30px">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object" src="{{notification.img}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{notification.username}}</h4>
-							<button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot</button>
-						</div>
+				<div class="media">
+					<div class="media-left">
+						<a href="#">
+							<img class="media-object" src="{{notification.img}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+						</a>
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{notification.username}}</h4>
+						<button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot</button>
 					</div>
 				</div>
 				{% endfor %}
 			</div>
 		</div>
-
 	</div>
 
 </div>
