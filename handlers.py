@@ -16,7 +16,7 @@ def home_page():
 @site.route('/notifications')
 def notifications_page():
     trends = [Trend('ozan','20.000 tweets'),Trend('berlin','100.000 tweets'),Trend('merinos','40.000 tweets')]
-    notifications = [Notification('Ozan','Bitsin artik bu cile'),Notification('Hakan altun','Gul Belalidir!'),Notification('Random Twitter Lady','@Ozan is a great guy!')]
+    notifications = [Notification('https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO_bigger.jpeg','Ozan ATA','itsozata','Bitsin artik bu cile'),Notification('https://pbs.twimg.com/media/Cu-b95cWEAIQ1V5.jpg','Hakan altun', 'saykolover','Gul Belalidir!'),Notification('https://pbs.twimg.com/profile_images/3354552894/515c6500aabb628256f4dfe03a1e1909_bigger.jpeg','Random Twitter Lady','random','@Ozan is a great guy!')]
     people = ['ozan','was','here']
     return render_template('notifications.html', signedin=True,trends=trends,notifications=notifications,people=people)
 
@@ -60,6 +60,8 @@ class Trend:
         self.info = info
 
 class Notification:
-    def __init__(self, source,tweet):
-        self.source = source
+    def __init__(self,img, name, username,tweet):
+        self.img = img
+        self.name = name
+        self.username = username
         self.tweet = tweet

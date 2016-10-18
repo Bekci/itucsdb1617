@@ -1,27 +1,102 @@
-{% extends "layout.html" %} 
-{% block title %}Notifications{% endblock %} 
-{% block content %}
-<div class="container">
-	<div class="row">
-		<div name='trends' class="col-sm-4">
-      Istanbul Trends · <a href='#'>Change</a>
-      {% for trend in trends %}
-        <div name = 'trend'class="row"><a href="#">#{{trend.name}}</a><br>{{trend.info}}</div>
-      {% endfor %}
-		</div>
-		<div name='notifications' class="col-sm-4">
-			{% for notification in notifications %}
-      <div class="row" name="notification">
-        <div>{{notification.source}}</div>
-        <div>{{notification.tweet}}</div>
-      </div>
-      {% endfor %}
-		</div>
-		<div name='who_to_follow' class="col-sm-4">
-			{% for person in people %}
-        <h3>{{ person }}</h3><br>
-      {% endfor %}
+{% extends "layout.html" %} {% block title %}Notifications{% endblock %} {% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='notification_style.css') }}" />
+
+<div class="container" style="width:90%;">
+	<div class="row" style="margin-top:20px;margin-bottom:20px;align:">
+		<div class="container">
+			<div class="col-sm-3">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+						<a href="#">something</a>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<div class="col-sm-3">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+						<a href="#">something</a>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<div class="col-sm-3">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+						<a href="#">something</a>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
+			<div class="col-sm-3">
+				<div class="col-sm-4"></div>
+				<div class="col-sm-4">
+						<a href="#">something</a>
+				</div>
+				<div class="col-sm-4"></div>
+			</div>
 		</div>
 	</div>
+
+	<div class="row">
+
+		<div name='trends' class="col-sm-2">
+			<div class="row">
+				<div class="alert alert-danger">This column of the page will show trends related with the user</div>
+			</div>
+			<div class="row">
+				<h3>Istanbul Trends · <a href='#'>Change</a></span>
+			</div>
+			{% for trend in trends %}
+			<div class="row">
+				<a href="#">#{{trend.name}}</a><br>{{trend.info}}
+			</div>
+			{% endfor %}
+		</div>
+
+		<div class="col-sm-1"></div>
+
+		<div name='notifications' class="col-sm-5">
+			<div class="alert alert-danger">This column of the page will show knots related with the user</div>
+			{% for notification in notifications %}
+			<div class="row">
+				<div class="media" style="margin:5px;padding:10px;border-radius:12px;">
+					<div class="media-left">
+						<a href="#">
+							<img class="media-object" src="{{notification.img}}" style='width:48px;height:48px;border-radius:8px;'>
+						</a>
+					</div>
+					<div class="media-body">
+						<h4 class="media-heading">{{notification.name}} <span class="userNameTag" style="color:#ccc;"> @{{notification.username}}</span></h4>
+						<div class='dataContent'>{{notification.tweet}}</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="col-sm-1"></div>
+
+		<div name='users' class="col-sm-3">
+			<div class="row">
+				<div class="alert alert-danger">This column of the page will show people related with the user</div>
+			</div>
+			<div class="container-fluid">
+				<div class="row">
+					<h5>Can you Knot?</h5>
+				</div>
+			{% for notification in notifications %}
+			<!-- style="margin-bottom:5px;padding:2px;border-radius:12px;" -->
+				<div class="row" style="margin-bottom:5px;background-color:#eee;border-radius:8px;padding:4px;">
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<img class="media-object" src="{{notification.img}}" style='width:48px;height:48px;border-radius:60%;margin:4px;'>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-3">
+							<div class="row" style="color:#ccc;"><i class="glyphicon glyphicon-link">{{notification.username}}</i></div>
+							<div class="row"><button type="button" class="btn btn-info" style='padding:2px;border-radius:8px;'><i class="glyphicon glyphicon-plus">Knot</i></button></div>
+						</div>
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+
+	</div>
+
 </div>
 {% endblock %}
