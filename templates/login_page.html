@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+
 	<link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}" />
 
 	<div class="container">
@@ -29,7 +30,7 @@
                             </div>
                             <div class="form-group">
                                 <div>
-                                    <button type="submit" class="btn btn-primary">Login</button>
+                                    <input type="button" class="btn btn-primary"  onclick="location.href='{{ url_for('site.user_profile_page') }}';" value="Login" />
                                 </div>
                             </div>
                         </form>
