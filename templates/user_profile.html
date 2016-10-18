@@ -37,7 +37,7 @@
                     <a class="nav-link" href="#">Knots <span class="badge">3</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Following <span class="badge">3</span></a>
+                    <a class="nav-link" href="{{ url_for('site.following_page') }}">Following <span class="badge">3</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('site.followers_page') }}">Followers <span
@@ -66,7 +66,7 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>adrian_smith</h4>
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> adrian_smith</h4>
                         <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
                         </button>
                     </div>
@@ -81,7 +81,7 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>iamoptimusprime</h4>
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> iamoptimusprime</h4>
                         <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
                         </button>
                     </div>
@@ -96,7 +96,7 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>hakan_tasiyan_01</h4>
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> hakan_tasiyan_01</h4>
                         <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot
                         </button>
                     </div>
@@ -104,7 +104,7 @@
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-7"
-                 style="margin-top: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+                 style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
                 {% block users_content %} {% endblock %}
             </div>
         </div>

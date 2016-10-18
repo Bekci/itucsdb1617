@@ -1,0 +1,53 @@
+{% extends "user_profile.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}"/>
+{% endblock %}
+{% block users_content %}
+    <div class="media" style="padding-top: 25px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS0Z1kJk6aPJ12xMROqK6cOAr7TGFo1MDYD56GYbCi7MgWv88VO3w"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> engin_jurnal</h4>
+            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span> Send a Message
+            </button>
+        </div>
+    </div>
+
+    <div class="media" style="padding-top: 25px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="http://vignette1.wikia.nocookie.net/marvelmovies/images/1/16/Deadpool_Total_Film_4.jpg/revision/latest/zoom-crop/width/320/height/320?cb=20160118020149"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> where_is_francis</h4>
+            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span> Send a Message
+            </button>
+        </div>
+    </div>
+
+    <div class="media" style="padding-top: 25px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvwaQaYhdR4210oruGycYgJF1e-AS9g_m0aGggRZQWMAqtvujV"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> amokachi_bjk</h4>
+            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-plus"></span> Send a Message
+            </button>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -33,9 +33,13 @@ def help_page():
 def settings_page():
     return render_template('settings_page.html',signedin=True)
 
-@site.route('/user_profile/user_followers')
+@site.route('/user_profile/followers')
 def followers_page():
     return render_template('user_followers.html',signedin=True)
+
+@site.route('/user_profile/following')
+def following_page():
+    return render_template('user_followings.html',signedin=True)
 
 @site.route('/about_us')
 def about_us_page():
