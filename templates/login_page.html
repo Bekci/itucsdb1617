@@ -1,38 +1,67 @@
-{% extends "layout.html" %} {% block content %}
+{% extends "layout.html" %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}" />
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}"/>
+{% endblock %}
 
-<div class="container">
-	<div class="row">
-		<div class="col-md-4 col-md-offset-4" style="margin-top:20%">
-			<form>
-				<div class="form-group">
-					<label>Knitter Name</label>
-					<div class="input-group">
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4" style="margin-top:20%">
+                <form>
+                    <div class="form-group">
+                        <label>Knitter Name</label>
+                        <div class="input-group">
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-user"></span>
 						</span>
-						<input type="text" name="knitter-name" class="form-control" />
-					</div>
-				</div>
+                            <input type="text" name="knitter-name" class="form-control"/>
+                        </div>
+                    </div>
 
-				<div class="form-group">
-					<label>Knotword</label>
-					<div class="input-group">
+                    <div class="form-group">
+                        <label>Knotword</label>
+                        <div class="input-group">
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-lock"></span>
 						</span>
-						<input type="password" name="knotword" class="form-control" />
-					</div>
-				</div>
+                            <input type="password" name="knotword" class="form-control"/>
+                        </div>
+                    </div>
 
-				<div class="form-group">
-					<input type="button" class="btn btn-success btn-block" onclick="location.href='{{ url_for('site.user_profile_page') }}';"
-						value="Login" />
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
+                    <div class="form-group">
+                        <input type="button" class="btn btn-success btn-block"
+                               onclick="location.href='{{ url_for('site.user_profile_page') }}';"
+                               value="Login"/>
+                    </div>
+                </form>
+
+                <div style="text-align: center">
+                    <a class="btn btn-social-icon btn-odnoklassniki">
+                        <span class="fa fa-odnoklassniki"></span>
+                    </a>
+
+                    <a class="btn btn-social-icon btn-facebook">
+                        <span class="fa fa-facebook"></span>
+                    </a>
+                    <a class="btn btn-social-icon btn-yahoo">
+                        <span class="fa fa-yahoo"></span>
+                    </a>
+
+                    <a class="btn btn-social-icon btn-github">
+                        <span class="fa fa-github"></span>
+                    </a>
+
+                    <a class="btn btn-social-icon btn-google">
+                        <span class="fa fa-google"></span>
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 
 {% endblock %}

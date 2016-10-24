@@ -7,6 +7,7 @@
     <title>{% block title %}{% endblock %}Knitter</title>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='layout_style.css') }}" />
+
 	<!-- Import jQuery -->
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 	<!-- Import Latest Bootstrap -->
@@ -14,13 +15,13 @@
 		crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 		crossorigin="anonymous"></script>
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
         <style>
         body {
             background-color: #F5F8FA !important;
         }
         </style>
-
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-social.css') }}" />
 
     {% endblock %}
 </head>
@@ -43,9 +44,9 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="{{ url_for('site.home_page') }}"><i class="fa fa-home" style="font-size:18px"></i> Home</a></li>
-					<li><a href="{{ url_for('site.notifications_page') }}"><i class="fa fa-bell" style="font-size:18px"></i> Notifications</a></li>
-					<li><a href="#"><i class="glyphicon glyphicon-envelope" style="font-size:18px"></i> Messages</a></li>
+					<li class="{% if request.path == '/home' %}active{% endif %}"><a href="{{ url_for('site.home_page') }}"><i class="fa fa-home" style="font-size:18px"></i> Home</a></li>
+					<li class="{% if request.path == '/notifications' %}active{% endif %}"><a href="{{ url_for('site.notifications_page') }}"><i class="fa fa-bell" style="font-size:18px"></i> Notifications</a></li>
+					<li class="{% if request.path == '/messages' %}active{% endif %}"><a href="#"><i class="glyphicon glyphicon-envelope" style="font-size:18px"></i> Messages</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li>
@@ -99,29 +100,8 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#"><i class="fa fa-home" style="font-size:18px"></i> Home</a></li>
-					<li><a href="{{ url_for('site.about_us_page') }}"> About Us</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-					<li>
-						<p class="navbar-text">Language:</p>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>English</b> <span class="caret"></span></a>
-						<ul id="login-dp" class="dropdown-menu">
-							<li>
-								<div class="row">
-									<div class="col-md-12">
-										Login via
-										<div class="social-buttons">
-											<a href="#" class="btn btn-fb"><i class="fa fa-facebook"></i>                    Facebook</a>
-											<a href="#" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
-										</div>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</li>
+                    <li><a class="navbar-brand" href="{{ url_for('site.login_page') }}">Knitter</a></li>
+					<li><a href="{{ url_for('site.about_us_page') }}">About Us</a></li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -129,6 +109,7 @@
 		<!-- /.container-fluid -->
 	</nav>
 	{% endif %} {% block content %} {% endblock %}
+
 </body>
 
 </html>

@@ -1,0 +1,41 @@
+{% extends "user_profile.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}"/>
+{% endblock %}
+{% block users_content %}
+    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+        <div style="padding: 15px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="https://avatars3.githubusercontent.com/u/1024025?v=3&s=400"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> linus_torvalds</h4>
+            I suggest you to use Angular2 also !
+        </div>
+        </div>
+    </div>
+
+    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+        <div style="padding: 15px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="http://a5.files.biography.com/image/upload/c_fill,cs_srgb,dpr_1.0,g_face,h_300,q_80,w_300/MTE1ODA0OTcxODMwMDUyMzY1.jpg"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> the_woz</h4>
+            When we built Apple II, there was only one thing in my mind, when will Angular2 come ?
+        </div>
+            </div>
+    </div>
+
+
+
+{% endblock %}

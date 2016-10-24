@@ -1,0 +1,57 @@
+{% extends "user_profile.html" %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}"/>
+{% endblock %}
+{% block users_content %}
+    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+        <div style="padding: 15px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
+            Angular JS rullzzzz !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        </div>
+        </div>
+    </div>
+
+    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+        <div style="padding: 15px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
+            Flask ? You gotta be kidding ! Use Angular2
+        </div>
+            </div>
+    </div>
+
+    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+    <div style="padding: 15px">
+        <div class="media-left">
+            <a href="#">
+                <img class="media-object"
+                     src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                     alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+            </a>
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
+            I love python but when it comes to web development never use framework other than Angular 2 !
+        </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

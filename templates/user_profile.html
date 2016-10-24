@@ -1,9 +1,12 @@
 {% extends "layout.html" %}
+
 {% block title %}Ozan Ata-{% endblock %}
+
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}"/>
 {% endblock %}
+
 {% block content %}
 
     <div class="container-fluid"
@@ -41,22 +44,22 @@
 
         <div class="row">
             <ul class="nav nav-tabs nav-justified" style="background-color: white">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Knots <span class="badge">3</span></a>
+                <li class="nav-item {% if request.path == '/user_profile/knots' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('site.knots_page') }}">Knots <span class="badge">3</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% if request.path == '/user_profile/following' %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('site.following_page') }}">Following <span
                             class="badge">3</span></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item {% if request.path == '/user_profile/followers' %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('site.followers_page') }}">Followers <span
                             class="badge">4</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Likes <span class="badge">2</span></a>
+                <li class="nav-item {% if request.path == '/user_profile/likes' %}active{% endif %}">
+                    <a class="nav-link" href="{{ url_for('site.likes_page') }}">Likes <span class="badge">2</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Profile Settings</a>
+                    <a class="nav-link" href="{{ url_for('site.settings_page') }}">Profile Settings</a>
                 </li>
             </ul>
         </div>
@@ -121,4 +124,7 @@
         </div>
 
     </div>
+
 {% endblock %}
+
+
