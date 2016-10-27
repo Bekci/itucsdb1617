@@ -25,6 +25,9 @@ def create_app():
     return app
 
 if __name__ == '__main__':
+
+    app = create_app()
+
     VCAP_APP_PORT = os.getenv('VCAP_APP_PORT')
     if VCAP_APP_PORT is not None:
         port, debug = int(VCAP_APP_PORT), False
