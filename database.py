@@ -59,6 +59,16 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
+            # ----------- Ozan ATA - LIKE-REKNOT ----------------------
+
+            query = """CREATE TABLE IF NOT EXISTS LIKE_REKNOT(
+                        KNOT_ID INTEGER references KNOTS(KNOT_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        USER_ID INTEDER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        IS_LIKE BOOLEAN
+                    )"""
+
+            cursor.execute(query)
+©
             # -----------------------------------------------------------------
             #           CREATE TABLE COMMANDS WILL BE HERE
 
@@ -103,6 +113,27 @@ class DatabaseOPS:
                                           0,
                                           0,
                                           CURRENT_DATE
+                        )"""
+
+            try:
+                cursor.execute(query)
+            except dbapi2.IntegrityError:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+    def add_relation(self):
+        with dbapi2.connect(self.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Ozan ATA - LIKE_REKNOT TABLE ----------------------
+
+            query = """INSERT INTO LIKE_REKNOT (KNOT_ID, USER_ID, IS_LIKE) VALUES (
+                                          1,
+                                          1,
+                                          TRUE
                         )"""
 
             try:
