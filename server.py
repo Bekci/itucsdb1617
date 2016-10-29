@@ -7,6 +7,10 @@ import os
 import json
 import re
 
+from flask import redirect
+from flask.helpers import url_for
+from database import initialize_database
+
 app = Flask(__name__)
 
 def get_elephantsql_dsn(vcap_services):
@@ -23,6 +27,11 @@ def create_app():
     app.config.from_object('settings')
     app.register_blueprint(site)
     return app
+
+@app.route('/initdb')
+def database_initialization():
+    initialize_database(app)
+    return redirect(url_for('login_page'))
 
 if __name__ == '__main__':
 
