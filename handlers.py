@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for
 from components.trends import Trend
 from components.trends import Notification
+from database import database
 
 site = Blueprint('site', __name__)
 
@@ -54,7 +55,6 @@ def knots_page():
 def likes_page():
     return render_template('user_likes.html',signedin=True)
 
-
 @site.route('/about_us')
 def about_us_page():
     return render_template('about_us.html',signedin=True)
@@ -68,4 +68,10 @@ def change_password_page():
 @site.route('/account/delete/confirm')
 def confirm_delete_account_page():
     return render_template('account_delete_confirm.html', signedin=True)
+
+@site.route('/initdb')
+def database_initialization():
+    database.create_tables()
+    database.add_user()
+    return redirect(url_for('site.login_page'))
 

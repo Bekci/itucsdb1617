@@ -1,34 +1,81 @@
 import psycopg2 as dbapi2
+import json
+import re
+import os
 
-def initialize_database(app):
-    with dbapi2.connect(app.config['dsn']) as connection:
-        cursor = connection.cursor()
 
-        # ----------- Can Altıniğne - USERS TABLE ----------------------
+class DatabaseOPS:
 
-        query = """CREATE TABLE IF NOT EXISTS USERS (
-                      USER_ID SERIAL PRIMARY KEY,
-                      USERNAME varchar(20) UNIQUE NOT NULL,
-                      USER_PASSWORD varchar(20) NOT NULL,
-                      PROFILE_PIC varchar(255) NOT NULL,
-                      COVER_PIC varchar(255) NOT NULL,
-                      MAIL_ADDRESS varchar(50) NOT NULL,
-                      REGISTER_DATE date NOT NULL
-                    )"""
+    def __init__(self):
 
-        cursor.execute(query)
+        VCAP_SERVICES = os.getenv('VCAP_SERVICES')
 
-        query = """INSERT INTO USERS (USERNAME, USER_PASSWORD, PROFILE_PIC, COVER_PIC, MAIL_ADDRESS, REGISTER_DATE) VALUES (
-                              'saykolover',
-                              'notsafe',
-                              'https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg',
-                              'https://pbs.twimg.com/profile_banners/626892198/1476549918/1500x500',
-                              'saykolover@itu.edu.tr',
-                              CURRENT_DATE
-                    )"""
+        if VCAP_SERVICES is not None:
+            self.config = DatabaseOPS.get_elephantsql_dsn(VCAP_SERVICES)
+        else:
+            self.config = """user='postgres' password='pamukkale' host='localhost'
+                                    port=5432 dbname='learning'"""
 
-        cursor.execute(query)
 
-        # -----------------------------------------------------------------
+    @classmethod
+    def get_elephantsql_dsn(cls, vcap_services):
+        """Returns the data source name for ElephantSQL."""
+        parsed = json.loads(vcap_services)
+        uri = parsed["elephantsql"][0]["credentials"]["uri"]
+        match = re.match('postgres://(.*?):(.*?)@(.*?)(:(\d+))?/(.*)', uri)
+        user, password, host, _, port, dbname = match.groups()
+        dsn = """user='{}' password='{}' host='{}' port={}
+                 dbname='{}'""".format(user, password, host, port, dbname)
+        return dsn
 
-        connection.commit()
+    def create_tables(self):
+        with dbapi2.connect(self.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Can Altıniğne - USERS TABLE ----------------------
+
+            query = """CREATE TABLE IF NOT EXISTS USERS (
+                          USER_ID SERIAL PRIMARY KEY,
+                          USERNAME varchar(20) UNIQUE NOT NULL,
+                          USER_PASSWORD varchar(20) NOT NULL,
+                          PROFILE_PIC varchar(255) NOT NULL,
+                          COVER_PIC varchar(255) NOT NULL,
+                          MAIL_ADDRESS varchar(50) NOT NULL,
+                          REGISTER_DATE date NOT NULL
+                        )"""
+
+            cursor.execute(query)
+
+            # -----------------------------------------------------------------
+            #           CREATE TABLE COMMANDS WILL BE HERE
+
+            # -----------------------------------------------------------------
+
+            connection.commit()
+            cursor.close()
+
+    def add_user(self):
+        with dbapi2.connect(self.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Can Altıniğne - USERS TABLE ----------------------
+
+            query = """INSERT INTO USERS (USERNAME, USER_PASSWORD, PROFILE_PIC, COVER_PIC, MAIL_ADDRESS, REGISTER_DATE) VALUES (
+                                          'osman',
+                                          'notsafe',
+                                          'https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg',
+                                          'https://pbs.twimg.com/profile_banners/626892198/1476549918/1500x500',
+                                          'saykolover@itu.edu.tr',
+                                          CURRENT_DATE
+                        )"""
+
+            try:
+                cursor.execute(query)
+            except dbapi2.IntegrityError:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+database = DatabaseOPS()
