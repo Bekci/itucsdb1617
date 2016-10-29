@@ -75,4 +75,5 @@ def database_initialization():
     database.add_user()
     database.add_knot()
     database.add_relation()
+    database.add_user_interaction()
     return redirect(url_for('site.login_page'))

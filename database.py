@@ -68,7 +68,16 @@ class DatabaseOPS:
                     )"""
 
             cursor.execute(query)
-©
+
+            # ----------- ilknur Meray - USER_INTERACTION TABLE ------------------
+
+            query = """CREATE TABLE IF NOT EXISTS USER_INTERACTION(
+                        BASE_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        TARGET_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                    )"""
+
+            cursor.execute(query)
+
             # -----------------------------------------------------------------
             #           CREATE TABLE COMMANDS WILL BE HERE
 
@@ -145,5 +154,24 @@ class DatabaseOPS:
 
             cursor.close()
 
+    def add_user_interaction(self):
+        with dbapi2.connect(self.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- ilknur Meray - USER_INTERACTION TABLE -----------------------
+
+            query = """INSERT INTO USER_INTERACTION(BASE_USER_ID, TARGET_USER_ID) VALUES(
+                                                    1,
+                                                    2
+                        )"""
+
+            try:
+                cursor.execute(query)
+            except dbapi2.IntegrityError:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
 
 database = DatabaseOPS()
