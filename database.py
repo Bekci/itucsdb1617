@@ -32,7 +32,7 @@ class DatabaseOPS:
         with dbapi2.connect(self.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- Can Altıniğne - USERS TABLE ----------------------
+            # ----------- Can Altiniğne - USERS TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS USERS (
                           USER_ID SERIAL PRIMARY KEY,
@@ -43,6 +43,19 @@ class DatabaseOPS:
                           MAIL_ADDRESS varchar(50) NOT NULL,
                           REGISTER_DATE date NOT NULL
                         )"""
+
+            cursor.execute(query)
+
+            # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
+
+            query = """CREATE TABLE IF NOT EXISTS KNOTS(
+                        KNOT_ID SERIAL PRIMARY KEY,
+                        OWNER_ID INTEGER NOT NULL REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        KNOT_CONTENT TEXT,
+                        LIKE_COUNTER INTEGER DEFAULT 0,
+                        REKNOT_COUNTER INTEGER DEFAULT 0,
+                        POST_DATE DATE NOT NULL
+                    )"""
 
             cursor.execute(query)
 
@@ -77,5 +90,29 @@ class DatabaseOPS:
                 connection.commit()
 
             cursor.close()
+
+    def add_knot(self):
+        with dbapi2.connect(self.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
+
+            query = """INSERT INTO KNOTS (OWNER_ID, KNOT_CONTENT, LIKE_COUNTER, REKNOT_COUNTER, POST_DATE) VALUES (
+                                          1,
+                                          'First content of the Knitter',
+                                          0,
+                                          0,
+                                          CURRENT_DATE
+                        )"""
+
+            try:
+                cursor.execute(query)
+            except dbapi2.IntegrityError:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
 
 database = DatabaseOPS()

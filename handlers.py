@@ -73,5 +73,5 @@ def confirm_delete_account_page():
 def database_initialization():
     database.create_tables()
     database.add_user()
+    database.add_knot()
     return redirect(url_for('site.login_page'))
-
