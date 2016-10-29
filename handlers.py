@@ -1,7 +1,11 @@
-from flask import Flask, Blueprint, render_template
-from flask import current_app
+from flask import Blueprint, render_template
 
-from datetime import datetime
+from components.trends import Trend
+from components.trends import Notification
+from server import app
+from flask import redirect
+from flask.helpers import url_for
+import psycopg2 as dbapi2
 
 site = Blueprint('site', __name__)
 
@@ -71,14 +75,39 @@ def confirm_delete_account_page():
     return render_template('account_delete_confirm.html', signedin=True)
 
 
-class Trend:
-    def __init__(self, name,info):
-        self.name = name
-        self.info = info
+@site.route('/initdb')
+def initialize_database():
+    with dbapi2.connect(app.config['dsn']) as connection:
+        cursor = connection.cursor()
 
-class Notification:
-    def __init__(self,img, name, username,tweet):
-        self.img = img
-        self.name = name
-        self.username = username
-        self.tweet = tweet
+        # ----------- Can Altıniğne - USERS TABLE ----------------------
+
+        query = """CREATE TABLE IF NOT EXISTS USERS (
+                      USER_ID SERIAL PRIMARY KEY,
+                      USERNAME varchar(20) UNIQUE NOT NULL,
+                      USER_PASSWORD varchar(20) NOT NULL,
+                      PROFILE_PIC varchar(255) NOT NULL,
+                      COVER_PIC varchar(255) NOT NULL,
+                      MAIL_ADDRESS varchar(50) NOT NULL,
+                      REGISTER_DATE date NOT NULL
+                    )"""
+
+        cursor.execute(query)
+
+        query = """INSERT INTO USERS (USERNAME, USER_PASSWORD, PROFILE_PIC, COVER_PIC, MAIL_ADDRESS, REGISTER_DATE) VALUES (
+                              'saykolover',
+                              'notsafe',
+                              'https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg',
+                              'https://pbs.twimg.com/profile_banners/626892198/1476549918/1500x500',
+                              'saykolover@itu.edu.tr',
+                              CURRENT_DATE
+                    )"""
+
+        cursor.execute(query)
+
+        # -----------------------------------------------------------------
+
+
+        connection.commit()
+    return redirect(url_for('login_page'))
+
