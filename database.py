@@ -63,7 +63,7 @@ class DatabaseOPS:
 
             query = """CREATE TABLE IF NOT EXISTS LIKE_REKNOT(
                         KNOT_ID INTEGER references KNOTS(KNOT_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                        USER_ID INTEDER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        USER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
                         IS_LIKE BOOLEAN
                     )"""
 
