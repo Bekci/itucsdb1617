@@ -78,10 +78,18 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
-            # -----------------------------------------------------------------
-            #           CREATE TABLE COMMANDS WILL BE HERE
+            # ------------Nursah Melis Cinar- MESSAGES TABLE----------------------
 
-            # -----------------------------------------------------------------
+            query = """CREATE TABLE IF NOT EXISTS MESSAGES(
+                        MESSAGE_ID SERIAL PRIMARY KEY,
+                        MESSAGE_CONTENT TEXT,
+                        FROM_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        TO_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        MESSAGE_DATE DATE NOT NULL
+                    )"""
+
+            cursor.execute(query)
+
 
             connection.commit()
             cursor.close()
@@ -173,5 +181,28 @@ class DatabaseOPS:
                 connection.commit()
 
             cursor.close()
+
+    def add_message(self):
+        with dbapi2.connect(self.config) as connection:
+            cursor=connection.cursor()
+
+            # -------------------Nursah Melis Cinar - MESSAGES TABLE ----------------------
+
+            query = """INSERT INTO MESSAGES(MESSAGE_CONTENT, FROM_USER_ID, TO_USER_ID, MESSAGE_DATE(
+                                                   'Thanks for database management systems lecture notes!',
+                                                    1,
+                                                    2,
+                                                    CURRENT_DATE
+                        )"""
+
+            try:
+                cursor.execute(query)
+            except dbapi2.IntegrityError:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
 
 database = DatabaseOPS()

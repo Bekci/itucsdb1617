@@ -76,4 +76,5 @@ def database_initialization():
     database.add_knot()
     database.add_relation()
     database.add_user_interaction()
+    database.add_message()
     return redirect(url_for('site.login_page'))
