@@ -32,7 +32,7 @@ class DatabaseOPS:
         with dbapi2.connect(self.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- Can Altiniğne - USERS TABLE ----------------------
+            # ----------- Can Altinigne - USERS TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS USERS (
                           USER_ID SERIAL PRIMARY KEY,
@@ -98,7 +98,7 @@ class DatabaseOPS:
         with dbapi2.connect(self.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- Can Altıniğne - USERS TABLE ----------------------
+            # ----------- Can Altinigne - USERS TABLE ----------------------
 
             query = """INSERT INTO USERS (USERNAME, USER_PASSWORD, PROFILE_PIC, COVER_PIC, MAIL_ADDRESS, REGISTER_DATE) VALUES (
                                           'osman',
