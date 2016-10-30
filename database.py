@@ -188,7 +188,7 @@ class DatabaseOPS:
 
             # -------------------Nursah Melis Cinar - MESSAGES TABLE ----------------------
 
-            query = """INSERT INTO MESSAGES(MESSAGE_CONTENT, FROM_USER_ID, TO_USER_ID, MESSAGE_DATE(
+            query = """INSERT INTO MESSAGES(MESSAGE_CONTENT, FROM_USER_ID, TO_USER_ID, MESSAGE_DATE) VALUES(
                                                    'Thanks for database management systems lecture notes!',
                                                     1,
                                                     2,
