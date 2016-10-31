@@ -1,0 +1,23 @@
+.temp{
+    width: 200px;
+    height: 200px;
+    margin: 50px;
+    border: 1px solid;
+    background-color: white;
+    border-radius: 12px;
+}
+.glyphicon-nonescaped.glyphicon-calendar:before {
+    content: "";
+}
+
+.nav-tabs.centered > li, .nav-pills.centered > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs.centered, .nav-pills.centered {
+    text-align:center;
+}
+
