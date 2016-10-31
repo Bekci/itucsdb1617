@@ -13,6 +13,10 @@ def login_page():
 def home_page():
     return render_template('home_page.html', signedin=True)
 
+@site.route('/home/knots')
+def home_page1():
+    return render_template('home_page.html', signedin=True)
+
 @site.route('/notifications')
 def notifications_page():
     trends = [Trend('kismetse-olur','20.000 Knots'),Trend('ben-bilmem-esim-bilir-evi','100.000 Knots'),Trend('survivor-gonulluler','40.000 Knots')]

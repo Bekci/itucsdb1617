@@ -1,108 +1,134 @@
 {% extends "layout.html" %}
+
+{% block title %}Knitter Home Page {% endblock %}
+
+{% block head %}
+	{{ super() }}
+	<link rel="stylesheet" href="{{ url_for('static', filename='home_page_style.css') }}"/>
+{% endblock %}
+
 {% block content %}
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-3">
-    	<br><br>
-<!-- 	<img src="https://scontent.xx.fbcdn.net/v/t34.0-12/14741025_1187348278022134_1544726231_n.jpg?oh=35ae347418ab14c54bb3ba7518b499ce&oe=5805964C" alt="ProfilePicture" style="width:200px;height:200px;">-->
-		<img src="https://scontent-otp1-1.xx.fbcdn.net/v/t34.0-12/14741756_10209118500193916_933589844_n.png?oh=627492981b134ed16c43ea989499cef9&oe=58077BA5" alt="ProfilePicture" style="width:200px;height:200px;">
-		<br> User Information <br><span class="glyphicon glyphicon-user"></span> @username
-    	<hr><span class="glyphicon glyphicon-list-alt"></span> Knots
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-3" style="margin-top: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+                 <p style="text-align: center"><img
+                        src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                        height="220px"
+                        width="220px"
+                        style="margin-top:30px; margin-bottom: 20px; border-radius: 25px; border: 2px solid #f5f8fa; padding: 5px 5px 5px 5px; text-align: center; vertical-align: center">
+                 </p>
+                <h3 style="text-align: center">Ozan Ata</h3>
+                <p style="text-align: center"><span class="glyphicon glyphicon-link"></span>saykolover</p>
+                <p style="text-align: center"><span class="glyphicon glyphicon-resize-small"></span><a> web.itu.edu.tr/saykolover</a></p>
+                <p style="text-align: center"><span class="glyphicon glyphicon-share-alt"></span> Joined July 2012</p>
+<!--    	<hr><span class="glyphicon glyphicon-list-alt"></span> Knots
     	<br><span class="glyphicon glyphicon-search"></span> Followings
     	<br><span class="glyphicon glyphicon-eye-open"></span> Followers
     	<hr><span class="glyphicon glyphicon-asterisk"></span> New Follower Requests
     	<hr><span class="glyphicon glyphicon-globe"></span> Trend Topics <hr>
-    </div>
-    <div class="col-md-7">
-    	<br><br>
-		<div class="media">
-       		<div class="media-left">
-       			<img src="https://scontent-otp1-1.xx.fbcdn.net/v/t34.0-12/14741756_10209118500193916_933589844_n.png?oh=627492981b134ed16c43ea989499cef9&oe=58077BA5" class="media-object" style="width:60px">
-       		</div>
-       		<div class="media-body">
-       			<p><textarea rows="2" cols="60" placeholder="  What's happening? Start knitting!"></textarea><br>
-       			<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-camera"></span> Add Photo
-        		</button>
-        		<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-option-horizontal"></span> More
-        		</button>
-        		<button type="button" class="btn btn-snd btn-sm" style="margin-left:220px">
-        		<span class="glyphicon glyphicon-pencil"></span> Knot
-        		</button>
-       			</p>
-       		</div>
-       	</div>
-		<hr>
+-->         </div>
 
-		<div class="media">
-       		<div class="media-left">
-       			<img src="https://scontent-otp1-1.xx.fbcdn.net/v/t34.0-12/14741008_10209117915779306_100683566_n.png?oh=58348157255d76240952136b7061a19b&oe=5807A0CB" class="media-object" style="width:60px">
-       		</div>
-       		<div class="media-body">
-       			<p>Knot #1<br>
-       			<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-heart"></span> Like
-        		</button>
-        		<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-share-alt"></span> Reply
-        		</button>
-        		<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-retweet"></span> Reknot
-        		</button>
-        		</p>
-       		</div>
-       	</div>
-		<hr>
-		<div class="media">
-       		<div class="media-left">
-       			<img src="https://scontent-otp1-1.xx.fbcdn.net/v/t34.0-12/14793969_10209117909739155_2064699632_n.png?oh=21754fd18628fd999a5d88cf77f4e72b&oe=5806C570" class="media-object" style="width:60px">
-       		</div>
-       		<div class="media-body">
-       			<p>Knot #2<br>
-       			<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-heart"></span> Like
-        		</button>
-        		<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-share-alt"></span> Reply
-        		</button>
-        		<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-retweet"></span> Reknot
-        		</button>
-       			</p>
-       		</div>
-       	</div>
-		<hr>
-		<div class="media">
-       		<div class="media-left">
-       			<img src="https://scontent-otp1-1.xx.fbcdn.net/v/t34.0-12/14686202_10209117944220017_590172371_n.png?oh=1d6d9c0f2d5fae3a34374f46a1280fcd&oe=5807C4DD" class="media-object" style="width:60px">
-       		</div>
-       		<div class="media-body">
-       			<p>Knot #3<br>
-       			<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-heart"></span> Like
-        		</button>
-        		<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-share-alt"></span> Reply
-        		</button>
-        		<button type="button" class="btn btn-default btn-sm">
-          		<span class="glyphicon glyphicon-retweet"></span> Reknot
-        		</button>
-       			</p>
-       		</div>
-       	</div>
-		<hr>
+
+
+            <div class="col-md-6" style="margin-top: 20px; margin-left: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+
+    	        <div class="row">
+                     <ul class="nav nav-tabs nav-justified" style="margin-left: 45px; background-color: white; padding: 5px 5px 5px 5px; border-radius: 10px; width: 500px">
+                        <li class="nav-item {% if request.path == '/home/knots' %}active{% endif %}">
+                            <a class="nav-link" href="{{ url_for('site.home_page1') }}">
+                                <span class="glyphicon glyphicon-list-alt"></span> Knots</a>
+                        </li>
+                        <li class="nav-item {% if request.path == '/user_profile/following' %}active{% endif %}">
+                            <a class="nav-link" href="{{ url_for('site.following_page') }}">
+                                <span class="glyphicon glyphicon-search"></span> Following</a>
+                         </li>
+                        <li class="nav-item {% if request.path == '/user_profile/followers' %}active{% endif %}">
+                             <a class="nav-link" href="{{ url_for('site.followers_page') }}">
+                                 <span class="glyphicon glyphicon-eye-open"></span> Followers</a>
+                        </li>
+                     </ul>
+                </div>
+
+                <div class="row" style="margin-left: 30px">
+                    <div class="media" style="margin-top: 30px; background-color: #f5f8fa; border-radius: 15px; width: 500px; height: 110px">
+       		            <div class="media-left">
+
+                            <a href="#">
+                                <img class="media-object"
+                                     src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                                     alt="userPhoto" style="margin-top: 10px; margin-left: 10px; height: 55px; width: 55px; border-radius: 30px">
+                            </a>
+
+       		            </div>
+       		            <div class="media-body" style="padding: 15px">
+       			            <p><textarea rows="2" cols="53" placeholder="  What's happening? Start knitting!"></textarea><br>
+       			                <button type="button" class="btn btn-snd btn-sm" style="margin-left:335px">
+        		                    <span class="glyphicon glyphicon-pencil"></span> Knot
+        		                </button>
+       			            </p>
+       		            </div>
+       	            </div>
+
+                    <div class="media" style="margin-top: 30px; background-color: #f5f8fa; border-radius: 15px; width: 500px; height: 110px">
+       		            <div class="media-left">
+
+                            <a href="#">
+                                <img class="media-object"
+                                    src="https://s-media-cache-ak0.pinimg.com/564x/d3/98/3e/d3983e83c8b95cbedadd03c181abbb53.jpg"
+                                    alt="userPhoto" style="margin-top: 10px; margin-left: 10px; height: 55px; width: 55px; border-radius: 30px">
+                            </a>
+
+       		            </div>
+       		            <div class="media-body" style="padding: 15px">
+       			            <p>Knot #2</p><br>
+                            <p style="text-align: right">
+                                <button type="button" class="btn btn-default btn-sm">
+          		                    <span class="glyphicon glyphicon-heart"></span> Like
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm">
+          		                    <span class="glyphicon glyphicon-retweet"></span> Reknot
+        		                </button>
+       			            </p>
+       		            </div>
+       	            </div>
+                     <div class="media" style="margin-top: 30px; background-color: #f5f8fa; border-radius: 15px; width: 500px; height: 110px">
+       		            <div class="media-left">
+
+                            <a href="#">
+                                <img class="media-object"
+                                    src="http://optimusprime.fansector.com/images/gallery/optimus_prime_gallery_0003.jpg"
+                                    alt="userPhoto" style="margin-top: 10px; margin-left: 10px; height: 55px; width: 55px; border-radius: 30px">
+                            </a>
+
+                        </div>
+       		            <div class="media-body" style="padding: 15px">
+       			            <p>Knot #3</p><br>
+                            <p style="text-align: right">
+                                <button type="button" class="btn btn-default btn-sm">
+          		                    <span class="glyphicon glyphicon-heart"></span> Like
+                                </button>
+                                <button type="button" class="btn btn-default btn-sm">
+          		                    <span class="glyphicon glyphicon-retweet"></span> Reknot
+        		                </button>
+       			            </p>
+       		            </div>
+       	            </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <div></div>
+            </div>
+
+            <div class="col-md-2" style="margin-top: 20px; margin-left: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+                <p style="text-align: center"><a href="http://localhost:5000/about_us">About Us.</a>
+                </p>
+            </div>
+        </div>
     </div>
-    <div class="col-md-2">
-    	<br><br><hr>
-    	<div style="background-color:#98e698;height:65px;width:170px;text-align:center">
-    	This part of page contains link for About Us page.<br>
-    	<a href="http://localhost:5000/about_us">About Us.</a>
-    	</div>
-    </div>
-  </div>
-</div>
 
 
 {% endblock %}
