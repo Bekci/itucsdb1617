@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='login_style.css') }}"/>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3" style="margin-top:20%">
+
+                <form action="{{ url_for('site.signup_page') }}" method="post" data-toggle="validator" novalidate>
+                    <div class="form-group">
+                        <label>Knitter Name</label>
+                        <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user"></span>
+						</span>
+                            <input type="text" name="knittername" class="form-control" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword" class="control-label">Password</label>
+                        <div class="form-group">
+                            <input type="password" data-minlength="8" class="form-control" id="inputPassword" name="inputPassword"
+                                   placeholder="Password" required>
+                            <div class="help-block">Minimum of 8 characters</div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="inputPasswordConfirm"
+                                   data-match="#inputPassword" data-match-error="Whoops, these don't match"
+                                   placeholder="Confirm" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Profile Picture Address</label>
+                        <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                            <input type="text" name="profile_pic" class="form-control" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cover Picture Address</label>
+                        <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-picture"></span>
+						</span>
+                            <input type="text" name="cover_pic" class="form-control" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputEmail" class="control-label">Email</label>
+                        <input type="email" class="form-control" id="inputEmail" name="inputEmail"
+                               data-error="Hey look here ! That email address is invalid" required>
+                        <div class="help-block with-errors"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-success btn-block" value="Sign up" name="signup" id="signup"/>
+                    </div>
+
+                </form>
+
+                   {% if samename %}
+                        <div class="alert alert-danger">
+                            <strong>Username is already taken !</strong>
+                        </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

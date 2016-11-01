@@ -5,7 +5,6 @@ import os
 
 
 class DatabaseOPS:
-
     def __init__(self):
 
         VCAP_SERVICES = os.getenv('VCAP_SERVICES')
@@ -14,8 +13,7 @@ class DatabaseOPS:
             self.config = DatabaseOPS.get_elephantsql_dsn(VCAP_SERVICES)
         else:
             self.config = """user='vagrant' password='vagrant'
-                               host='localhost' port=5432 dbname='itucsdb'"""
-
+                                           host='localhost' port=5432 dbname='itucsdb'"""
 
     @classmethod
     def get_elephantsql_dsn(cls, vcap_services):
@@ -90,32 +88,7 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
-
             connection.commit()
-            cursor.close()
-
-    def add_user(self):
-        with dbapi2.connect(self.config) as connection:
-            cursor = connection.cursor()
-
-            # ----------- Can Altinigne - USERS TABLE ----------------------
-
-            query = """INSERT INTO USERS (USERNAME, USER_PASSWORD, PROFILE_PIC, COVER_PIC, MAIL_ADDRESS, REGISTER_DATE) VALUES (
-                                          'osman',
-                                          'notsafe',
-                                          'https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg',
-                                          'https://pbs.twimg.com/profile_banners/626892198/1476549918/1500x500',
-                                          'saykolover@itu.edu.tr',
-                                          CURRENT_DATE
-                        )"""
-
-            try:
-                cursor.execute(query)
-            except dbapi2.IntegrityError:
-                connection.rollback()
-            else:
-                connection.commit()
-
             cursor.close()
 
     def add_knot(self, owner_id, knot_content, likes, reknots, post_date):
@@ -179,28 +152,28 @@ class DatabaseOPS:
             tup = tuple()
 
             if knot_id is not None or owner_id is not None or likes is not None \
-                or reknots is not None or post_date is not None or \
-                knot_content is not None:
+                    or reknots is not None or post_date is not None or \
+                            knot_content is not None:
                 query = query + " WHERE "
                 if knot_id is not None:
                     query = query + " KNOT_ID=%s"
-                    tup = tup + (knot_id, )
+                    tup = tup + (knot_id,)
                 if owner_id is not None:
                     query = query + " OWNER_ID=%s"
-                    tup = tup + (owner_id, )
+                    tup = tup + (owner_id,)
                 if likes is not None:
                     query = query + " LIKE_COUNTER=%s"
-                    tup = tup + (likes, )
+                    tup = tup + (likes,)
                 if reknots is not None:
                     query = query + " REKNOT_COUNTER=%s"
-                    tup = tup + (reknots, )
+                    tup = tup + (reknots,)
                 if post_date is not None:
                     query = query + " POST_DATE=%s"
-                    tup = tup + (post_date, )
+                    tup = tup + (post_date,)
                 if knot_content is not None:
                     query = query + " KNOT_CONTENT LIKE %s"
                     knot_content = '%{}%'.format(knot_content)
-                    tup = tup + (knot_content, )
+                    tup = tup + (knot_content,)
             try:
                 cursor.execute(query, tup)
                 knots = cursor.fetchall()
@@ -255,7 +228,7 @@ class DatabaseOPS:
 
     def add_message(self):
         with dbapi2.connect(self.config) as connection:
-            cursor=connection.cursor()
+            cursor = connection.cursor()
 
             # -------------------Nursah Melis Cinar - MESSAGES TABLE ----------------------
 

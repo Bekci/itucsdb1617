@@ -10,14 +10,15 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4" style="margin-top:20%">
-                <form>
+
+                <form action="{{ url_for('site.login_page') }}" method="post">
                     <div class="form-group">
                         <label>Knitter Name</label>
                         <div class="input-group">
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-user"></span>
 						</span>
-                            <input type="text" name="knitter-name" class="form-control"/>
+                            <input type="text" name="knittername" class="form-control"/>
                         </div>
                     </div>
 
@@ -32,10 +33,23 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="button" class="btn btn-success btn-block"
-                               onclick="location.href='{{ url_for('site.user_profile_page') }}';"
-                               value="Login"/>
+                        <input type="submit" class="btn btn-success btn-block" value="Login" name="Login"/>
                     </div>
+
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            <strong>Hey Earthling Stop !</strong><br>Username or password is not correct<br><strong>Not
+                            a member ?</strong>
+                            <a href="{{ url_for('site.signup_page') }}"> Click Here !</a>
+                        </div>
+                    {% endif %}
+
+                    {% if newly_signup %}
+                        <div class="alert alert-success">
+                            <strong>Welcome to Knitter Familia !</strong>
+                        </div>
+                    {% endif %}
+
                 </form>
 
                 <div style="text-align: center">
