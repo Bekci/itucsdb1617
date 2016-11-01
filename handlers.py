@@ -82,3 +82,7 @@ def database_initialization():
     database.add_user_interaction()
     database.add_message()
     return redirect(url_for('site.login_page'))
+
+@site.route('/messages')
+def messages_page():
+    return render_template('messages.html', signedin=True)

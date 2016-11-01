@@ -46,7 +46,7 @@
 				<ul class="nav navbar-nav">
 					<li class="{% if request.path == '/home' %}active{% endif %}"><a href="{{ url_for('site.home_page') }}"><i class="fa fa-home" style="font-size:18px"></i> Home</a></li>
 					<li class="{% if request.path == '/notifications' %}active{% endif %}"><a href="{{ url_for('site.notifications_page') }}"><i class="fa fa-bell" style="font-size:18px"></i> Notifications</a></li>
-					<li class="{% if request.path == '/messages' %}active{% endif %}"><a href="#"><i class="glyphicon glyphicon-envelope" style="font-size:18px"></i> Messages</a></li>
+					<li class="{% if request.path == '/messages' %}active{% endif %}"><a href="{{ url_for('site.messages_page') }}"><i class="glyphicon glyphicon-envelope" style="font-size:18px"></i> Messages</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li>
