@@ -77,7 +77,7 @@ def confirm_delete_account_page():
 def database_initialization():
     database.create_tables()
     database.add_user()
-    database.add_knot()
+    database.add_knot(1, "First content of the Knitter", 0, 0, "2016-10-29")
     database.add_relation()
     database.add_user_interaction()
     database.add_message()
