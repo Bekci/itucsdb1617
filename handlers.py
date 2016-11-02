@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request
 from components.trends import Trend
 from components.trends import Notification
 from database import database
+from knot import KnotDatabaseOPS
 from user import UserDatabaseOPS
 
 site = Blueprint('site', __name__)
@@ -121,7 +122,7 @@ def database_initialization():
     database.create_tables()
     UserDatabaseOPS.add_user("mesut_guneri", "tokmak", "tokmak", "tokmak",
                              "cobanyildizi")  # Can Altinigne Insert Into User Table Manually
-    database.add_knot(1, "First content of the Knitter", 0, 0, "2016-10-29")
+    KnotDatabaseOPS.add_knot(1, "First content of the Knitter", 0, 0, "2016-10-29")
     database.add_relation()
     database.add_user_interaction()
     database.add_message()
