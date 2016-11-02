@@ -112,25 +112,6 @@ class DatabaseOPS:
 
             cursor.close()
 
-    def add_user_interaction(self):
-        with dbapi2.connect(self.config) as connection:
-            cursor = connection.cursor()
-
-            # ----------- ilknur Meray - USER_INTERACTION TABLE -----------------------
-
-            query = """INSERT INTO USER_INTERACTION(BASE_USER_ID, TARGET_USER_ID) VALUES(
-                                                    1,
-                                                    2
-                        )"""
-
-            try:
-                cursor.execute(query)
-            except dbapi2.IntegrityError:
-                connection.rollback()
-            else:
-                connection.commit()
-
-            cursor.close()
 
     def add_message(self):
         with dbapi2.connect(self.config) as connection:

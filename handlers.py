@@ -4,6 +4,7 @@ from components.trends import Notification
 from database import database
 from knot import KnotDatabaseOPS
 from user import UserDatabaseOPS
+from interaction import InteractionDatabaseOPS
 
 site = Blueprint('site', __name__)
 
@@ -123,6 +124,7 @@ def database_initialization():
     UserDatabaseOPS.add_user("mesut_guneri", "tokmak", "tokmak", "tokmak",
                              "cobanyildizi")  # Can Altinigne Insert Into User Table Manually
     KnotDatabaseOPS.add_knot(1, "First content of the Knitter", 0, 0, "2016-10-29")
+    InteractionDatabaseOPS.add_user_interaction(1, 10)  # ilknur meray: insert into USER_INTERACTION table manually
     database.add_relation()
     database.add_user_interaction()
     database.add_message()
