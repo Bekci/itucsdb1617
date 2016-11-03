@@ -61,7 +61,7 @@ def notifications_page(user_id):
     trends = [Trend('kismetse-olur','20.000 Knots'),Trend('ben-bilmem-esim-bilir-evi','100.000 Knots'),Trend('survivor-gonulluler','40.000 Knots')]
     knots = NotificationDatabaseOPS.select_notifications(user)
     if request.method == 'GET':
-        return render_template('notifications.html', signedin=True,trends=trends,knots=knots)
+        return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user)
 
     else:
         if 'delete' in request.form:
@@ -90,7 +90,7 @@ def notifications_page(user_id):
                 NotificationDatabaseOPS.increase_knot_reknot(knot_id)
 
         knots = NotificationDatabaseOPS.select_notifications(user)
-        return render_template('notifications.html', signedin=True,trends=trends,knots=knots)
+        return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user)
 
 
 @site.route('/user_profile/<int:user_id>', methods=['GET', 'POST'])

@@ -99,27 +99,6 @@ class DatabaseOPS:
             connection.commit()
             cursor.close()
 
-    def add_relation(self):
-        with dbapi2.connect(self.config) as connection:
-            cursor = connection.cursor()
-
-            # ----------- Ozan ATA - LIKE_REKNOT TABLE ----------------------
-
-            query = """INSERT INTO LIKE_REKNOT (KNOT_ID, USER_ID, IS_LIKE) VALUES (
-                                          1,
-                                          1,
-                                          TRUE
-                        )"""
-
-            try:
-                cursor.execute(query)
-            except dbapi2.IntegrityError:
-                connection.rollback()
-            else:
-                connection.commit()
-
-            cursor.close()
-
 
     def add_message(self):
         with dbapi2.connect(self.config) as connection:
