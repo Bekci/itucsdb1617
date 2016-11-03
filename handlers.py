@@ -195,8 +195,8 @@ def database_initialization():
                              "cobanyildizi")  # Can Altinigne Insert Into User Table Manually
     KnotDatabaseOPS.add_knot(1, "First content of the Knitter", 0, 0, "2016-10-29")
     InteractionDatabaseOPS.add_user_interaction(1, 10)  # ilknur meray: insert into USER_INTERACTION table manually
-    database.add_relation()
-    database.add_message()
+    MessageDatabaseOPS.add_message('Thanks for database management systems lecture notes!',1,2)
+    NotificationDatabaseOPS.insert_relation(1,1,True)
     return redirect(url_for('site.login_page'))
 
 

@@ -100,27 +100,4 @@ class DatabaseOPS:
             cursor.close()
 
 
-    def add_message(self):
-        with dbapi2.connect(self.config) as connection:
-            cursor = connection.cursor()
-
-            # -------------------Nursah Melis Cinar - MESSAGES TABLE ----------------------
-
-            query = """INSERT INTO MESSAGES(MESSAGE_CONTENT, FROM_USER_ID, TO_USER_ID, MESSAGE_DATE) VALUES(
-                                                   'Thanks for database management systems lecture notes!',
-                                                    1,
-                                                    2,
-                                                    CURRENT_DATE
-                        )"""
-
-            try:
-                cursor.execute(query)
-            except dbapi2.IntegrityError:
-                connection.rollback()
-            else:
-                connection.commit()
-
-            cursor.close()
-
-
 database = DatabaseOPS()
