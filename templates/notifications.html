@@ -34,7 +34,7 @@
 		<div class="col-sm-1"></div>
 
 		<div name='notifications' class="col-sm-5" style="background-color:white;">
-			{% if knots %} {% for knot in knots %}
+			{% for knot in knots if knots is not none %}
 			<form action="{{ url_for('site.notifications_page') }}" method="POST">
 				<div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
 					<div class="alert alert-info" style="border-radius:15px;">
@@ -82,7 +82,7 @@
 					</div>
 				</div>
 			</form>
-			{% endfor %} {% endif %}
+			{% endfor %}
 
 		</div>
 

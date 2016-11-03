@@ -20,9 +20,9 @@ class NotificationDatabaseOPS:
     def select_notifications(self, user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-
             # ----------- Ozan ATA - Get Notifications -----------
-            first_query = None
+            
+            first_query = []
             query = """SELECT 
                             knots.knot_id as knot_id,
                             knots.knot_content as knot_content,
@@ -41,9 +41,8 @@ class NotificationDatabaseOPS:
                 first_query = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
-            else:
-                connection.commit()
-            second_query = None
+            
+            second_query = []
             query = """SELECT 
                             users.profile_pic as action_source_pic,
                             users.username as action_source, 
@@ -53,13 +52,13 @@ class NotificationDatabaseOPS:
                             INNER JOIN knots on knots.knot_id = like_reknot.knot_id
                             where knots.owner_id = %s;"""
             try:
-                cursor.execute(query,[user_id])
+                cursor.execute(query,(user_id))
                 second_query = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
             else:
                 connection.commit()
-
+            
             cursor.close()
             
             if first_query is not None and second_query is not None:
@@ -76,11 +75,10 @@ class NotificationDatabaseOPS:
                     result.append(Notification(first_query[i][0], first_query[i][1], first_query[i][2] , first_query[i][3], first_query[i][4], first_query[i][4], second_query[i][0], second_query[i][1], action_type))
                     i = i + 1
 
-                if first_query is not None:
-                    return result
+                return result
 
-                else:
-                    return -1
+            else:
+                return -1
 
     @classmethod
     def check_like(self, knot_id, user_id, is_like):
