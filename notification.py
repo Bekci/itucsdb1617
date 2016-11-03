@@ -52,7 +52,6 @@ class NotificationDatabaseOPS:
                             INNER JOIN knots on knots.knot_id = like_reknot.knot_id
                             where knots.owner_id = %s;"""
             try:
-                foo = 1
                 cursor.execute(query,[user_id])
                 second_query = cursor.fetchall()
             except dbapi2.Error:
@@ -62,26 +61,25 @@ class NotificationDatabaseOPS:
 
             cursor.close()
             
-            if first_query:
-                if second_query:
-                    i = 0
-                    max = len(first_query)
-                    result = []
+            if first_query is not None and second_query is not None:
+                i = 0
+                max = len(first_query)
+                result = []
 
-                    while i < max:
-                        if second_query[i][2] == True:
-                            action_type = 'liked'
-                        else:
-                            action_type = 'reknotted'
-                        
-                        result.append(Notification(first_query[i][0], first_query[i][1], first_query[i][2] , first_query[i][3], first_query[i][4], first_query[i][4], second_query[i][0], second_query[i][1], action_type))
-                        i = i + 1
-
-                    if first_query:
-                        return result
-                    
+                while i < max:
+                    if second_query[i][2] == True:
+                        action_type = 'liked'
                     else:
-                        return -1
+                        action_type = 'reknotted'
+
+                    result.append(Notification(first_query[i][0], first_query[i][1], first_query[i][2] , first_query[i][3], first_query[i][4], first_query[i][4], second_query[i][0], second_query[i][1], action_type))
+                    i = i + 1
+
+                if first_query is not None:
+                    return result
+
+                else:
+                    return -1
 
     @classmethod
     def check_like(self, knot_id, user_id, is_like):
