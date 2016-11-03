@@ -43,8 +43,6 @@ class NotificationDatabaseOPS:
             else:
                 connection.commit()
 
-            print(first_query[1][1])
-
             query = """SELECT 
                             users.profile_pic as action_source_pic,
                             users.username as action_source, 
