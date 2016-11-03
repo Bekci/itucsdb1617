@@ -67,27 +67,27 @@ def notifications_page(user_id):
     else:
         if 'delete' in request.form:
             knot_id = request.form['delete']
-            UserDatabaseOPS.delete_knot(knot_id)
+            KnotDatabaseOPS.delete_knot(knot_id)
         elif 'update' in request.form:
             knot_id = request.form['update']
             print("Update Knot function is currently not working :(")
         elif 'like' in request.form:
             knot_id = request.form['like']
-            is_like = NotificationDatabaseOPS.check_like(knot_id,user, True)
+            is_like = NotificationDatabaseOPS.check_like(knot_id,user.id, True)
             if is_like:
-                NotificationDatabaseOPS.delete_relation(knot_id, user, True)
+                NotificationDatabaseOPS.delete_relation(knot_id, user.id, True)
                 NotificationDatabaseOPS.decrease_knot_like(knot_id)
             else:
-                NotificationDatabaseOPS.insert_relation(knot_id, user, True)
+                NotificationDatabaseOPS.insert_relation(knot_id, user.id, True)
                 NotificationDatabaseOPS.increase_knot_like(knot_id)
         elif 'reknot' in request.form:
             knot_id = request.form['reknot']
-            is_reknot = NotificationDatabaseOPS.check_reknot(knot_id,user, False)
+            is_reknot = NotificationDatabaseOPS.check_reknot(knot_id,user.id, False)
             if is_reknot:
-                NotificationDatabaseOPS.delete_relation(knot_id, user, False)
+                NotificationDatabaseOPS.delete_relation(knot_id, user.id, False)
                 NotificationDatabaseOPS.decrease_knot_reknot(knot_id)
             else:
-                NotificationDatabaseOPS.insert_relation(knot_id, user, False)
+                NotificationDatabaseOPS.insert_relation(knot_id, user.id, False)
                 NotificationDatabaseOPS.increase_knot_reknot(knot_id)
 
         knots = NotificationDatabaseOPS.select_notifications(user)
