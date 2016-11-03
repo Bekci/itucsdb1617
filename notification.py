@@ -64,24 +64,26 @@ class NotificationDatabaseOPS:
 
             cursor.close()
             
-            i = 0
-            max = len(first_query)
-            result = []
-
-            while i < max:
-                if second_query[i][2] == True:
-                    action_type = 'liked'
-                else:
-                    action_type = 'reknotted'
-                
-                result.append(Notification(first_query[i][0], first_query[i][1], first_query[i][2] , first_query[i][3], first_query[i][4], first_query[i][4], second_query[i][0], second_query[i][1], action_type))
-                i = i + 1
-
             if first_query:
-                return result
-            
-            else:
-                return -1
+                if second_query:
+                    i = 0
+                    max = len(first_query)
+                    result = []
+
+                    while i < max:
+                        if second_query[i][2] == True:
+                            action_type = 'liked'
+                        else:
+                            action_type = 'reknotted'
+                        
+                        result.append(Notification(first_query[i][0], first_query[i][1], first_query[i][2] , first_query[i][3], first_query[i][4], first_query[i][4], second_query[i][0], second_query[i][1], action_type))
+                        i = i + 1
+
+                    if first_query:
+                        return result
+                    
+                    else:
+                        return -1
 
     @classmethod
     def check_like(self, knot_id, user_id, is_like):
