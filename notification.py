@@ -52,7 +52,7 @@ class NotificationDatabaseOPS:
                             INNER JOIN knots on knots.knot_id = like_reknot.knot_id
                             where knots.owner_id = %s;"""
             try:
-                cursor.execute(query,(user_id))
+                cursor.execute(query,[user_id])
                 second_query = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
