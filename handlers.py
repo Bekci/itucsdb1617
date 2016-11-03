@@ -54,8 +54,6 @@ def home_page1(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
     return render_template('home_page.html', signedin=True, user=user)
 
-user = UserDatabaseOPS.select_user_with_id(user_id)
-
 @site.route('/notifications/<int:user_id>', methods = ['GET','POST'])
 def notifications_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
