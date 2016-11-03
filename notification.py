@@ -22,7 +22,7 @@ class NotificationDatabaseOPS:
             cursor = connection.cursor()
 
             # ----------- Ozan ATA - Get Notifications -----------
-
+            first_query = None
             query = """SELECT 
                             knots.knot_id as knot_id,
                             knots.knot_content as knot_content,
@@ -35,6 +35,7 @@ class NotificationDatabaseOPS:
                             INNER JOIN like_reknot ON knots.knot_id = like_reknot.knot_id
                             where like_counter > 0 OR reknot_counter > 0;"""
 
+            
             try:
                 cursor.execute(query)
                 first_query = cursor.fetchall()
@@ -42,7 +43,7 @@ class NotificationDatabaseOPS:
                 connection.rollback()
             else:
                 connection.commit()
-
+            second_query = None
             query = """SELECT 
                             users.profile_pic as action_source_pic,
                             users.username as action_source, 
