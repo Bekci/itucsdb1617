@@ -34,11 +34,11 @@
 		<div class="col-sm-1"></div>
 
 		<div name='notifications' class="col-sm-5" style="background-color:white;">
-			{% for knot in knots %}
+			{% if knots %} {% for knot in knots %}
 			<form action="{{ url_for('site.notifications_page') }}" method="POST">
 				<div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
 					<div class="alert alert-info" style="border-radius:15px;">
-							<img src="{{knot.action_source_pic}}" style="height: 24px; width: 24px; border-radius: 8px">  <b>{{knot.action_source}}</b> has <b>{{knot.action_type}}</b> your knot!
+						<img src="{{knot.action_source_pic}}" style="height: 24px; width: 24px; border-radius: 8px"> <b>{{knot.action_source}}</b>						has <b>{{knot.action_type}}</b> your knot!
 					</div>
 					<div class="media-left">
 						<a href="{{knot.user_pic_url}}">
@@ -53,13 +53,13 @@
 									<i class="glyphicon glyphicon-option-horizontal"></i>
 								</button>
 								<ul class="dropdown-menu" style="overflow:visible;background-color: #f5f8fa;">
-									<li style="border-bottom:0.01em solid white;"> 
+									<li style="border-bottom:0.01em solid white;">
 										<button class="btn dropdown-toggle" name="delete" id="delete" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
 											<i class="glyphicon glyphicon-trash"></i> Delete This Knot
 										</button>
 									</li>
 									<li>
-										<button class="btn dropdown-toggle" name="update" id ="update" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+										<button class="btn dropdown-toggle" name="update" id="update" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
 											<i class="glyphicon glyphicon-edit"></i> Update This Knot
 										</button>
 									</li>
@@ -82,7 +82,8 @@
 					</div>
 				</div>
 			</form>
-			{% endfor %}
+			{% endfor %} {% endif %}
+
 		</div>
 
 		<div class="col-sm-1"></div>
