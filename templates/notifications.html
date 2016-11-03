@@ -33,25 +33,55 @@
 
 		<div class="col-sm-1"></div>
 
-		<div name='notifications' class="col-sm-5">
-			<div class="alert alert-danger">This column of the page will show knots related with the user</div>
-			{% for notification in notifications %}
-			<div class="media">
-				<div class="media-left">
-					<a href="#">
-						<img class="media-object" src="{{notification.img}}" style='width:48px;height:48px;border-radius:8px;'>
-					</a>
-				</div>
-				<div class="media-body">
-					<h4 class="media-heading">{{notification.name}} <span class="userNameTag" style="color:#ccc;"> @{{notification.username}}</span></h4>
-					<div class='dataContent'>{{notification.tweet}}</div>
-					<div class="btn-group btn-group-justified">
-						<i class="btn btn-primary"><i class="glyphicon glyphicon-link"> Re-Knot</i></i>
-						<i class="btn btn-danger"><i class="glyphicon glyphicon-heart"> Like</i></i>
-						<i class="btn btn-success"><i class="glyphicon glyphicon-share"> Reply</i></i>
+		<div name='notifications' class="col-sm-5" style="background-color:white;">
+			{% for knot in knots %}
+			<form action="{{ url_for('site.notifications_page') }}" method="POST">
+				<div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
+					<div class="alert alert-info" style="border-radius:15px;">
+							<img src="{{knot.action_source_pic}}" style="height: 24px; width: 24px; border-radius: 8px">  <b>{{knot.action_source}}</b> has <b>{{knot.action_type}}</b> your knot!
+					</div>
+					<div class="media-left">
+						<a href="{{knot.user_pic_url}}">
+							<img class="media-object" src="{{knot.user_pic_url}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 60%">
+						</a>
+					</div>
+					<div class="media-body" style="border-bottom:0.01em solid white;overflow:visible;">
+						<h4 class="media-heading">
+							<span class="glyphicon glyphicon-link"></span> {{knot.username}}
+							<div class="dropdown pull-right">
+								<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #f5f8fa;">
+									<i class="glyphicon glyphicon-option-horizontal"></i>
+								</button>
+								<ul class="dropdown-menu" style="overflow:visible;background-color: #f5f8fa;">
+									<li style="border-bottom:0.01em solid white;"> 
+										<button class="btn dropdown-toggle" name="delete" id="delete" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+											<i class="glyphicon glyphicon-trash"></i> Delete This Knot
+										</button>
+									</li>
+									<li>
+										<button class="btn dropdown-toggle" name="update" id ="update" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+											<i class="glyphicon glyphicon-edit"></i> Update This Knot
+										</button>
+									</li>
+								</ul>
+							</div>
+						</h4>
+						{{knot.knot_content}}
+					</div>
+					<div class="media-bottom" style="overflow:hidden;">
+						<div class="pull-left" style="margin-left:10%">
+							<button class="btn dropdown-toggle" name="like" id="like" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+								<i class="glyphicon glyphicon-heart" style="background-color: #f5f8fa;"> {{knot.like_number}}</i>
+							</button>
+						</div>
+						<div class="pull-left" style="margin-left:10%;">
+							<button class="btn dropdown-toggle" name="reknot" id="reknot" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+								<i type="button" class="glyphicon glyphicon-link" style="background-color: #f5f8fa;"> {{knot.reknot_number}}</i>
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
+			</form>
 			{% endfor %}
 		</div>
 
@@ -61,16 +91,16 @@
 			<div class="alert alert-danger">This column of the page will show people related with the user</div>
 			<div class="userPanel">
 				<h5 style="padding:10px;padding-bottom:0px;">Can you Knot?</h5>
-				{% for notification in notifications %}
+				{% for knot in knots %}
 				<!-- style="margin-bottom:5px;padding:2px;border-radius:12px;" -->
 				<div class="media">
 					<div class="media-left">
 						<a href="#">
-							<img class="media-object" src="{{notification.img}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+							<img class="media-object" src="{{knot.user_pic_url}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
 						</a>
 					</div>
 					<div class="media-body">
-						<h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{notification.username}}</h4>
+						<h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{knot.username}}</h4>
 						<button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Knot</button>
 					</div>
 				</div>

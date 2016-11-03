@@ -54,21 +54,44 @@ def home_page1(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
     return render_template('home_page.html', signedin=True, user=user)
 
+user = UserDatabaseOPS.select_user_with_id(user_id)
 
-@site.route('/notifications/<int:user_id>')
+@site.route('/notifications/<int:user_id>', methods = ['GET','POST'])
 def notifications_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
-    trends = [Trend('kismetse-olur', '20.000 Knots'), Trend('ben-bilmem-esim-bilir-evi', '100.000 Knots'),
-              Trend('survivor-gonulluler', '40.000 Knots')]
-    notifications = [
-        Notification('https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO_bigger.jpeg', 'Ozan ATA',
-                     'itsozata', 'Bitsin artik bu cile'),
-        Notification('https://pbs.twimg.com/media/Cu-b95cWEAIQ1V5.jpg', 'Hakan altun', 'saykolover', 'Gul Belalidir!'),
-        Notification('https://pbs.twimg.com/profile_images/3354552894/515c6500aabb628256f4dfe03a1e1909_bigger.jpeg',
-                     'Random Twitter Lady', 'random', '@Ozan is a great guy!')]
-    people = ['ozan', 'was', 'here']
-    return render_template('notifications.html', signedin=True, trends=trends, notifications=notifications,
-                           people=people, user=user)
+    trends = [Trend('kismetse-olur','20.000 Knots'),Trend('ben-bilmem-esim-bilir-evi','100.000 Knots'),Trend('survivor-gonulluler','40.000 Knots')]
+    knots = NotificationDatabaseOPS.select_notifications(user)
+    if request.method == 'GET':
+        return render_template('notifications.html', signedin=True,trends=trends,knots=knots)
+
+    else:        
+        if 'delete' in request.form:
+            knot_id = request.form['delete']
+            UserDatabaseOPS.delete_knot(knot_id)
+        elif 'update' in request.form:
+            knot_id = request.form['update']
+            print("Update Knot function is currently not working :(")
+        elif 'like' in request.form:
+            knot_id = request.form['like']
+            is_like = NotificationDatabaseOPS.check_like(knot_id,user, True)
+            if is_like:
+                NotificationDatabaseOPS.delete_relation(knot_id, user, True)
+                NotificationDatabaseOPS.decrease_knot_like(knot_id)
+            else:
+                NotificationDatabaseOPS.insert_relation(knot_id, user, True)
+                NotificationDatabaseOPS.increase_knot_like(knot_id)
+        elif 'reknot' in request.form:
+            knot_id = request.form['reknot']
+            is_reknot = NotificationDatabaseOPS.check_reknot(knot_id,user, False)
+            if is_reknot:
+                NotificationDatabaseOPS.delete_relation(knot_id, user, False)
+                NotificationDatabaseOPS.decrease_knot_reknot(knot_id)
+            else:
+                NotificationDatabaseOPS.insert_relation(knot_id, user, False)
+                NotificationDatabaseOPS.increase_knot_reknot(knot_id)
+
+        knots = NotificationDatabaseOPS.select_notifications(user)
+        return render_template('notifications.html', signedin=True,trends=trends,knots=knots)
 
 
 @site.route('/user_profile/<int:user_id>', methods=['GET', 'POST'])
