@@ -194,22 +194,6 @@ def database_initialization():
     return redirect(url_for('site.login_page'))
 
 
-@site.route('/messages/<int:user_id>')
-def messages_page(user_id):
-    user = UserDatabaseOPS.select_user_with_id(user_id)
-    return render_template('messages.html', signedin=True, user=user)
-@site.route('/messages/<int:user_id>', methods=['GET', 'POST'])
-def messages_page(user_id):
-    user = UserDatabaseOPS.select_user_with_id(user_id)
-    all_messages = MessageDatabaseOPS.select_messages_for_user(user_id)
-
-    if request.method == 'GET':
-        messages=MessageDatabaseOPS.select_messages_for_user(user_id)
-        return render_template('messages.html', signedin=True, user=user, all_messages=all_messages)
-    else:
-        content=request.form['message_content']
-        messages=UserDatabaseOPS.add_message(content,user_id, to_user_id)
-
 @site.route('/messages/delete/<int:user_id>/<int:message_id>', methods=['GET', 'POST'])
 def message_delete(user_id, message_id):
     MessageDatabaseOPS.delete_message(message_id)
