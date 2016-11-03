@@ -6,6 +6,7 @@ from knot import KnotDatabaseOPS
 from user import UserDatabaseOPS
 from notification import NotificationDatabaseOPS
 from interaction import InteractionDatabaseOPS
+from message import MessageDatabaseOPS
 
 site = Blueprint('site', __name__)
 
