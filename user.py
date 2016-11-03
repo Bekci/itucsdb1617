@@ -234,5 +234,23 @@ class UserDatabaseOPS:
 
             cursor.close()
 
+    @classmethod
+    def delete_real_name(cls, username):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Can Altinigne - USERS TABLE ----------------------
+
+            query = """DELETE FROM USERS_NAMES WHERE USERNAME = %s"""
+
+            try:
+                cursor.execute(query, (username,))
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
 
 user_ops = UserDatabaseOPS()
