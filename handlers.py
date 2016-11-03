@@ -4,6 +4,7 @@ from components.trends import Notification
 from database import database
 from knot import KnotDatabaseOPS
 from user import UserDatabaseOPS
+from notification import NotificationDatabaseOPS
 from interaction import InteractionDatabaseOPS
 
 site = Blueprint('site', __name__)
