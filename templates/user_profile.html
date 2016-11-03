@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Ozan Ata-{% endblock %}
+{% block title %}{{ user.username }} - {% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -14,11 +14,19 @@
 
         <div class="row">
             <p style="text-align: center"><img
-                        src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
-                        height="150px"
-                        width="150px"
-                        style="margin-top:75px; border-radius: 25px; border: 5px solid turquoise; text-align: center; vertical-align: center">
-                </p>
+                    src={{ user.profile_pic }}
+                            height="150px"
+                    width="150px"
+                    style="margin-top:75px; border-radius: 25px; border: 5px solid turquoise; text-align: center; vertical-align: center">
+            </p>
+        </div>
+
+        <div class="row">
+            <p style="text-align: center">
+                <button type="button" class="btn" data-toggle="modal" data-target="#myModal">
+                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                </button>
+            </p>
         </div>
 
     </div>
@@ -29,34 +37,34 @@
         <div class="row">
 
             <div class="col-sm-4" style="text-align: center">
-                <h3>Ozan Ata</h3>
+                <h3>{{ real_name.name }} {{ real_name.surname }}</h3>
             </div>
 
             <div class="col-sm-4">
-                <h3 style="text-align: center"><span class="glyphicon glyphicon-link"></span>saykolover</h3>
+                <h3 style="text-align: center"><span class="glyphicon glyphicon-link"></span>{{ user.username }}</h3>
             </div>
 
             <div class="col-sm-4" style="text-align: center; padding-top: 15px">
-                <p><span class="glyphicon glyphicon-resize-small"></span><a> web.itu.edu.tr/saykolover</a></p>
-                <p><span class="glyphicon glyphicon-share-alt"></span> Joined July 2012</p>
+                <p><span class="glyphicon glyphicon-resize-small"></span><a> {{ user.mail_address }}</a></p>
+                <p><span class="glyphicon glyphicon-share-alt"></span> {{ user.register_date }}</p>
             </div>
         </div>
 
         <div class="row">
             <ul class="nav nav-tabs nav-justified" style="background-color: white">
-                <li class="nav-item {% if request.path == '/user_profile/knots' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('site.knots_page') }}">Knots <span class="badge">3</span></a>
+                <li id="li_knot" class="nav-item">
+                    <a class="nav-link" href="#" id="knot_link">Knots <span class="badge">3</span></a>
                 </li>
-                <li class="nav-item {% if request.path == '/user_profile/following' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('site.following_page') }}">Following <span
+                <li id="li_following" class="nav-item">
+                    <a class="nav-link" href="#" id="following_link">Following <span
                             class="badge">3</span></a>
                 </li>
-                <li class="nav-item {% if request.path == '/user_profile/followers' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('site.followers_page') }}">Followers <span
+                <li id="li_follower" class="nav-item">
+                    <a class="nav-link" href="#" id="follower_link">Followers <span
                             class="badge">4</span></a>
                 </li>
-                <li class="nav-item {% if request.path == '/user_profile/likes' %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('site.likes_page') }}">Likes <span class="badge">2</span></a>
+                <li id="li_like" class="nav-item">
+                    <a class="nav-link" href="#" id="like_link">Likes <span class="badge">2</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('site.settings_page') }}">Profile Settings</a>
@@ -67,7 +75,9 @@
         <div class="row">
             <div class="col-sm-4"
                  style="margin-top: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
-                <div class="alert alert-info" role="alert" style="text-align: center"><strong>Why Knot ?</strong> There are lots of Knitters here !</div>
+                <div class="alert alert-info" role="alert" style="text-align: center"><strong>Why Knot ?</strong> There
+                    are lots of Knitters here !
+                </div>
 
                 <div class="media" style="margin-top: 30px">
                     <div class="media-left">
@@ -119,11 +129,341 @@
             </div>
             <div class="col-sm-7"
                  style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
-                {% block users_content %} {% endblock %}
+                <div id="knots" class="sections">
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
+                                Angular JS rullzzzz !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
+                                Flask ? You gotta be kidding ! Use Angular2
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
+                                I love python but when it comes to web development never use framework other than
+                                Angular 2 !
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="followers" class="sections">
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="http://www.cheatsheet.com/wp-content/uploads/2016/04/doctor-strange-pic-full.jpg"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> drstrange</h4>
+                                <button type="button" class="btn btn-info"><span
+                                        class="glyphicon glyphicon-plus"></span>
+                                    Knot
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://i.ytimg.com/vi/nSK1vSjRG6g/maxresdefault.jpg"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>
+                                    bulentbinbas_1950
+                                </h4>
+                                <button type="button" class="btn btn-info"><span
+                                        class="glyphicon glyphicon-plus"></span>
+                                    Knot
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvwaQaYhdR4210oruGycYgJF1e-AS9g_m0aGggRZQWMAqtvujV"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> amokachi_bjk
+                                </h4>
+                                <button type="button" class="btn btn-warning"><span
+                                        class="glyphicon glyphicon-plus"></span>
+                                    Send a Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="http://static.businessinsider.com/image/57d31321b0ef97011d8b4834/image.jpg"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> erlich</h4>
+                                <button type="button" class="btn btn-info"><span
+                                        class="glyphicon glyphicon-plus"></span>
+                                    Knot
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="followings" class="sections">
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS0Z1kJk6aPJ12xMROqK6cOAr7TGFo1MDYD56GYbCi7MgWv88VO3w"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> engin_jurnal
+                                </h4>
+                                <button type="button" class="btn btn-warning"><span
+                                        class="glyphicon glyphicon-plus"></span> Send a Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="http://vignette1.wikia.nocookie.net/marvelmovies/images/1/16/Deadpool_Total_Film_4.jpg/revision/latest/zoom-crop/width/320/height/320?cb=20160118020149"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>
+                                    where_is_francis</h4>
+                                <button type="button" class="btn btn-warning"><span
+                                        class="glyphicon glyphicon-plus"></span> Send a Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvwaQaYhdR4210oruGycYgJF1e-AS9g_m0aGggRZQWMAqtvujV"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> amokachi_bjk
+                                </h4>
+                                <button type="button" class="btn btn-warning"><span
+                                        class="glyphicon glyphicon-plus"></span> Send a Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="likes" class="sections">
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="https://avatars3.githubusercontent.com/u/1024025?v=3&s=400"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> linus_torvalds
+                                </h4>
+                                I suggest you to use Angular2 also !
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                        <div style="padding: 15px">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object"
+                                         src="http://a5.files.biography.com/image/upload/c_fill,cs_srgb,dpr_1.0,g_face,h_300,q_80,w_300/MTE1ODA0OTcxODMwMDUyMzY1.jpg"
+                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> the_woz</h4>
+                                When we built Apple II, there was only one thing in my mind, when will Angular2 come ?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
     </div>
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Change your profile infos</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{ url_for('site.user_profile_page') }}" method="post">
+
+                        <div class="form-group">
+                            <label>New Image URL</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="imageURL" class="form-control"  value="{{ user.profile_pic }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Name</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="my_name" class="form-control" value="{{ real_name.name }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Surname</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="my_surname" class="form-control" value="{{ real_name.surname }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success btn-block" value="Change Info" name="changeImage"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        $(document).ready(function () {
+            $(".sections").hide();
+            $("#knots").show();
+            $('.nav-item').removeClass("active");
+            $('#li_knot').addClass("active");
+        });
+
+        $('#knot_link').click(function (e) {
+            $(".sections").hide();
+            $("#knots").show();
+            $('.nav-item').removeClass("active");
+            $('#li_knot').addClass("active");
+            e.preventDefault();
+            return false;
+        });
+
+        $('#follower_link').click(function (e) {
+            $(".sections").hide();
+            $("#followers").show();
+            $('.nav-item').removeClass("active");
+            $('#li_follower').addClass("active");
+            e.preventDefault();
+            return false;
+        });
+
+        $('#following_link').click(function (e) {
+            $(".sections").hide();
+            $("#followings").show();
+            $('.nav-item').removeClass("active");
+            $('#li_following').addClass("active");
+            e.preventDefault();
+            return false;
+        });
+
+        $('#like_link').click(function (e) {
+            $(".sections").hide();
+            $("#likes").show();
+            $('.nav-item').removeClass("active");
+            $('#li_like').addClass("active");
+            e.preventDefault();
+            return false;
+        })
+
+    </script>
 
 {% endblock %}
 

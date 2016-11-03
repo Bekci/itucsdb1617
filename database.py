@@ -44,6 +44,14 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
+            query = """CREATE TABLE IF NOT EXISTS USERS_NAMES (
+                                      USERNAME varchar(20) UNIQUE NOT NULL,
+                                      U_NAME varchar(30),
+                                      U_SURNAME varchar(30)
+                                    )"""
+
+            cursor.execute(query)
+
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS KNOTS(

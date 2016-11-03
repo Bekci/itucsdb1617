@@ -7,10 +7,16 @@ from user import UserDatabaseOPS
 from interaction import InteractionDatabaseOPS
 
 site = Blueprint('site', __name__)
-
+current_user = None
+current_user_real_name = None
 
 @site.route('/', methods=['GET', 'POST'])
 def login_page():
+    global current_user
+    global current_user_real_name
+
+    current_user = None
+
     if request.method == 'GET':
         return render_template('login_page.html', signedin=False)
     else:
@@ -18,8 +24,15 @@ def login_page():
             user = UserDatabaseOPS.select_user(request.form['knittername'])
 
             if user and user != -1:
+
                 if request.form['knotword'] == user.password:
-                    return render_template('user_knots.html', user=user, signedin=True)
+                    current_user = user
+                    real_names = UserDatabaseOPS.select_user_name_surname(user.username)
+
+                    if real_names and real_names != -1:
+                        current_user_real_name = real_names
+
+                    return redirect('user_profile')
 
         return render_template('login_page.html', error=True, signedin=False)
 
@@ -40,7 +53,7 @@ def signup_page():
                                          request.form['profile_pic'], request.form['cover_pic'],
                                          request.form['inputEmail'])
 
-        return render_template('login_page.html', signedin=False, newly_signup=True)
+        return redirect(url_for('site.login_page'))
 
 
 @site.route('/home')
@@ -68,9 +81,34 @@ def notifications_page():
                            people=people)
 
 
-@site.route('/user_profile/knots')
+@site.route('/user_profile', methods=['GET', 'POST'])
 def user_profile_page():
-    return render_template('user_knots.html', signedin=True)
+    global current_user
+    global current_user_real_name
+
+    if request.method == 'GET':
+        return render_template('user_profile.html', signedin=True, user=current_user, real_name=current_user_real_name)
+    else:
+        if 'changeImage' in request.form:
+            current_user.profile_pic = request.form['imageURL']
+            my_name = request.form['my_name']
+            my_surname = request.form['my_surname']
+
+            current_user_real_name = UserDatabaseOPS.select_user_name_surname(current_user.username)
+
+            print(current_user_real_name)
+
+            if current_user_real_name == -1:
+                UserDatabaseOPS.add_real_name(current_user.username,my_name, my_surname)
+            else:
+                UserDatabaseOPS.update_real_name(current_user.username, my_name, my_surname)
+
+            UserDatabaseOPS.update_user(current_user.username, current_user.password,
+                                        current_user.profile_pic, current_user.cover_pic, current_user.mail_address)
+
+            current_user_real_name = UserDatabaseOPS.select_user_name_surname(current_user.username)
+
+        return render_template('user_profile.html', signedin=True, user=current_user, real_name=current_user_real_name)
 
 
 @site.route('/help')
@@ -81,26 +119,6 @@ def help_page():
 @site.route('/settings')
 def settings_page():
     return render_template('settings_page.html', signedin=True)
-
-
-@site.route('/user_profile/followers')
-def followers_page():
-    return render_template('user_followers.html', signedin=True)
-
-
-@site.route('/user_profile/following')
-def following_page():
-    return render_template('user_followings.html', signedin=True)
-
-
-@site.route('/user_profile/knots')
-def knots_page():
-    return render_template('user_knots.html', signedin=True)
-
-
-@site.route('/user_profile/likes')
-def likes_page():
-    return render_template('user_likes.html', signedin=True)
 
 
 @site.route('/about_us')
@@ -126,7 +144,6 @@ def database_initialization():
     KnotDatabaseOPS.add_knot(1, "First content of the Knitter", 0, 0, "2016-10-29")
     InteractionDatabaseOPS.add_user_interaction(1, 10)  # ilknur meray: insert into USER_INTERACTION table manually
     database.add_relation()
-    database.add_user_interaction()
     database.add_message()
     return redirect(url_for('site.login_page'))
 
