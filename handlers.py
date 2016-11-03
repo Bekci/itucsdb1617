@@ -120,6 +120,11 @@ def user_profile_page(user_id):
 
             user_real_name = UserDatabaseOPS.select_user_name_surname(user.username)
 
+        if 'deleteReal' in request.form:
+            user = UserDatabaseOPS.select_user_with_id(user_id)
+            UserDatabaseOPS.delete_real_name(user.username)
+            user_real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+
         return render_template('user_profile.html', signedin=True, user=user, real_name=user_real_name)
 
 
