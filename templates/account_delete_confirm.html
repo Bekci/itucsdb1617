@@ -9,14 +9,14 @@
                 <h3><small>Before you delete @Knitter_Official, you have to know below explanations:</small></h3>
                 <ul>
                     <li>You can change your username. You do not need to delete your account. It is in
-                        <a href="{{ url_for('site.settings_page') }}">Account Settings</a> page
+                        <a href="{{ url_for('site.settings_page', user_id=user.id) }}">Account Settings</a> page
                     </li>
                     <li>We can not control search engines such as Google for indexing.</li>
                 </ul>
                 <hr />
                 <form method="post">
                   <button type="submit" class="btn btn-danger" style="margin-left:100px;">Delete @Knitter_Official </button>
-                  <a href="{{ url_for('site.settings_page') }}" class="btn btn-primary">Cancel</a>
+                  <a href="{{ url_for('site.settings_page', user_id=user.id) }}" class="btn btn-primary">Cancel</a>
                 </form>
 
             </div>

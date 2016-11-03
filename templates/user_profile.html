@@ -10,7 +10,7 @@
 {% block content %}
 
     <div class="container-fluid"
-         style="padding: 0px; background-image: url(https://pbs.twimg.com/profile_banners/626892198/1476549918/1500x500); height: 300px">
+         style="padding: 0px; background-image: url({{ user.cover_pic }}); height: 300px; max-width: 100%;">
 
         <div class="row">
             <p style="text-align: center"><img
@@ -67,7 +67,7 @@
                     <a class="nav-link" href="#" id="like_link">Likes <span class="badge">2</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('site.settings_page') }}">Profile Settings</a>
+                    <a class="nav-link" href="{{ url_for('site.settings_page', user_id=user.id) }}">Profile Settings</a>
                 </li>
             </ul>
         </div>
@@ -373,15 +373,25 @@
                 </div>
 
                 <div class="modal-body">
-                    <form action="{{ url_for('site.user_profile_page') }}" method="post">
+                    <form action="{{ url_for('site.user_profile_page', user_id=user.id) }}" method="post">
 
                         <div class="form-group">
-                            <label>New Image URL</label>
+                            <label>New Profile Image URL</label>
                             <div class="input-group">
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-camera"></span>
 						</span>
                                 <input type="text" name="imageURL" class="form-control"  value="{{ user.profile_pic }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>New Cover Image URL</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="coverURL" class="form-control"  value="{{ user.cover_pic }}"/>
                             </div>
                         </div>
 
@@ -466,5 +476,3 @@
     </script>
 
 {% endblock %}
-
-

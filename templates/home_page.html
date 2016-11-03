@@ -37,15 +37,15 @@
     	        <div class="row">
                      <ul class="nav nav-tabs nav-justified" style="margin-left: 45px; background-color: white; padding: 5px 5px 5px 5px; border-radius: 10px; width: 500px">
                         <li class="nav-item {% if request.path == '/home/knots' %}active{% endif %}">
-                            <a class="nav-link" href="{{ url_for('site.home_page1') }}">
+                            <a class="nav-link" href="{{ url_for('site.home_page1', user_id=user.id) }}">
                                 <span class="glyphicon glyphicon-list-alt"></span> Knots</a>
                         </li>
                         <li class="nav-item {% if request.path == '/user_profile/following' %}active{% endif %}">
-                            <a class="nav-link" href="{{ url_for('site.following_page') }}">
+                            <a class="nav-link" href="{{ url_for('site.user_profile_page', user_id=user.id) }}">
                                 <span class="glyphicon glyphicon-search"></span> Following</a>
                          </li>
                         <li class="nav-item {% if request.path == '/user_profile/followers' %}active{% endif %}">
-                             <a class="nav-link" href="{{ url_for('site.followers_page') }}">
+                             <a class="nav-link" href="{{ url_for('site.user_profile_page', user_id=user.id) }}">
                                  <span class="glyphicon glyphicon-eye-open"></span> Followers</a>
                         </li>
                      </ul>

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, g
 from components.trends import Trend
 from components.trends import Notification
 from database import database
@@ -7,15 +7,9 @@ from user import UserDatabaseOPS
 from interaction import InteractionDatabaseOPS
 
 site = Blueprint('site', __name__)
-current_user = None
-current_user_real_name = None
 
 @site.route('/', methods=['GET', 'POST'])
 def login_page():
-    global current_user
-    global current_user_real_name
-
-    current_user = None
 
     if request.method == 'GET':
         return render_template('login_page.html', signedin=False)
@@ -24,15 +18,8 @@ def login_page():
             user = UserDatabaseOPS.select_user(request.form['knittername'])
 
             if user and user != -1:
-
                 if request.form['knotword'] == user.password:
-                    current_user = user
-                    real_names = UserDatabaseOPS.select_user_name_surname(user.username)
-
-                    if real_names and real_names != -1:
-                        current_user_real_name = real_names
-
-                    return redirect('user_profile')
+                    return redirect(url_for('site.user_profile_page', user_id=user.id))
 
         return render_template('login_page.html', error=True, signedin=False)
 
@@ -53,21 +40,24 @@ def signup_page():
                                          request.form['profile_pic'], request.form['cover_pic'],
                                          request.form['inputEmail'])
 
-        return redirect(url_for('site.login_page'))
+            return render_template('login_page.html', newly_signup=True, signedin=False)
 
 
-@site.route('/home')
-def home_page():
-    return render_template('home_page.html', signedin=True)
+@site.route('/home/<int:user_id>')
+def home_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    return render_template('home_page.html', signedin=True, user=user)
 
 
-@site.route('/home/knots')
-def home_page1():
-    return render_template('home_page.html', signedin=True)
+@site.route('/home/knots/<int:user_id>')
+def home_page1(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    return render_template('home_page.html', signedin=True, user=user)
 
 
-@site.route('/notifications')
-def notifications_page():
+@site.route('/notifications/<int:user_id>')
+def notifications_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
     trends = [Trend('kismetse-olur', '20.000 Knots'), Trend('ben-bilmem-esim-bilir-evi', '100.000 Knots'),
               Trend('survivor-gonulluler', '40.000 Knots')]
     notifications = [
@@ -78,37 +68,37 @@ def notifications_page():
                      'Random Twitter Lady', 'random', '@Ozan is a great guy!')]
     people = ['ozan', 'was', 'here']
     return render_template('notifications.html', signedin=True, trends=trends, notifications=notifications,
-                           people=people)
+                           people=people, user=user)
 
 
-@site.route('/user_profile', methods=['GET', 'POST'])
-def user_profile_page():
-    global current_user
-    global current_user_real_name
+@site.route('/user_profile/<int:user_id>', methods=['GET', 'POST'])
+def user_profile_page(user_id):
 
     if request.method == 'GET':
-        return render_template('user_profile.html', signedin=True, user=current_user, real_name=current_user_real_name)
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        return render_template('user_profile.html', signedin=True, user=user, real_name=real_name)
     else:
         if 'changeImage' in request.form:
-            current_user.profile_pic = request.form['imageURL']
+            user = UserDatabaseOPS.select_user_with_id(user_id)
+            user.profile_pic = request.form['imageURL']
             my_name = request.form['my_name']
             my_surname = request.form['my_surname']
+            user.cover_pic = request.form['coverURL']
 
-            current_user_real_name = UserDatabaseOPS.select_user_name_surname(current_user.username)
+            user_real_name = UserDatabaseOPS.select_user_name_surname(user.username)
 
-            print(current_user_real_name)
-
-            if current_user_real_name == -1:
-                UserDatabaseOPS.add_real_name(current_user.username,my_name, my_surname)
+            if user_real_name == -1:
+                UserDatabaseOPS.add_real_name(user.username,my_name, my_surname)
             else:
-                UserDatabaseOPS.update_real_name(current_user.username, my_name, my_surname)
+                UserDatabaseOPS.update_real_name(user.username, my_name, my_surname)
 
-            UserDatabaseOPS.update_user(current_user.username, current_user.password,
-                                        current_user.profile_pic, current_user.cover_pic, current_user.mail_address)
+            UserDatabaseOPS.update_user(user.username, user.password,
+                                        user.profile_pic, user.cover_pic, user.mail_address)
 
-            current_user_real_name = UserDatabaseOPS.select_user_name_surname(current_user.username)
+            user_real_name = UserDatabaseOPS.select_user_name_surname(user.username)
 
-        return render_template('user_profile.html', signedin=True, user=current_user, real_name=current_user_real_name)
+        return render_template('user_profile.html', signedin=True, user=user, real_name=user_real_name)
 
 
 @site.route('/help')
@@ -116,24 +106,28 @@ def help_page():
     return render_template('help_page.html', signedin=True)
 
 
-@site.route('/settings')
-def settings_page():
-    return render_template('settings_page.html', signedin=True)
+@site.route('/settings/<int:user_id>')
+def settings_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    return render_template('settings_page.html', signedin=True, user=user)
 
 
 @site.route('/about_us')
 def about_us_page():
-    return render_template('about_us.html', signedin=True)
+    user = UserDatabaseOPS.select_user_with_id(1)
+    return render_template('about_us.html', signedin=True, user=user)
 
 
-@site.route('/account/change/password')
-def change_password_page():
-    return render_template('password_change.html', signedin=True)
+@site.route('/account/<int:user_id>/change/password')
+def change_password_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    return render_template('password_change.html', signedin=True, user=user)
 
 
-@site.route('/account/delete/confirm')
-def confirm_delete_account_page():
-    return render_template('account_delete_confirm.html', signedin=True)
+@site.route('/account/<int:user_id>/delete/confirm')
+def confirm_delete_account_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    return render_template('account_delete_confirm.html', signedin=True, user=user)
 
 
 @site.route('/initdb')
@@ -148,6 +142,7 @@ def database_initialization():
     return redirect(url_for('site.login_page'))
 
 
-@site.route('/messages')
-def messages_page():
-    return render_template('messages.html', signedin=True)
+@site.route('/messages/<int:user_id>')
+def messages_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    return render_template('messages.html', signedin=True, user=user)

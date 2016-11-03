@@ -22,8 +22,8 @@
                 </div>
             </div>
             <ul class="list-group">
-                <li class="list-group-item active"><a href="{{ url_for('site.settings_page') }} " style="color:white;">Account Settings</a></li>
-                <li class="list-group-item"><a href="{{ url_for('site.change_password_page') }}">Change Password</a></li>
+                <li class="list-group-item active"><a href="{{ url_for('site.settings_page', user_id=user.id) }} " style="color:white;">Account Settings</a></li>
+                <li class="list-group-item"><a href="{{ url_for('site.change_password_page', user_id=user.id) }}">Change Password</a></li>
             </ul>
         </div>
         <div class="col-md-8">
@@ -55,7 +55,7 @@
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                     <hr />
-                    <a href="{{ url_for('site.confirm_delete_account_page') }}" style="text-align:center;display:block;">Delete my account</a>
+                    <a href="{{ url_for('site.confirm_delete_account_page', user_id=user.id) }}" style="text-align:center;display:block;">Delete my account</a>
                 </div>
             </form>
         </div>
