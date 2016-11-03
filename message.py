@@ -3,7 +3,7 @@ import psycopg2 as dbapi2
 
 
 class Message:
-    def _init_(self, message_id, message_content, from_user_id, to_user_id, message_date):
+    def __init__(self, message_id, message_content, from_user_id, to_user_id, message_date):
         self.message_id = message_id
         self.message_content = message_content
         self.from_user_id = from_user_id
