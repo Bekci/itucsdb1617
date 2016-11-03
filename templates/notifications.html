@@ -34,8 +34,8 @@
 		<div class="col-sm-1"></div>
 
 		<div name='notifications' class="col-sm-5" style="background-color:white;">
-			{% for knot in knots if knots is not none %}
-			<form action="{{ url_for('site.notifications_page') }}" method="POST">
+			{% for knot in knots %}
+			<form action="{{ url_for('site.notifications_page', user_id=user.id) }}" method="POST">
 				<div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
 					<div class="alert alert-info" style="border-radius:15px;">
 						<img src="{{knot.action_source_pic}}" style="height: 24px; width: 24px; border-radius: 8px"> <b>{{knot.action_source}}</b>						has <b>{{knot.action_type}}</b> your knot!
@@ -83,7 +83,6 @@
 				</div>
 			</form>
 			{% endfor %}
-
 		</div>
 
 		<div class="col-sm-1"></div>

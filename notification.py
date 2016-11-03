@@ -21,47 +21,46 @@ class NotificationDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             # ----------- Ozan ATA - Get Notifications -----------
-            
+
             first_query = []
-            query = """SELECT 
+            query = """SELECT
                             knots.knot_id as knot_id,
                             knots.knot_content as knot_content,
                             users.profile_pic AS user_pic_url,
                             users.username AS username,
                             knots.like_counter AS like_number,
                             knots.reknot_counter AS reknot_number
-                        FROM knots 
+                        FROM knots
                             INNER JOIN users ON knots.owner_id = users.user_id
                             INNER JOIN like_reknot ON knots.knot_id = like_reknot.knot_id
                             where like_counter > 0 OR reknot_counter > 0;"""
 
-            
+
             try:
                 cursor.execute(query)
                 first_query = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
-            
+
             second_query = []
-            query = """SELECT 
+            query = """SELECT
                             users.profile_pic as action_source_pic,
-                            users.username as action_source, 
+                            users.username as action_source,
                             like_reknot.is_like as action_is_like
                         from like_reknot
                             inner join users on like_reknot.user_id = users.user_id
                             INNER JOIN knots on knots.knot_id = like_reknot.knot_id
                             where knots.owner_id = %s;"""
             try:
-                cursor.execute(query,[user_id])
+                cursor.execute(query,[user_id.id])
                 second_query = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
             else:
                 connection.commit()
-            
+
             cursor.close()
-            
-            if first_query is not None and second_query is not None:
+            if len(first_query) > 0 and len(second_query) > 0:
                 i = 0
                 max = len(first_query)
                 result = []
@@ -78,7 +77,7 @@ class NotificationDatabaseOPS:
                 return result
 
             else:
-                return -1
+                return []
 
     @classmethod
     def check_like(self, knot_id, user_id, is_like):
@@ -87,11 +86,11 @@ class NotificationDatabaseOPS:
 
                 # ----------- Ozan Ata - Check Like Existance -----------
 
-                query = """SELECT * FROM LIKE_REKNOT 
-                            WHERE 
+                query = """SELECT * FROM LIKE_REKNOT
+                            WHERE
                             knot_id=%s and
                             user_id=%s and
-                            is_like=%s  
+                            is_like=%s
                             """
 
                 try:
@@ -116,8 +115,8 @@ class NotificationDatabaseOPS:
 
                 # ----------- Ozan ATA - Check Reknot Existance -----------
 
-                query = """SELECT * FROM LIKE_REKNOT 
-                            WHERE 
+                query = """SELECT * FROM LIKE_REKNOT
+                            WHERE
                             knot_id=%s and
                             user_id=%s and
                             is_like=%s
@@ -162,10 +161,10 @@ class NotificationDatabaseOPS:
     def delete_relation(self,knot_id, user_id, is_like):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            # ----------- Ozan ATA - DELETE RELATION -----------        
-            query = """ DELETE FROM LIKE_REKNOT 
-                    WHERE 
-                    knot_id=%s and 
+            # ----------- Ozan ATA - DELETE RELATION -----------
+            query = """ DELETE FROM LIKE_REKNOT
+                    WHERE
+                    knot_id=%s and
                     user_id=%s and
                     is_like=%s"""
             try:
@@ -210,7 +209,7 @@ class NotificationDatabaseOPS:
                 connection.commit()
 
             cursor.close()
-    
+
     @classmethod
     def increase_knot_reknot(self, knot_id):
         with dbapi2.connect(database.config) as connection:
