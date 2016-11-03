@@ -10,13 +10,13 @@
             <div class="well" style="background-color:white;">
                 <div class="row">
                     <div class="col-md-4">
-                        <img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" class="img-thumbnail img-responsive"/>
+                        <img src="{{ user.profile_pic }}" class="img-thumbnail img-responsive"/>
                     </div>
                     <div class="col-md-8">
                         <div style="float:left;">
-                            <h3><b>Knitter Official</b></h3>
+                            <h3><b>{{ real_name.name }} {{ real_name.surname }}</b></h3>
 
-                            <h4><small>@Knitter_Official</small></h4>
+                            <h4><small>@{{ user.username }}</small></h4>
                         </div>
                     </div>
                 </div>
@@ -28,28 +28,26 @@
         </div>
         <div class="col-md-8">
             <h3>Account Settings</h3>
+            {% if success %}
+            <div class="alert alert-success">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              Successfully changed
+            </div>
+            {% endif %}
             <form role="form" class="form-normal" method="post" action="" accept-charset="UTF-8">
-                <div class="form-group">
-                    <label class="control-label" for="UsernameField">Username</label>
-                    <div>
-                        <input type="text" class="form-control" id="UsernameField" placeholder="Username">
-                    </div>
-                </div>
                 <div class="form-group">
                     <label class="control-label" for="EmailField">Email address</label>
                     <div>
-                        <input type="email" class="form-control" id="EmailField" placeholder="Email Address">
+                        <input type="email" class="form-control" id="EmailField" name="mail_address" value="{{ user.mail_address }}">
                     </div>
-                </div>
-                <div class="form-group">
-                    <div>
-                        <div class="checkbox">
-                            <label class="control-label">
-                                <input type="checkbox"> Hide my tweets
-                            </label>
-                        </div>
+                    {% if error %}
+                    <div class="alert alert-danger">
+                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                      Username exists
                     </div>
+                    {% endif %}
                 </div>
+
                 <div class="form-group">
                     <div>
                         <button type="submit" class="btn btn-primary">Submit</button>

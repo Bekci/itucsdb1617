@@ -6,7 +6,7 @@
             <div class="well" style="background-color:white;">
                 <h2>Delete Confirm for Account</h2>
                 <hr />
-                <h3><small>Before you delete @Knitter_Official, you have to know below explanations:</small></h3>
+                <h3><small>Before you delete @{{ user.username }}, you have to know below explanations:</small></h3>
                 <ul>
                     <li>You can change your username. You do not need to delete your account. It is in
                         <a href="{{ url_for('site.settings_page', user_id=user.id) }}">Account Settings</a> page
@@ -15,7 +15,7 @@
                 </ul>
                 <hr />
                 <form method="post">
-                  <button type="submit" class="btn btn-danger" style="margin-left:100px;">Delete @Knitter_Official </button>
+                  <button type="submit" class="btn btn-danger" style="margin-left:100px;">Delete @{{ user.username }} </button>
                   <a href="{{ url_for('site.settings_page', user_id=user.id) }}" class="btn btn-primary">Cancel</a>
                 </form>
 

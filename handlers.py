@@ -63,7 +63,7 @@ def notifications_page(user_id):
     if request.method == 'GET':
         return render_template('notifications.html', signedin=True,trends=trends,knots=knots)
 
-    else:        
+    else:
         if 'delete' in request.form:
             knot_id = request.form['delete']
             UserDatabaseOPS.delete_knot(knot_id)
@@ -128,10 +128,19 @@ def help_page():
     return render_template('help_page.html', signedin=True)
 
 
-@site.route('/settings/<int:user_id>')
+@site.route('/settings/<int:user_id>', methods=['GET', 'POST'])
 def settings_page(user_id):
-    user = UserDatabaseOPS.select_user_with_id(user_id)
-    return render_template('settings_page.html', signedin=True, user=user)
+    if request.method == 'GET':
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        return render_template('settings_page.html', signedin=True, user=user, real_name=real_name, error=False)
+    else:
+        mail = request.form['mail_address']
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        UserDatabaseOPS.update_user(user.username, user.password, user.profile_pic, user.cover_pic, mail)
+        changed_user = UserDatabaseOPS.select_user_with_id(user_id)
+        return render_template('settings_page.html', signedin=True, user=changed_user, real_name=real_name, success=True)
 
 
 @site.route('/about_us')
@@ -140,16 +149,37 @@ def about_us_page():
     return render_template('about_us.html', signedin=True, user=user)
 
 
-@site.route('/account/<int:user_id>/change/password')
+@site.route('/account/<int:user_id>/change/password', methods=['GET', 'POST'])
 def change_password_page(user_id):
-    user = UserDatabaseOPS.select_user_with_id(user_id)
-    return render_template('password_change.html', signedin=True, user=user)
+    if request.method == 'GET':
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        return render_template('password_change.html', signedin=True, user=user, real_name=real_name, error=False)
+    else:
+        current_password = request.form['CurrentPassword']
+        new_password = request.form['NewPassword']
+        confirm_password = request.form['ConfirmPassword']
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        if current_password != user.password:
+            return render_template('password_change.html', signedin=True, user=user, real_name=real_name, password_error=True)
+        elif new_password != confirm_password:
+             return render_template('password_change.html', signedin=True, user=user, real_name=real_name, password_match_error=True)
+        else:
+            UserDatabaseOPS.update_user(user.username, new_password, user.profile_pic, user.cover_pic, user.mail_address)
+        return render_template('password_change.html', signedin=True, user=user, real_name=real_name, success=True)
 
 
-@site.route('/account/<int:user_id>/delete/confirm')
+@site.route('/account/<int:user_id>/delete/confirm', methods=['GET', 'POST'])
 def confirm_delete_account_page(user_id):
-    user = UserDatabaseOPS.select_user_with_id(user_id)
-    return render_template('account_delete_confirm.html', signedin=True, user=user)
+    if request.method == 'GET':
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        return render_template('account_delete_confirm.html', signedin=True, user=user)
+    else:
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        UserDatabaseOPS.delete_user(user.username)
+        return redirect(url_for('site.login_page'))
 
 
 @site.route('/initdb')
