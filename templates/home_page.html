@@ -95,6 +95,7 @@
 					    <div class="media-body" style="border-bottom: 0.1em solid white;overflow:visible;">
 						    <h4 class="media-heading">
 							    <span class="glyphicon glyphicon-link"></span> {{ following_counter.username }}
+                                {% if (knot_counter.owner_id==user.id) %}
                                 <form action="{{ url_for('site.home_page', user_id=user.id) }}" method="post">
 							    <div class="dropdown pull-right">
 								    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #f5f8fa;">
@@ -108,14 +109,38 @@
 										    </button>
 									    </li>
 									    <li>
-										    <button class="btn dropdown-toggle" name="update" id="update" type="submit" value="{{ knot_counter.knot_id }}" style="background-color: #f5f8fa;">
+										    <button class="btn dropdown-toggle" data-toggle="modal" data-target="#myModal" name="update" id="update" type="button" value="{{ knot_counter.knot_id }}" style="background-color: #f5f8fa;">
 											    <i class="glyphicon glyphicon-edit"></i> Update This Knot
 										    </button>
-									    </li>
+                                        </li>
 								    </ul>
+
+                                    <form action="{{ url_for('site.home_page', user_id=user.id) }}" method="post">
+                                        <div class="form-group">
+                                            <div class="modal fade" id="myModal" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <textarea class="form-control" rows="2" name="update_knot_content" style="resize: none">{{ knot_counter.knot_content }}</textarea>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-info" name="update_knot" id="update_knot" value="{{ knot_counter.knot_id }}"><span class="glyphicon glyphicon-edit"></span> Update </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            </form>
 
 							    </div>
                                 </form>
+                                {% endif %}
 						    </h4>
                             <p style="margin-left: 10px">{{ knot_counter.knot_content }}</p>
 					    </div>

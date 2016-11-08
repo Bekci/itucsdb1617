@@ -70,8 +70,8 @@ def home_page(user_id):
         elif 'delete' in request.form:
             KnotDatabaseOPS.delete_knot(request.form['delete'])
             return redirect(url_for('site.home_page', user_id=user.id))
-        elif 'update' in request.form:
-            # update part is under construction
+        elif 'update_knot' in request.form:
+            KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, "2016-11-09", request.form['update_knot'])
             return redirect(url_for('site.home_page', user_id=user.id))
 
 
