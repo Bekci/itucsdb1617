@@ -57,7 +57,7 @@ class InteractionDatabaseOPS:
 
             query = """SELECT TARGET_USER_ID FROM USER_INTERACTION WHERE BASE_USER_ID = %s"""
             followings_ids = []
-            followings_list = []
+            # followings_list = []
             try:
                 cursor.execute(query, (base_id,))
                 followings_ids = cursor.fetchall()
@@ -68,14 +68,16 @@ class InteractionDatabaseOPS:
 
             cursor.close()
 
-            for person in followings_ids:
-                followings_list.append(
-                    Interaction(
-                        base_id,  # base user
-                        person[1]  # following user by base user
-                    )
-                )
-            return followings_list
+            return followings_ids
+
+            # for person in followings_ids:
+            # followings_list.append(
+            # Interaction(
+            # base_id,  # base user
+            # person  # following user by base user
+            # )
+            # )
+            # return followings_list
 
     @classmethod
     def select_followers_from_user_interaction(cls, target_id):  # target_id keeps followings
@@ -86,7 +88,7 @@ class InteractionDatabaseOPS:
 
             query = """SELECT BASE_USER_ID FROM USER_INTERACTION WHERE TARGET_USER_ID = %s"""
             followers_ids = []
-            followers_list = []
+            # followers_list = []
 
             try:
                 cursor.execute(query, (target_id,))
@@ -98,14 +100,15 @@ class InteractionDatabaseOPS:
 
             cursor.close()
 
-            for person in followers_ids:
-                followers_list.append(
-                    Interaction(
-                        target_id,  # target user
-                        person[1]  # follower user of target user
-                    )
-                )
-            return followers_list
+            return followers_ids
+            # for person in followers_ids:
+            # followers_list.append(
+            # Interaction(
+            # target_id,  # target user
+            # person  # follower user of target user
+            # )
+            # )
+            # return followers_list
 
     @classmethod
     def select_interactions_for_search(cls, base_id):

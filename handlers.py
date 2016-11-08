@@ -45,16 +45,41 @@ def signup_page():
             return render_template('login_page.html', newly_signup=True, signedin=False)
 
 
-@site.route('/home/<int:user_id>')
+@site.route('/home/<int:user_id>', methods=['GET', 'POST'])
 def home_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
-    return render_template('home_page.html', signedin=True, user=user)
+    real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+    if request.method == 'GET':
+        my_followings_id = InteractionDatabaseOPS.select_followings_from_user_interaction(user.id)
+        my_followings_user = []
+        my_followings_user.append(user)
+        my_followings_knots = []
+        my_temp_knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
+        for counter in my_temp_knot_list:
+            my_followings_knots.append(counter)
+        for index in my_followings_id:
+            my_followings_user.append(UserDatabaseOPS.select_user_with_id(index))
+            temp_knot_list = KnotDatabaseOPS.select_knots_for_owner(index)
+            for element in temp_knot_list:
+                my_followings_knots.append(element)
+        return render_template('home_page.html', signedin=True, user=user, real_name=real_name, my_followings_knots=my_followings_knots, my_followings_user=my_followings_user)
+    else:
+        if 'add_knot' in request.form:
+            KnotDatabaseOPS.add_knot(user_id, request.form['new_knot_content'], 0, 0, "2016-11-08")
+            return redirect(url_for('site.home_page', user_id=user.id))
+        elif 'delete' in request.form:
+            KnotDatabaseOPS.delete_knot(request.form['delete'])
+            return redirect(url_for('site.home_page', user_id=user.id))
+        elif 'update' in request.form:
+            # update part is under construction
+            return redirect(url_for('site.home_page', user_id=user.id))
 
 
-@site.route('/home/knots/<int:user_id>')
-def home_page1(user_id):
+@site.route('/home/knots/<int:user_id>', methods=['GET', 'POST'])
+def home_page_knots(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
     return render_template('home_page.html', signedin=True, user=user)
+
 
 @site.route('/notifications/<int:user_id>', methods = ['GET','POST'])
 def notifications_page(user_id):

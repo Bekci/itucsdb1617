@@ -12,111 +12,132 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-md-3" style="margin-top: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
-                 <p style="text-align: center"><img
-                        src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+
+            <div class="col-md-3" style="text-align: center; margin-top: 20px; background-color: white; padding: 5px 5px 5px 5px; border-radius: 10px">
+
+                <p><img
+                        src={{ user.profile_pic }}
                         height="220px"
                         width="220px"
                         style="margin-top:30px; margin-bottom: 20px; border-radius: 25px; border: 2px solid #f5f8fa; padding: 5px 5px 5px 5px; text-align: center; vertical-align: center">
-                 </p>
-                <h3 style="text-align: center">Ozan Ata</h3>
-                <p style="text-align: center"><span class="glyphicon glyphicon-link"></span>saykolover</p>
-                <p style="text-align: center"><span class="glyphicon glyphicon-resize-small"></span><a> web.itu.edu.tr/saykolover</a></p>
-                <p style="text-align: center"><span class="glyphicon glyphicon-share-alt"></span> Joined July 2012</p>
-<!--    	<hr><span class="glyphicon glyphicon-list-alt"></span> Knots
-    	<br><span class="glyphicon glyphicon-search"></span> Followings
-    	<br><span class="glyphicon glyphicon-eye-open"></span> Followers
-    	<hr><span class="glyphicon glyphicon-asterisk"></span> New Follower Requests
-    	<hr><span class="glyphicon glyphicon-globe"></span> Trend Topics <hr>
--->         </div>
+                </p>
+                <h3>{{ real_name.name }} {{ real_name.surname }} </h3>
+                <p><span class="glyphicon glyphicon-link"></span>{{ user.username }}</p>
+                <p><span class="glyphicon glyphicon-resize-small"></span><a> {{ user.mail_address }}</a></p>
+                <p><span class="glyphicon glyphicon-share-alt"></span> {{ user.register_date }}</p>
+
+            </div>
 
 
+            <div class="col-md-6" style="margin-top: 20px; margin-left: 25px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
 
-            <div class="col-md-6" style="margin-top: 20px; margin-left: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+                <div style="text-align: center">
 
-    	        <div class="row">
-                     <ul class="nav nav-tabs nav-justified" style="margin-left: 45px; background-color: white; padding: 5px 5px 5px 5px; border-radius: 10px; width: 500px">
+                    <ul class="nav nav-tabs nav-justified"
+                        style="text-align: center; background-color: white; border-radius: 10px;">
                         <li class="nav-item {% if request.path == '/home/knots' %}active{% endif %}">
-                            <a class="nav-link" href="{{ url_for('site.home_page1', user_id=user.id) }}">
+                            <a class="nav-link" href="{{ url_for('site.home_page', user_id=user.id) }}">
                                 <span class="glyphicon glyphicon-list-alt"></span> Knots</a>
                         </li>
                         <li class="nav-item {% if request.path == '/user_profile/following' %}active{% endif %}">
                             <a class="nav-link" href="{{ url_for('site.user_profile_page', user_id=user.id) }}">
                                 <span class="glyphicon glyphicon-search"></span> Following</a>
-                         </li>
-                        <li class="nav-item {% if request.path == '/user_profile/followers' %}active{% endif %}">
-                             <a class="nav-link" href="{{ url_for('site.user_profile_page', user_id=user.id) }}">
-                                 <span class="glyphicon glyphicon-eye-open"></span> Followers</a>
                         </li>
-                     </ul>
+                        <li class="nav-item {% if request.path == '/user_profile/followers' %}active{% endif %}">
+                            <a class="nav-link" href="{{ url_for('site.user_profile_page', user_id=user.id) }}">
+                                <span class="glyphicon glyphicon-eye-open"></span> Followers</a>
+                        </li>
+                    </ul>
+
                 </div>
 
-                <div class="row" style="margin-left: 30px">
-                    <div class="media" style="margin-top: 30px; background-color: #f5f8fa; border-radius: 15px; width: 500px; height: 110px">
+                <div style="text-align: center">
+
+                    <div class="media" style="margin-top: 10px; background-color: #f5f8fa; border-radius: 15px">
        		            <div class="media-left">
-
-                            <a href="#">
-                                <img class="media-object"
-                                     src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
-                                     alt="userPhoto" style="margin-top: 10px; margin-left: 10px; height: 55px; width: 55px; border-radius: 30px">
-                            </a>
-
+                            <div style="margin-left: 20px; margin-top: 10px">
+                                <a href="#">
+                                    <img class="media-object"
+                                        src={{ user.profile_pic }}
+                                        alt="userPhoto" style="height: 55px; width: 55px; border-radius: 30px">
+                                </a>
+                            </div>
        		            </div>
        		            <div class="media-body">
-       			            <p style="padding: 10px"><textarea style="resize: none" rows="2" cols="53" placeholder="  What's happening? Start knitting!"></textarea><br>
-       			                <button type="button" class="btn btn-snd btn-sm" style="margin-left:335px">
-        		                    <span class="glyphicon glyphicon-pencil"></span> Knot
-        		                </button>
-       			            </p>
-       		            </div>
-       	            </div>
-
-                    <div class="media" style="margin-top: 30px; background-color: #f5f8fa; border-radius: 15px; width: 500px; height: 110px">
-       		            <div class="media-left">
-
-                            <a href="#">
-                                <img class="media-object"
-                                    src="https://s-media-cache-ak0.pinimg.com/564x/d3/98/3e/d3983e83c8b95cbedadd03c181abbb53.jpg"
-                                    alt="userPhoto" style="margin-top: 10px; margin-left: 10px; height: 55px; width: 55px; border-radius: 30px">
-                            </a>
-
-       		            </div>
-       		            <div class="media-body" style="padding: 15px">
-       			            <p>Knot #2</p><br>
-                            <p style="text-align: right">
-                                <button type="button" class="btn btn-default btn-sm">
-          		                    <span class="glyphicon glyphicon-heart"></span> Like
-                                </button>
-                                <button type="button" class="btn btn-default btn-sm">
-          		                    <span class="glyphicon glyphicon-retweet"></span> Reknot
-        		                </button>
-       			            </p>
-       		            </div>
-       	            </div>
-                     <div class="media" style="margin-top: 30px; background-color: #f5f8fa; border-radius: 15px; width: 500px; height: 110px">
-       		            <div class="media-left">
-
-                            <a href="#">
-                                <img class="media-object"
-                                    src="http://optimusprime.fansector.com/images/gallery/optimus_prime_gallery_0003.jpg"
-                                    alt="userPhoto" style="margin-top: 10px; margin-left: 10px; height: 55px; width: 55px; border-radius: 30px">
-                            </a>
-
-                        </div>
-       		            <div class="media-body" style="padding: 15px">
-       			            <p>Knot #3</p><br>
-                            <p style="text-align: right">
-                                <button type="button" class="btn btn-default btn-sm">
-          		                    <span class="glyphicon glyphicon-heart"></span> Like
-                                </button>
-                                <button type="button" class="btn btn-default btn-sm">
-          		                    <span class="glyphicon glyphicon-retweet"></span> Reknot
-        		                </button>
-       			            </p>
+                            <form action="{{ url_for('site.home_page', user_id=user.id) }}" method="post" style="padding: 10px 10px 5px 1px">
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="2" name="new_knot_content" style="resize: none" placeholder="  What's happening? Start knitting!"></textarea>
+                                        <div style="text-align: right; margin-top: 5px">
+                                            <button type="submit" class="btn btn-info" name="add_knot" value="add_knot"><span class="glyphicon glyphicon-plus"></span> Knot</button>
+                                        </div>
+                                </div>
+                            </form>
        		            </div>
        	            </div>
 
                 </div>
+
+                <div>
+                    {% for following_counter in my_followings_user %}
+                        {% for knot_counter in my_followings_knots %}
+                            {% if (following_counter.id==knot_counter.owner_id) %}
+				    <div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
+
+					    <div class="media-left">
+						    <div style="margin-left: 20px; margin-top: 10px">
+                                <a href="#">
+                                    <img class="media-object"
+                                        src={{ following_counter.profile_pic }}
+                                        alt="userPhoto" style="height: 55px; width: 55px; border-radius: 30px">
+                                </a>
+                            </div>
+					    </div>
+					    <div class="media-body" style="border-bottom: 0.1em solid white;overflow:visible;">
+						    <h4 class="media-heading">
+							    <span class="glyphicon glyphicon-link"></span> {{ following_counter.username }}
+                                <form action="{{ url_for('site.home_page', user_id=user.id) }}" method="post">
+							    <div class="dropdown pull-right">
+								    <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #f5f8fa;">
+									    <i class="glyphicon glyphicon-option-horizontal"></i>
+								    </button>
+
+								    <ul class="dropdown-menu" style="overflow:visible; background-color: #f5f8fa;">
+									    <li style="border-bottom:0.01em solid white;">
+										    <button class="btn dropdown-toggle" name="delete" id="delete" type="submit" value="{{ knot_counter.knot_id }}" style="background-color: #f5f8fa;">
+											    <i class="glyphicon glyphicon-trash"></i> Delete This Knot
+										    </button>
+									    </li>
+									    <li>
+										    <button class="btn dropdown-toggle" name="update" id="update" type="submit" value="{{ knot_counter.knot_id }}" style="background-color: #f5f8fa;">
+											    <i class="glyphicon glyphicon-edit"></i> Update This Knot
+										    </button>
+									    </li>
+								    </ul>
+
+							    </div>
+                                </form>
+						    </h4>
+                            <p style="margin-left: 10px">{{ knot_counter.knot_content }}</p>
+					    </div>
+					    <div class="media-bottom" style="overflow:hidden;">
+						    <div class="pull-left" style="margin-left:20%">
+							    <button class="btn dropdown-toggle" name="like" id="like" type="submit" style="background-color: #f5f8fa;">
+								    <i class="glyphicon glyphicon-heart" style="background-color: #f5f8fa;">{{ knot_counter.like_counter }}</i>
+							    </button>
+						    </div>
+						    <div class="pull-left" style="margin-left:5%;">
+							    <button class="btn dropdown-toggle" name="reknot" id="reknot" type="submit" style="background-color: #f5f8fa;">
+								    <i type="button" class="glyphicon glyphicon-link" style="background-color: #f5f8fa;">{{ knot_counter.reknot_counter }}</i>
+							    </button>
+						    </div>
+					    </div>
+
+				    </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+
             </div>
 
             <div class="col-md-1">
@@ -127,7 +148,9 @@
                 <p style="text-align: center"><a href="http://localhost:5000/about_us">About Us.</a>
                 </p>
             </div>
+
         </div>
+
     </div>
 
 
