@@ -7,6 +7,7 @@ from user import UserDatabaseOPS
 from notification import NotificationDatabaseOPS
 from interaction import InteractionDatabaseOPS
 from message import MessageDatabaseOPS
+from datetime import datetime
 
 site = Blueprint('site', __name__)
 
@@ -65,13 +66,13 @@ def home_page(user_id):
         return render_template('home_page.html', signedin=True, user=user, real_name=real_name, my_followings_knots=my_followings_knots, my_followings_user=my_followings_user)
     else:
         if 'add_knot' in request.form:
-            KnotDatabaseOPS.add_knot(user_id, request.form['new_knot_content'], 0, 0, "2016-11-08")
+            KnotDatabaseOPS.add_knot(user_id, request.form['new_knot_content'], 0, 0, datetime.now().date().isoformat())
             return redirect(url_for('site.home_page', user_id=user.id))
         elif 'delete' in request.form:
             KnotDatabaseOPS.delete_knot(request.form['delete'])
             return redirect(url_for('site.home_page', user_id=user.id))
         elif 'update_knot' in request.form:
-            KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, "2016-11-09", request.form['update_knot'])
+            KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, datetime.now().date().isoformat(), request.form['update_knot'])
             return redirect(url_for('site.home_page', user_id=user.id))
 
 

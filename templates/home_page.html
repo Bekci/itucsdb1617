@@ -109,7 +109,7 @@
 										    </button>
 									    </li>
 									    <li>
-										    <button class="btn dropdown-toggle" data-toggle="modal" data-target="#myModal" name="update" id="update" type="button" value="{{ knot_counter.knot_id }}" style="background-color: #f5f8fa;">
+										    <button class="btn dropdown-toggle" data-toggle="modal" data-target="#myModal-{{ knot_counter.knot_id }}" name="update" id="update" type="button" value="{{ knot_counter.knot_id }}" style="background-color: #f5f8fa;">
 											    <i class="glyphicon glyphicon-edit"></i> Update This Knot
 										    </button>
                                         </li>
@@ -117,7 +117,7 @@
 
                                     <form action="{{ url_for('site.home_page', user_id=user.id) }}" method="post">
                                         <div class="form-group">
-                                            <div class="modal fade" id="myModal" role="dialog">
+                                            <div class="modal fade" id="myModal-{{ knot_counter.knot_id }}" role="dialog">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -136,7 +136,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                            </form>
+                                    </form>
 
 							    </div>
                                 </form>
