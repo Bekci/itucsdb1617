@@ -11,152 +11,116 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
-          <center>
-                <h1>All Messages</h1>
-          </center>
-
+          <h1 style="text-align:center;">All Messages <a style="float:right;" data-toggle="modal" data-target="#add-message-form" class="btn btn-primary" method="post" name="add_message">Send new message</a></h1>
       </div>
+			<div class="modal fade" tabindex="-1" role="dialog" id="add-message-form">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">Send Message</h4>
+			      </div>
+			      <div class="modal-body">
+			        <form action="{{ url_for('site.messages_page', user_id=user.id) }}" method="post">
+								<div class="form-group">
+								  <label for="send-to">Send To:</label>
+								  <select class="form-control" id="send-to" name="to_user_id">
+								    {% for contact_user in contact_user_list %}
+											{% set real_name = get_real_name(contact_user.id) %}
+											<option value="{{ contact_user.id }}">{{ real_name.name }} {{ real_name.surname }}</option>
+										{% endfor %}
+								  </select>
+								</div>
+								<div class="form-group">
+								  <label for="Content">Content:</label>
+								  <textarea style="resize:none;" class="form-control" rows="2" id="content" name="message_content"></textarea>
+								</div>
+								<button type="submit" class="btn btn-success" method="post" name="send_new_message">Send</button>
+							</form>
+			      </div>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
 
       <!-- Example row of columns -->
-    <div name="messages" class="container">
+    <div name="messages">
 				<ul class="list-group">
-  				{% for message in all_messages %}
-  					<li class="list-group-item"><a href="#{{ message.to_user_id }}" data-toggle="modal" data-target="#messages">{{ message.to_user_id }}</a>
-							<form method="post" action="{{ url_for('site.message_delete', user_id=message.from_user_id, message_id=message.message_id)}}">
-								<button type="submit" class="btn btn-default" method="post">Delete</button>
+  				{% for chat in all_messages %}
+					{% if chat %}
+						{% if chat.0.to_user_id == user.id %}
+						{% set real_name = get_real_name(chat.0.from_user_id) %}
+						{% set chat_user_id = chat.0.from_user_id %}
+						{% else %}
+						{% set real_name = get_real_name(chat.0.to_user_id) %}
+						{% set chat_user_id = chat.0.to_user_id %}
+						{% endif %}
+  					<li class="list-group-item">
+							<a href="#" OnClick="get_to_id({{ chat_user_id }})" data-toggle="modal" data-target="#messages-{{ chat.0.message_id }}">{{ real_name.name|capitalize }} {{ real_name.surname|capitalize }}</a>
+							<form method="post" action="{{ url_for('site.messages_page', user_id=chat.0.from_user_id)}}">
+								<div class="form-group">
+									<input type="hidden" class="form-control" id="chat_id" name="chat_id" value="{{ loop.index0 }}">
+								</div>
+								<button type="submit" class="btn btn-danger" method="post" name="delete_messages">Delete</button>
 							</form>
 						</li>
+						<div class="modal fade" tabindex="-1" role="dialog" id="messages-{{ chat.0.message_id }}">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						        <h4 class="modal-title">Message History</h4>
+						      </div>
+						      <div class="modal-body">
+										<div id="old_messages">
+											{% for message in chat %}
+											{% set chat_user = get_user_info(message.from_user_id) %}
+											<div class="row">
+												{% if message.from_user_id == user.id %}
+												<div class="col-md-11">
+													<div class="alert alert-warning">
+														{{ message.message_content }}
+													</div>
+												</div>
+												<div class="col-md-1">
+													<img src="{{ user.profile_pic }}" width="40px"/>
+												</div>
+												{% else %}
+												<div class="col-md-1">
+													<img src="{{ chat_user.profile_pic }}" width="40px"/>
+												</div>
+												<div class="col-md-11">
+													<div class="alert alert-warning">
+														{{ message.message_content }}
+													</div>
+												</div>
+												{% endif %}
+											</div>
+											{% endfor %}
+										</div>
+									</div>
+									<div class="modal-footer">
+										<form method="post" action="{{ url_for('site.messages_page', user_id=user.id)}}">
+										  <div class="form-group">
+										    <label for="InputTextArea">Your Message:</label>
+										    <textarea class="form-control" rows="2" id="message" name="message_content"></textarea>
+										  </div>
+											<div class="form-group">
+											  <input type="hidden" class="form-control" id="to_user_response_id" name="to_user_id">
+											</div>
+										  <button type="submit" class="btn btn-default" method="post" name="response_answer">Send</button>
+										</form>
+						      </div>
+						    </div><!-- /.modal-content -->
+						  </div><!-- /.modal-dialog -->
+						</div><!-- /.modal -->
+						{% endif %}
   				{% endfor %}
 				</ul>
     </div>
-		<div class="modal fade" tabindex="-1" role="dialog" id="messages">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		        <h4 class="modal-title">Message History</h4>
-		      </div>
-		      <div class="modal-body">
-						<div id="old_messages">
-							<div class="row">
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg" width="40px"/>
-								</div>
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 1
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 2
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" width="40px" style="left:0;position:absolute;"/>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg" width="40px"/>
-								</div>
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 1
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 2
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" width="40px" style="left:0;position:absolute;"/>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg" width="40px"/>
-								</div>
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 1
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 2
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" width="40px" style="left:0;position:absolute;"/>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg" width="40px"/>
-								</div>
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 1
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 2
-									</div>
-								</div>
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/468699268182999040/o10jbsgO.jpeg" width="40px" style="left:0;position:absolute;"/>
-								</div>
-								<button type="button">Delete Message</button>
-							</div>
-							<div class="row">
-								<div class="col-md-1">
-									<img src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg" width="40px"/>
-								</div>
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 1
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-11">
-									<div class="alert alert-warning">
-			  						Message 2
-									</div>
-									<button type="button">Delete Message</button>
-								</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<form>
-						  <div class="form-group">
-						    <label for="InputTextArea">Your Message:</label>
-						    <textarea class="form-control" rows="2" id="message" name="message_content"></textarea>
-						  </div>
-						  <button type="submit" class="btn btn-default" method="post">Send</button>
-						</form>
-		      </div>
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
+		<script>
+				function get_to_id(id){
+					$("#to_user_response_id").val(id);
+				};
+		</script>
 </div>
 {% endblock %}

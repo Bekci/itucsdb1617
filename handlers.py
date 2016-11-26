@@ -228,19 +228,52 @@ def database_initialization():
 
 @site.route('/messages/<int:user_id>', methods=['GET', 'POST'])
 def messages_page(user_id):
+
     user = UserDatabaseOPS.select_user_with_id(user_id)
-    all_messages = MessageDatabaseOPS.select_messages_for_user(user_id)
+    my_followings = InteractionDatabaseOPS.select_followings_from_user_interaction(user_id)
+    my_followers = InteractionDatabaseOPS.select_followers_from_user_interaction(user_id)
+    contact_list = []
+    for my_following in my_followings:
+        if my_following in my_followers:
+            contact_list.append(my_following)
+    contact_user_list = []
+    for contact_id in contact_list:
+        contact = UserDatabaseOPS.select_user_with_id(contact_id)
+        contact_user_list.append(contact)
+    all_messages = []
+    for contact in contact_list:
+        messages = MessageDatabaseOPS.select_messages_for_chat(user_id, contact)
+        all_messages.append(messages)
 
     if request.method == 'GET':
         messages=MessageDatabaseOPS.select_messages_for_user(user_id)
-        return render_template('messages.html', signedin=True, user=user, all_messages=all_messages)
+        return render_template('messages.html', signedin=True, user=user, all_messages=all_messages, contact_user_list=contact_user_list)
     else:
-        content=request.form['message_content']
-        messages=UserDatabaseOPS.add_message(content,user_id, to_user_id)
 
-@site.route('/messages/delete/<int:user_id>/<int:message_id>', methods=['GET', 'POST'])
-def message_delete(user_id, message_id):
-    MessageDatabaseOPS.delete_message(message_id)
-    user = UserDatabaseOPS.select_user_with_id(user_id)
-    all_messages = MessageDatabaseOPS.select_messages_for_user(user_id)
-    return redirect(url_for('site.messages_page', user_id=user_id))
+        if 'send_new_message' in request.form:
+
+            content = request.form['message_content']
+            to_user_id = request.form['to_user_id']
+            MessageDatabaseOPS.add_message(content,user_id, to_user_id)
+            return redirect(url_for('site.messages_page', user_id=user_id))
+        elif 'response_answer' in request.form:
+            content = request.form['message_content']
+            to_user_id = request.form['to_user_id']
+            MessageDatabaseOPS.add_message(content,user_id, to_user_id)
+            return redirect(url_for('site.messages_page', user_id=user_id))
+        elif 'delete_messages' in request.form:
+            index = int(request.form['chat_id'])
+            for message in all_messages[index]:
+                MessageDatabaseOPS.delete_message(message.message_id)
+            return redirect(url_for('site.messages_page', user_id=user_id))
+
+@site.context_processor
+def utility_processor():
+    def get_real_name(user_id):
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        return real_name
+    def get_user_info(user_id):
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        return user
+    return dict(get_real_name=get_real_name, get_user_info=get_user_info)

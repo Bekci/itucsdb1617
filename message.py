@@ -91,10 +91,10 @@ class MessageDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT * FROM MESSAGES WHERE FROM_USER_ID=%s AND TO_USER_ID=%s ORDER BY MESSAGE_DATE"""
+            query = """SELECT * FROM MESSAGES WHERE FROM_USER_ID=%s AND TO_USER_ID=%s OR FROM_USER_ID=%s AND TO_USER_ID=%s ORDER BY MESSAGE_DATE"""
 
             try:
-                cursor.execute(query, (from_user_id, to_user_id, ))
+                cursor.execute(query, (from_user_id, to_user_id, to_user_id, from_user_id, ))
                 message_data = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
@@ -133,5 +133,6 @@ class MessageDatabaseOPS:
                     Message(row[0], row[1], row[2], row[3], row[4])
                 )
             return message_list
+
 
 message_ops = MessageDatabaseOPS
