@@ -174,7 +174,7 @@ class UserDatabaseOPS:
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """SELECT * FROM USERS_NAMES WHERE USERNAME=%s"""
+            query = """SELECT * FROM USER_DETAIL WHERE USERNAME=%s"""
             user_data = 0
 
             try:
@@ -199,7 +199,7 @@ class UserDatabaseOPS:
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """INSERT INTO USERS_NAMES (USERNAME, U_NAME, U_SURNAME) VALUES (
+            query = """INSERT INTO USER_DETAIL (USERNAME, U_NAME, U_SURNAME) VALUES (
                                                   %s,
                                                   %s,
                                                   %s
@@ -221,7 +221,7 @@ class UserDatabaseOPS:
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """UPDATE USERS_NAMES SET U_NAME=%s, U_SURNAME=%s
+            query = """UPDATE USER_DETAIL SET U_NAME=%s, U_SURNAME=%s
                               WHERE USERNAME=%s
                                 """
 
@@ -241,7 +241,7 @@ class UserDatabaseOPS:
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """DELETE FROM USERS_NAMES WHERE USERNAME = %s"""
+            query = """DELETE FROM USER_DETAIL WHERE USERNAME = %s"""
 
             try:
                 cursor.execute(query, (username,))
