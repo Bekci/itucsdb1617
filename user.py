@@ -2,10 +2,14 @@ from database import database
 import psycopg2 as dbapi2
 
 
-class Username:
-    def __init__(self, name, surname):
+class UserDetails:
+    def __init__(self, username, name, surname, birthday, city, country):
+        self.username = username
         self.name = name
         self.surname = surname
+        self.birthday = birthday
+        self.city = city
+        self.country = country
 
 
 class User:
@@ -167,8 +171,9 @@ class UserDatabaseOPS:
             else:
                 return -1
 
+
     @classmethod
-    def select_user_name_surname(cls, username):
+    def select_user_detail(cls, username):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -188,25 +193,29 @@ class UserDatabaseOPS:
             cursor.close()
 
             if user_data and user_data != 0:
-                return Username(user_data[1], user_data[2])
+                return UserDetails(username=user_data[0], name=user_data[1], surname=user_data[2], birthday=user_data[3],
+                                   city=user_data[4], country=user_data[5])
             else:
                 return -1
 
     @classmethod
-    def add_real_name(cls, username, real_name, real_surname):
+    def add_user_detail(cls, username, real_name, real_surname, birthday, city, country):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """INSERT INTO USER_DETAIL (USERNAME, U_NAME, U_SURNAME) VALUES (
+            query = """INSERT INTO USER_DETAIL (USERNAME, U_NAME, U_SURNAME, BIRTHDAY, CITY, COUNTRY) VALUES (
+                                                  %s,
+                                                  %s,
+                                                  %s,
                                                   %s,
                                                   %s,
                                                   %s
                                 )"""
 
             try:
-                cursor.execute(query, (username, real_name, real_surname))
+                cursor.execute(query, (username, real_name, real_surname, birthday, city, country))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -215,18 +224,18 @@ class UserDatabaseOPS:
             cursor.close()
 
     @classmethod
-    def update_real_name(cls, username, real_name, real_surname):
+    def update_user_detail(cls, username, real_name, real_surname, birthday, city, country):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """UPDATE USER_DETAIL SET U_NAME=%s, U_SURNAME=%s
+            query = """UPDATE USER_DETAIL SET U_NAME=%s, U_SURNAME=%s, BIRTHDAY=%s, CITY=%s, COUNTRY=%s
                               WHERE USERNAME=%s
                                 """
 
             try:
-                cursor.execute(query, (real_name, real_surname, username))
+                cursor.execute(query, (real_name, real_surname, username, birthday, city, country))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -235,7 +244,7 @@ class UserDatabaseOPS:
             cursor.close()
 
     @classmethod
-    def delete_real_name(cls, username):
+    def delete_user_detail(cls, username):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 

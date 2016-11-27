@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, request, g
+from flask import Blueprint, render_template, redirect, url_for, request
 from components.trends import Trend
-from components.trends import Notification
 from database import database
 from knot import KnotDatabaseOPS
 from user import UserDatabaseOPS
@@ -10,6 +9,7 @@ from message import MessageDatabaseOPS
 from datetime import datetime
 
 site = Blueprint('site', __name__)
+
 
 @site.route('/', methods=['GET', 'POST'])
 def login_page():
@@ -49,7 +49,7 @@ def signup_page():
 @site.route('/home/<int:user_id>', methods=['GET', 'POST'])
 def home_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
-    real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+    real_name = UserDatabaseOPS.select_user_detail(user.username)
     if request.method == 'GET':
         my_followings_id = InteractionDatabaseOPS.select_followings_from_user_interaction(user.id)
         my_followings_user = []
@@ -125,7 +125,7 @@ def user_profile_page(user_id):
 
     if request.method == 'GET':
         user = UserDatabaseOPS.select_user_with_id(user_id)
-        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        real_name = UserDatabaseOPS.select_user_detail(user.username)
         return render_template('user_profile.html', signedin=True, user=user, real_name=real_name)
     else:
         if 'changeImage' in request.form:
@@ -134,25 +134,28 @@ def user_profile_page(user_id):
             my_name = request.form['my_name']
             my_surname = request.form['my_surname']
             user.cover_pic = request.form['coverURL']
+            bday = request.form['birthday']
+            city = request.form['city']
+            country = request.form['country']
 
-            user_real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+            user_details = UserDatabaseOPS.select_user_detail(user.username)
 
-            if user_real_name == -1:
-                UserDatabaseOPS.add_real_name(user.username,my_name, my_surname)
+            if user_details == -1:
+                UserDatabaseOPS.add_user_detail(user.username, my_name, my_surname, bday, city, country)
             else:
-                UserDatabaseOPS.update_real_name(user.username, my_name, my_surname)
+                UserDatabaseOPS.update_user_detail(user.username, my_name, my_surname, bday, city, country)
 
             UserDatabaseOPS.update_user(user.username, user.password,
                                         user.profile_pic, user.cover_pic, user.mail_address)
 
-            user_real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+            user_details = UserDatabaseOPS.select_user_detail(user.username)
 
         if 'deleteReal' in request.form:
             user = UserDatabaseOPS.select_user_with_id(user_id)
-            UserDatabaseOPS.delete_real_name(user.username)
-            user_real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+            UserDatabaseOPS.delete_user_detail(user.username)
+            user_details = UserDatabaseOPS.select_user_detail(user.username)
 
-        return render_template('user_profile.html', signedin=True, user=user, real_name=user_real_name)
+        return render_template('user_profile.html', signedin=True, user=user, real_name=user_details)
 
 
 @site.route('/help')
@@ -164,12 +167,12 @@ def help_page():
 def settings_page(user_id):
     if request.method == 'GET':
         user = UserDatabaseOPS.select_user_with_id(user_id)
-        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        real_name = UserDatabaseOPS.select_user_detail(user.username)
         return render_template('settings_page.html', signedin=True, user=user, real_name=real_name, error=False)
     else:
         mail = request.form['mail_address']
         user = UserDatabaseOPS.select_user_with_id(user_id)
-        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        real_name = UserDatabaseOPS.select_user_detail(user.username)
         UserDatabaseOPS.update_user(user.username, user.password, user.profile_pic, user.cover_pic, mail)
         changed_user = UserDatabaseOPS.select_user_with_id(user_id)
         return render_template('settings_page.html', signedin=True, user=changed_user, real_name=real_name, success=True)
@@ -185,14 +188,14 @@ def about_us_page():
 def change_password_page(user_id):
     if request.method == 'GET':
         user = UserDatabaseOPS.select_user_with_id(user_id)
-        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        real_name = UserDatabaseOPS.select_user_detail(user.username)
         return render_template('password_change.html', signedin=True, user=user, real_name=real_name, error=False)
     else:
         current_password = request.form['CurrentPassword']
         new_password = request.form['NewPassword']
         confirm_password = request.form['ConfirmPassword']
         user = UserDatabaseOPS.select_user_with_id(user_id)
-        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        real_name = UserDatabaseOPS.select_user_detail(user.username)
         user = UserDatabaseOPS.select_user_with_id(user_id)
         if current_password != user.password:
             return render_template('password_change.html', signedin=True, user=user, real_name=real_name, password_error=True)
@@ -261,13 +264,17 @@ def messages_page(user_id):
                 MessageDatabaseOPS.delete_message(message.message_id)
             return redirect(url_for('site.messages_page', user_id=user_id))
 
+
 @site.context_processor
 def utility_processor():
+
     def get_real_name(user_id):
         user = UserDatabaseOPS.select_user_with_id(user_id)
-        real_name = UserDatabaseOPS.select_user_name_surname(user.username)
+        real_name = UserDatabaseOPS.select_user_detail(user.username)
         return real_name
+
     def get_user_info(user_id):
         user = UserDatabaseOPS.select_user_with_id(user_id)
         return user
+
     return dict(get_real_name=get_real_name, get_user_info=get_user_info)
