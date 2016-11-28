@@ -143,7 +143,7 @@ class DatabaseOPS:
                             TYPE_COUNTER INTEGER DEFAULT 0
                     )"""
 
-            cursor.execute(query);
+            cursor.execute(query)
 
             # ----------- ilknur Meray - BOOK TABLE ------------------------------
 
@@ -154,13 +154,12 @@ class DatabaseOPS:
                             BOOK_WRITER VARCHAR(50) NOT NULL,
                             DATE_READ DATE NOT NULL,
                             BOOK_REVIEW TEXT,
-                            BOOK_RATE NUMERIC(1,1) NOT NULL,
                             BOOK_TYPE_ID INTEGER REFERENCES BOOK_TYPE(TYPE_ID) ON DELETE CASCADE ON UPDATE CASCADE,
                             BOOK_READER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
                             PRIMARY KEY(BOOK_ID,BOOK_READER_ID)
                     )"""
 
-            cursor.execute(query);
+            cursor.execute(query)
 
             # ------------Nursah Melis Cinar- MESSAGES TABLE----------------------
 

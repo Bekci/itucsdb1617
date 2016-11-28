@@ -6,6 +6,8 @@ from user import UserDatabaseOPS, User
 from notification import NotificationDatabaseOPS
 from interaction import InteractionDatabaseOPS
 from message import MessageDatabaseOPS
+from book_type import BookTypeDatabaseOPS
+from book import BookDatabaseOPS
 from datetime import datetime
 
 site = Blueprint('site', __name__)
