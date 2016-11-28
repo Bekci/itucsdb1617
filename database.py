@@ -135,6 +135,33 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
+            # ----------- ilknur Meray - BOOK_TYPE TABLE ------------------------------
+
+            query = """CREATE TABLE IF NOT EXISTS BOOK_TYPE(
+                            TYPE_ID SERIAL PRIMARY KEY,
+                            TYPE_NAME VARCHAR(20) NOT NULL,
+                            TYPE_COUNTER INTEGER DEFAULT 0
+                    )"""
+
+            cursor.execute(query);
+
+            # ----------- ilknur Meray - BOOK TABLE ------------------------------
+
+            query = """CREATE TABLE IF NOT EXISTS BOOK(
+                            BOOK_ID SERIAL UNIQUE NOT NULL,
+                            BOOK_TITLE VARCHAR(30) NOT NULL,
+                            BOOK_COVER VARCHAR(255) NOT NULL,
+                            BOOK_WRITER VARCHAR(50) NOT NULL,
+                            DATE_READ DATE NOT NULL,
+                            BOOK_REVIEW TEXT,
+                            BOOK_RATE NUMERIC(1,1) NOT NULL,
+                            BOOK_TYPE_ID INTEGER REFERENCES BOOK_TYPE(TYPE_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                            BOOK_READER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                            PRIMARY KEY(BOOK_ID,BOOK_READER_ID)
+                    )"""
+
+            cursor.execute(query);
+
             # ------------Nursah Melis Cinar- MESSAGES TABLE----------------------
 
             query = """CREATE TABLE IF NOT EXISTS MESSAGES(
