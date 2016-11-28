@@ -96,6 +96,8 @@ class UserDatabaseOPS:
 
             query = """SELECT * FROM USERS WHERE USERNAME=%s"""
 
+            user_data = None
+
             try:
                 cursor.execute(query, (username,))
                 user_data = cursor.fetchone()
@@ -179,7 +181,10 @@ class UserDatabaseOPS:
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """SELECT * FROM USER_DETAIL WHERE USERNAME=%s"""
+            query = """SELECT USER_DETAIL.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USER_DETAIL
+                       INNER JOIN USERS ON USERS.USERNAME=USER_DETAIL.USERNAME
+                       INNER JOIN CITIES ON CITIES.CITY_ID=USER_DETAIL.CITY_ID
+                       WHERE USER_DETAIL.USERNAME=%s"""
             user_data = 0
 
             try:
@@ -194,19 +199,18 @@ class UserDatabaseOPS:
 
             if user_data and user_data != 0:
                 return UserDetails(username=user_data[0], name=user_data[1], surname=user_data[2], birthday=user_data[3],
-                                   city=user_data[4], country=user_data[5])
+                                   city=user_data[5], country=user_data[6])
             else:
                 return -1
 
     @classmethod
-    def add_user_detail(cls, username, real_name, real_surname, birthday, city, country):
+    def add_user_detail(cls, username, real_name, real_surname, birthday, city_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """INSERT INTO USER_DETAIL (USERNAME, U_NAME, U_SURNAME, BIRTHDAY, CITY, COUNTRY) VALUES (
-                                                  %s,
+            query = """INSERT INTO USER_DETAIL (USERNAME, U_NAME, U_SURNAME, BIRTHDAY, CITY_ID) VALUES (
                                                   %s,
                                                   %s,
                                                   %s,
@@ -215,7 +219,7 @@ class UserDatabaseOPS:
                                 )"""
 
             try:
-                cursor.execute(query, (username, real_name, real_surname, birthday, city, country))
+                cursor.execute(query, (username, real_name, real_surname, birthday, city_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -224,18 +228,18 @@ class UserDatabaseOPS:
             cursor.close()
 
     @classmethod
-    def update_user_detail(cls, username, real_name, real_surname, birthday, city, country):
+    def update_user_detail(cls, username, real_name, real_surname, birthday, city_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
-            query = """UPDATE USER_DETAIL SET U_NAME=%s, U_SURNAME=%s, BIRTHDAY=%s, CITY=%s, COUNTRY=%s
+            query = """UPDATE USER_DETAIL SET U_NAME=%s, U_SURNAME=%s, BIRTHDAY=%s, CITY_ID=%s
                               WHERE USERNAME=%s
                                 """
 
             try:
-                cursor.execute(query, (real_name, real_surname, username, birthday, city, country))
+                cursor.execute(query, (real_name, real_surname, username, birthday, city_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
