@@ -11,6 +11,7 @@ from book_type import BookTypeDatabaseOPS
 from book import BookDatabaseOPS
 from datetime import datetime
 from city import CityDatabaseOPS, City
+from events import EventDatabaseOPS
 from currency import CurrencyDatabaseOPS, Currency
 
 site = Blueprint('site', __name__)
@@ -139,17 +140,17 @@ def notifications_page(user_id):
 
         elif 'create' in request.form:
             PollDatabaseOPS.add_poll(user.id, request.form['poll_content'], request.form['answer_1'], request.form['answer_2'], datetime.now().date().isoformat(), request.form['end_date'])
-        
+
         elif 'vote' in request.form:
             PollDatabaseOPS.update_poll(int(request.form['optionsRadios']),request.form['id'])
             PollDatabaseOPS.add_relation(user.id,request.form['id'])
-        
+
         elif 'delete_poll' in request.form:
-            if user.id == int(request.form['owner']): 
+            if user.id == int(request.form['owner']):
                 PollDatabaseOPS.delete_poll(request.form['id'])
         else:
             print(request.form)
-        
+
         polls = PollDatabaseOPS.select_poll(user.id)
         knots = NotificationDatabaseOPS.select_notifications(user)
         return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user, polls = polls)
@@ -343,6 +344,46 @@ def messages_page(user_id):
             for message in all_messages[index]:
                 MessageDatabaseOPS.delete_message(message.message_id)
             return redirect(url_for('site.messages_page', user_id=user_id))
+
+
+@site.route('/events/<int:user_id>', methods=['GET', 'POST'])
+def events_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if request.method == 'GET':
+        organizer_ids = []
+        organizer_ids.append(user_id)
+        my_events = EventDatabaseOPS.select_organized_events_with_user_id(user_id)
+        joined_events = EventDatabaseOPS.select_joined_events_with_user_id(user_id)
+        joinable_events = EventDatabaseOPS.select_joinable_events_with_user_id(user_id)
+        return render_template('events.html', signedin=True, user=user, my_events=my_events, joined_events=joined_events, joinable_events=joinable_events, organizer_ids=organizer_ids)
+    elif request.method == 'POST':
+        if 'create-event' in request.form:
+            owner_id = user_id
+            event_content = request.form['description']
+            event_start_date = request.form['start-date']
+            event_end_date = request.form['end-date']
+            if int(request.form['is_user']) == 0:
+                is_user=True
+            else:
+                is_user=False
+            event_id = EventDatabaseOPS.add_event(owner_id, event_content, event_start_date, event_end_date, is_user)
+            EventDatabaseOPS.add_participant(event_id, user_id)
+        elif 'update-event' in request.form:
+            event_content = request.form['description']
+            event_start_date = request.form['start-date']
+            event_end_date = request.form['end-date']
+            event_id = request.form['update-event']
+            EventDatabaseOPS.update_event(event_content, event_start_date, event_end_date, event_id)
+        elif 'delete-event' in request.form:
+            event_id = request.form['delete-event']
+            EventDatabaseOPS.delete_event(event_id)
+        elif 'exit-event' in request.form:
+            event_id = request.form['exit-event']
+            EventDatabaseOPS.delete_participant(event_id, user_id)
+        elif 'join-event' in request.form:
+            event_id = request.form['join-event']
+            EventDatabaseOPS.add_participant(event_id, user_id)
+        return redirect(url_for('site.events_page', user_id=user_id))
 
 
 @site.context_processor

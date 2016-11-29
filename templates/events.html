@@ -1,0 +1,238 @@
+{% extends "layout.html" %}
+{% block title %}Events Page{% endblock %}
+{% block head %}
+ {{ super() }}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+$(function(){
+  $('.datepicker').datepicker({
+     format: 'yyyy-mm-dd'
+   });
+});
+</script>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row" style="padding-top:25px;">
+        <div class="col-md-4" style="border-radius:10px;background-color:white;margin-right:10px">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Create an Event!!!</div>
+                <div class="panel-body">
+                    <form role="form" method="post" action="{{ url_for('site.events_page', user_id=user.id)}}">
+                      <div class="form-group">
+                        <input type="hidden" class="form-control" name="is_user" id="is_user">
+                      </div>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label class="control-label" for="Organizer">Organizer:</label>
+                                <select id="Organizer" class="form-control" name="owner_id">
+                                    {% for id in organizer_ids %}
+                                    {% set user = get_user_info(id) %}
+                                    <option value="{{ user.user_id }}">@{{ user.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="Description">Description:</label>
+                            <textarea class="form-control" rows="3" style="resize: none;" name="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="Start-Date">Start Date:</label>
+                            <div class='input-group date'>
+                                <input type='text' class="form-control datepicker" name="start-date"/>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label" for="end-date">End Date:</label>
+                            <div class="input-group date">
+                                <input type="text" class="form-control datepicker" name="end-date">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button OnClick="get_is_user()" type="submit" class="btn btn-primary" name="create-event">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div style="background-color: white;border-radius:10px;" class="col-md-7">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#my-events">My Events</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#joined-events">Joined Events</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" href="#other-events">Other Events</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="my-events">
+                  {% for event in my_events %}
+                    <div id="events" class="sections">
+                        <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px;margin-bottom:25px;overflow:visible;">
+                            <div style="padding: 15px">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object" src="{{ user.profile_pic }}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                    </a>
+                                </div>
+                                <div class="media-body" style="overflow:visible;">
+                                    <h4 class="media-heading"><div class="btn-group pull-right">
+                                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" style="background-color: #f5f8fa;">
+                                                <i class="glyphicon glyphicon-option-horizontal"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" style="overflow:visible; background-color: #f5f8fa;">
+                                                <li style="border-bottom:0.01em solid white;">
+                                                  <form method="post" action="{{ url_for('site.events_page', user_id=user.id) }}">
+                                                    <button class="btn dropdown-toggle" name="delete-event" type="submit" value="{{ event.event_id }}" style="background-color: #f5f8fa;border-bottom:0.01em solid white;">
+                                                        <i class="glyphicon glyphicon-trash"></i> Delete This Event
+                                                    </button>
+                                                  </form>
+                                                </li>
+                                                <li>
+                                                    <button class="btn dropdown-toggle" data-toggle="modal" data-target="#update-event-form-{{ event.event_id }}" type="button" style="background-color: #f5f8fa;">
+                                                        <i class="glyphicon glyphicon-edit"></i> Update This Event
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div><span class="glyphicon glyphicon-link"></span> {{ user.username }}</h4>
+                                    Start Date:
+                                    <span class="glyphicon glyphicon-calendar" style="padding-right:20px;">{{ event.start_date }}</span>
+                                    End Date:
+                                    <span class="glyphicon glyphicon-calendar">{{ event.end_date }}</span>
+                                    <br>
+                                    {{ event.event_content }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" tabindex="-1" role="dialog" id="update-event-form-{{ event.event_id }}">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Update Event</h4>
+                      </div>
+                      <div class="modal-body">
+                        <form method="post" action="{{ url_for('site.events_page', user_id=user.id ) }}">
+                          <div class="form-group">
+                              <label class="control-label" for="description">Description:</label>
+                              <textarea class="form-control" rows="3" style="resize: none;" name="description">{{ event.event_content }}</textarea>
+                          </div>
+                          <div class="form-group">
+                              <label class="control-label" for="start-date">Start Date:</label>
+                              <div class='input-group date'>
+                                  <input type='text' class="form-control datepicker" name="start-date"/ value="{{ event.start_date }}">
+                                  <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <label class="control-label" for="end-date">End Date:</label>
+                              <div class="input-group date">
+                                  <input type="text" class="form-control datepicker" name="end-date" value="{{ event.end_date }}">
+                                  <div class="input-group-addon">
+                                      <span class="glyphicon glyphicon-calendar"></span>
+                                  </div>
+                              </div>
+                          </div>
+                          <button type="submit" class="btn btn-primary" name="update-event" value="{{ event.event_id }}">Submit</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+                <div class="tab-pane fade" id="joined-events">
+                  {% for event in joined_events %}
+                  {% set owner = get_user_info(event.owner_id) %}
+                    <div id="events" class="sections">
+                        <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px;margin-bottom:25px;overflow:visible;">
+                            <div style="padding: 15px">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object" src="{{ owner.profile_pic }}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                    </a>
+                                </div>
+                                <div class="media-body" style="overflow:visible;">
+                                    <h4 class="media-heading"><div class="btn-group pull-right">
+                                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" style="background-color: #f5f8fa;">
+                                                <i class="glyphicon glyphicon-option-horizontal"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" style="overflow:visible; background-color: #f5f8fa;">
+                                                <li style="border-bottom:0.01em solid white;">
+                                                  <form method="post" action="{{ url_for('site.events_page', user_id=user.id ) }}">
+                                                    <button class="btn dropdown-toggle" name="exit-event" type="submit" value="{{ event.event_id }}" style="background-color: #f5f8fa;border-bottom:0.01em solid white;">
+                                                        <i class="glyphicon"><span class="glyphicon glyphicon-minus"></span></i> Exit the event
+                                                    </button>
+                                                  </form>
+                                                </li>
+                                            </ul>
+                                        </div><span class="glyphicon glyphicon-link"></span> {{ owner.username }}</h4>
+                                    Start Date:
+                                    <span class="glyphicon glyphicon-calendar" style="padding-right:20px;">{{ event.start_date }}</span>
+                                    End Date:
+                                    <span class="glyphicon glyphicon-calendar">{{ event.end_date }}</span>
+                                    <br>
+                                    {{ event.event_content }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="tab-pane fade" id="other-events">
+                  {% for event in joinable_events %}
+                  {% set owner = get_user_info(event.owner_id) %}
+                    <div id="events" class="sections">
+                        <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px;margin-bottom:25px;overflow:visible;">
+                            <div style="padding: 15px">
+                                <div class="media-left">
+                                    <a href="#">
+                                        <img class="media-object" src="{{ owner.profile_pic }}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                                    </a>
+                                </div>
+                                <div class="media-body" style="overflow:visible;">
+                                    <h4 class="media-heading"><div class="btn-group pull-right">
+                                            <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" style="background-color: #f5f8fa;">
+                                                <i class="glyphicon glyphicon-option-horizontal"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" style="overflow:visible; background-color: #f5f8fa;">
+                                                <li style="border-bottom:0.01em solid white;">
+                                                  <form action="{{ url_for('site.events_page', user_id=user.id) }}" method="post">
+                                                    <button class="btn dropdown-toggle" name="join-event" type="submit" value="{{ event.event_id }}" style="background-color: #f5f8fa;width:100%;height:auto;border-bottom:0.01em solid white;">
+                                                        <i class="glyphicon"><span class="glyphicon glyphicon-plus"></span></i> Join the event
+                                                    </button>
+                                                  </form>
+                                                </li>
+                                            </ul>
+                                        </div><span class="glyphicon glyphicon-link"></span> {{ owner.username }}</h4>
+                                    Start Date:
+                                    <span class="glyphicon glyphicon-calendar" style="padding-right:20px;">{{ event.start_date }}</span>
+                                    End Date:
+                                    <span class="glyphicon glyphicon-calendar">{{ event.end_date }}</span>
+                                    <br>
+                                    {{ event.event_content }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function get_is_user(){
+
+      $("#is_user").val($("#Organizer").prop('selectedIndex'));
+    };
+</script>
+{% endblock %}
