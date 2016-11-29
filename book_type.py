@@ -74,8 +74,9 @@ class BookTypeDatabaseOPS:
 
             # ----------- ilknur Meray - BOOK_TYPE TABLE -----------------------
 
-            query = """SELECT * FROM BOOK_TYPE WHERE TYPE_NAME = %s"""
+            query = """SELECT TYPE_ID FROM BOOK_TYPE WHERE TYPE_NAME = %s"""
 
+            type_data=[]
             try:
                 cursor.execute(query, (type_name,))
                 type_data = cursor.fetchone()
@@ -86,7 +87,7 @@ class BookTypeDatabaseOPS:
 
             cursor.close()
 
-            return BookType(type_id=type_data[0], type_name=type_data[1], type_counter=type_data[2])
+            return type_data
 
     @classmethod
     def select_book_type_with_id(cls, type_id):
@@ -96,6 +97,8 @@ class BookTypeDatabaseOPS:
             # ----------- ilknur Meray - BOOK_TYPE TABLE -----------------------
 
             query = """SELECT * FROM BOOK_TYPE WHERE TYPE_ID = %s"""
+
+            type_data1 = []
 
             try:
                 cursor.execute(query, (type_id,))

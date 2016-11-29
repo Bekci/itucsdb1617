@@ -20,7 +20,7 @@ class BookDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- ilknur Meray - BOOK_TYPE TABLE -----------------------
+            # ----------- ilknur Meray - BOOK TABLE -----------------------
 
             type_info = BookTypeDatabaseOPS.select_book_type_with_name(book_type_name)
             query = """INSERT INTO BOOK (BOOK_TITLE, BOOK_COVER, BOOK_WRITER, DATE_READ, BOOK_REVIEW, BOOK_TYPE_ID, BOOK_READER_ID) VALUES (
@@ -34,7 +34,7 @@ class BookDatabaseOPS:
                         )"""
 
             try:
-                cursor.execute(query, (book_title, book_cover, book_writer, date_read, book_review, type_info[0], book_reader_id))
+                cursor.execute(query, (book_title, book_cover, book_writer, date_read, book_review, type_info, book_reader_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -47,7 +47,7 @@ class BookDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- ilknur Meray - BOOK_TYPE TABLE -----------------------
+            # ----------- ilknur Meray - BOOK TABLE -----------------------
 
             type_info = BookTypeDatabaseOPS.select_book_type_with_name(book_type_name)
             query = """UPDATE BOOK SET BOOK_TITLE=%s,
@@ -58,7 +58,7 @@ class BookDatabaseOPS:
                                     BOOK_TYPE_ID=%s WHERE BOOK_ID=%s AND BOOK_READER_ID=%s"""
 
             try:
-                cursor.execute(query, (book_title, book_cover, book_writer, date_read, book_review, type_info[0], book_id, book_reader_id))
+                cursor.execute(query, (book_title, book_cover, book_writer, date_read, book_review, type_info, book_id, book_reader_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -71,7 +71,7 @@ class BookDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- ilknur Meray - BOOK_TYPE TABLE -----------------------
+            # ----------- ilknur Meray - BOOK TABLE -----------------------
 
             query = """DELETE FROM BOOK WHERE BOOK_ID = %s AND BOOK_READER_ID=%s"""
 
@@ -89,9 +89,11 @@ class BookDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- ilknur Meray - BOOK_TYPE TABLE -----------------------
+            # ----------- ilknur Meray - BOOK TABLE -----------------------
 
             query = """SELECT * FROM BOOK WHERE BOOK_READER_ID=%s"""
+
+            book_data = []
 
             try:
                 cursor.execute(query, (book_reader_id,))
@@ -117,9 +119,11 @@ class BookDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            # ----------- ilknur Meray - BOOK_TYPE TABLE -----------------------
+            # ----------- ilknur Meray - BOOK TABLE -----------------------
             type_info = BookTypeDatabaseOPS.select_book_type_with_name(book_type_name)
             query = """SELECT * FROM BOOK WHERE BOOK_TYPE_ID=%s"""
+
+            book_data = []
 
             try:
                 cursor.execute(query, (type_info[0],))

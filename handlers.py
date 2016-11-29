@@ -95,6 +95,28 @@ def home_page(user_id):
             return redirect(url_for('site.home_page', user_id=user.id))
 
 
+@site.route('/books_page/<int:user_id>', methods=['GET', 'POST'])
+def books_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    real_name = UserDatabaseOPS.select_user_detail(user.username)
+    if request.method == 'GET':
+        my_books = BookDatabaseOPS.select_all_books(user.id)
+        return render_template('books_page.html', signedin=True, user=user, real_name=real_name, my_books=my_books)
+    else:
+        if 'add_book' in request.form:
+            BookDatabaseOPS.add_book(request.form['title'], request.form['cover'], request.form['writer'], request.form['date_read'], request.form['review'], request.form['b_type_name'], user.id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'add_type' in request.form:
+            BookTypeDatabaseOPS.add_book_type(request.form['type_name'])
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'delete' in request.form:
+            BookDatabaseOPS.delete_book(request.form['delete'], user.id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'update_book' in request.form:
+    # BookDatabaseOPS.update_book(request.form['new_book_title'], request.form['new_book_cover'], request.form['new_book_writer'], request.form['new_date_read'], request.form['new_book_review'], request.form['new_book_type_name'], user.id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+
+
 @site.route('/home/knots/<int:user_id>', methods=['GET', 'POST'])
 def home_page_knots(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)

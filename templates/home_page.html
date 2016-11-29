@@ -25,7 +25,7 @@
                 <p><span class="glyphicon glyphicon-link"></span>{{ user.username }}</p>
                 <p><span class="glyphicon glyphicon-resize-small"></span><a> {{ user.mail_address }}</a></p>
                 <p><span class="glyphicon glyphicon-share-alt"></span> {{ user.register_date }}</p>
-
+                <p><span class="glyphicon glyphicon-book"></span><a href="{{ url_for('site.books_page', user_id=user.id) }}">  Library</a></p>
             </div>
 
 
