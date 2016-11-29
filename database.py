@@ -219,6 +219,26 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
+            # ------------Nursah Melis Cinar- GROUPS TABLE----------------------
+
+            query = """CREATE TABLE IF NOT EXISTS GROUPS(
+                        GROUP_ID SERIAL PRIMARY KEY,
+                        GROUP_NAME TEXT NOT NULL,
+                        GROUP_PIC varchar(255) NOT NULL,
+                        GROUP_DESCRIPTION TEXT NOT NULL
+                    )"""
+
+            cursor.execute(query)
+
+            # ------------Nursah Melis Cinar- GROUP_PARTICIPANTS TABLE----------
+
+            query = """CREATE TABLE IF NOT EXISTS GROUP_PARTICIPANTS(
+                        GROUP_ID INTEGER REFERENCES GROUPS(GROUP_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        PARTICIPANT_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                    )"""
+
+            cursor.execute(query)
+
             connection.commit()
             cursor.close()
 

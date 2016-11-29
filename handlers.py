@@ -12,6 +12,7 @@ from book import BookDatabaseOPS
 from datetime import datetime
 from city import CityDatabaseOPS, City
 from events import EventDatabaseOPS
+from group import GroupDatabaseOPS
 from currency import CurrencyDatabaseOPS, Currency
 
 site = Blueprint('site', __name__)
@@ -72,6 +73,7 @@ def home_page(user_id):
         my_followings_user.append(user)
         my_followings_knots = []
         my_temp_knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
+        new_groups= GroupDatabaseOPS.find_groups()
         for counter in my_temp_knot_list:
             my_followings_knots.append(counter)
         for index in my_followings_id:
@@ -79,7 +81,7 @@ def home_page(user_id):
             temp_knot_list = KnotDatabaseOPS.select_knots_for_owner(index)
             for element in temp_knot_list:
                 my_followings_knots.append(element)
-        return render_template('home_page.html', signedin=True, user=user, real_name=real_name, my_followings_knots=my_followings_knots, my_followings_user=my_followings_user)
+        return render_template('home_page.html', signedin=True, user=user, real_name=real_name, my_followings_knots=my_followings_knots, my_followings_user=my_followings_user, new_groups=new_groups)
     else:
         if 'add_knot' in request.form:
             KnotDatabaseOPS.add_knot(user_id, request.form['new_knot_content'], 0, 0, datetime.now().date().isoformat())
@@ -190,7 +192,7 @@ def sales_page(user_id):
     #         UserDatabaseOPS.delete_user_detail(user.username)
     #         user_details = UserDatabaseOPS.select_user_detail(user.username)
 
-    return render_template('sales_knitter.html', signedin=True, user=sil_bunu, real_name={'name': 'Can', 'surname': 'Altıniğne'})
+    return render_template('sales_knitter.html', signedin=True, user=sil_bunu, real_name={'name': 'Can', 'surname': 'Altinigne'})
 
 
 @site.route('/user_profile/<int:user_id>', methods=['GET', 'POST'])
@@ -243,7 +245,6 @@ def user_profile_page(user_id):
 def help_page():
     return render_template('help_page.html', signedin=True)
 
-
 @site.route('/settings/<int:user_id>', methods=['GET', 'POST'])
 def settings_page(user_id):
     if request.method == 'GET':
@@ -251,12 +252,24 @@ def settings_page(user_id):
         real_name = UserDatabaseOPS.select_user_detail(user.username)
         return render_template('settings_page.html', signedin=True, user=user, real_name=real_name, error=False)
     else:
-        mail = request.form['mail_address']
-        user = UserDatabaseOPS.select_user_with_id(user_id)
-        real_name = UserDatabaseOPS.select_user_detail(user.username)
-        UserDatabaseOPS.update_user(user.username, user.password, user.profile_pic, user.cover_pic, mail)
-        changed_user = UserDatabaseOPS.select_user_with_id(user_id)
+        if 'change-mail' in request.form:
+            mail = request.form['mail_address']
+            user = UserDatabaseOPS.select_user_with_id(user_id)
+            real_name = UserDatabaseOPS.select_user_detail(user.username)
+            UserDatabaseOPS.update_user(user.username, user.password, user.profile_pic, user.cover_pic, mail)
+            changed_user = UserDatabaseOPS.select_user_with_id(user_id)
+        elif 'add-group' in request.form:
+            user = UserDatabaseOPS.select_user_with_id(user_id)
+            real_name = UserDatabaseOPS.select_user_detail(user.username)
+            group_name = request.form['group_name']
+            group_profile_pic = request.form['group_picture_url']
+            group_description = request.form['group_description']
+            group_id = GroupDatabaseOPS.add_group(group_name, group_profile_pic, group_description)
+            GroupDatabaseOPS.add_group_participation(group_id, user_id)
+            changed_user = UserDatabaseOPS.select_user_with_id(user_id)
+
         return render_template('settings_page.html', signedin=True, user=changed_user, real_name=real_name, success=True)
+
 
 
 @site.route('/about_us')
@@ -344,6 +357,31 @@ def messages_page(user_id):
             for message in all_messages[index]:
                 MessageDatabaseOPS.delete_message(message.message_id)
             return redirect(url_for('site.messages_page', user_id=user_id))
+
+
+@site.route('/groups/<int:group_id>/<int:user_id>', methods=['GET', 'POST'])
+def group_page(group_id, user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    group_participants = GroupDatabaseOPS.select_group_participation(group_id)
+    group_info = GroupDatabaseOPS.select_group(group_id)
+    joined=False
+    for participant in group_participants:
+        if user_id == participant.user_id:
+            joined=True
+    if request.method=='GET':
+
+        return render_template('groups.html', joined=joined, signedin=True, user=user, group_participants=group_participants, group_info=group_info)
+    elif request.method=='POST':
+        if 'update-description' in request.form:
+            group_description = request.form['group_description']
+            GroupDatabaseOPS.update_group_description(group_id, group_description)
+        elif 'delete-group' in request.form:
+            GroupDatabaseOPS.delete_group(group_id)
+            return redirect(url_for('site.user_profile_page', user_id=user_id))
+        elif 'join-group' in request.form:
+            group_id = int(request.form["join-group"])
+            GroupDatabaseOPS.add_group_participation(group_id,user_id)
+        return redirect(url_for('site.group_page', group_id=group_id, user_id=user_id))
 
 
 @site.route('/events/<int:user_id>', methods=['GET', 'POST'])

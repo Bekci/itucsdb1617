@@ -169,9 +169,13 @@
                 <div></div>
             </div>
 
-            <div class="col-md-2" style="margin-top: 20px; margin-left: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
-                <p style="text-align: center"><a href="http://localhost:5000/about_us">About Us.</a>
-                </p>
+						<div class="col-md-2" style="margin-top: 20px; margin-left: 20px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+							{% for group_counter in new_groups %}
+
+							<a class="nav-link" href="{{ url_for('site.group_page', group_id=group_counter.group_id, user_id=user.id) }}">
+									<span class="glyphicon glyphicon-list-alt"></span>{{group_counter.group_name }}</a>
+							<p style="margin-left: 10px"> {{group_counter.group_description }}</p>
+							{% endfor %}
             </div>
 
         </div>
