@@ -1,0 +1,301 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ user.username }}'s Sales Page - {% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='user_profile_style.css') }}"/>
+    <style type="text/css">
+        .sale_banner {
+            background: url("/static/saleBanner.jpg");
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid sale_banner"
+         style="padding: 0px; height: 200px; max-width: 100%;">
+
+        <div class="row">
+            <h2 style="text-align: center; font-family: Avenir; padding-top: 60px; color: white">Sale now with Knitter
+                !</h2>
+        </div>
+
+    </div>
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <div class="col-md-2"
+                 style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
+                <p style="text-align: center"><img
+                        src="https://pbs.twimg.com/profile_images/3185300157/8ffee78995192b6be24a293341519902.jpeg"
+                        height="150px"
+                        width="150px"
+                        style="margin-top:75px; border-radius: 25px; border: 5px solid red; text-align: center; vertical-align: center">
+                </p>
+                <h3 style="text-align: center"><span class="glyphicon glyphicon-link"></span>{{ user.username }}</h3>
+                <h3 style="text-align: center">{{ real_name.name }} {{ real_name.surname }}</h3>
+                <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#add_new_item"
+                        style="margin-top: 20px">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new Item
+                </button>
+
+
+                <br><h4 style="text-align: center">Currencies to TL</h4>
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action">
+                        <h5 class="list-group-item-heading">Euro</h5>
+                        <p class="list-group-item-text">3.57</p>
+                        <strong class="list-group-item-text">Last Update: 2016-01-01</strong>
+                    </a>
+                    <a class="list-group-item list-group-item-action">
+                        <h5 class="list-group-item-heading">US Dollars</h5>
+                        <p class="list-group-item-text">3.32</p>
+                        <strong class="list-group-item-text">Last Update: 2016-01-01</strong>
+                    </a>
+                    <a class="list-group-item list-group-item-action">
+                        <h5 class="list-group-item-heading">TL</h5>
+                        <p class="list-group-item-text">1</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-sm-1" style="margin-top: 20px; padding: 0px 10px 25px 10px; border-radius: 10px">
+                <div></div>
+            </div>
+
+            <div class="col-md-4"
+                 style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
+                <h2 style="text-align: center">My Items</h2>
+
+                <div class="panel panel-danger" style="margin-top: 20px; background-color: #f5f8fa; border-radius: 5px">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><a data-toggle="collapse" href="#collapse1">Electric Guitar</a></h3>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <p style="text-align: center"><img
+                                    src="http://previews.123rf.com/images/aberration/aberration1001/aberration100100128/6310306-green-electric-guitar-isolated-on-white-Stock-Photo-guitars.jpg"
+                                    height="360px"
+                                    width="480px"
+                                    style="margin-top:25px; border-radius: 25px; border: 5px solid red; text-align: center; vertical-align: center">
+                            </p>
+
+                            <p style="text-align: justify">Lorem Ipsum, dizgi ve baskı
+                                endüstrisinde kullanılan mıgır metinlerdir.
+                                Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı
+                                oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden
+                                beri endüstri standardı sahte metinler olarak kullanılmıştır.</p>
+
+                            <div class="list-group">
+                                <a class="list-group-item list-group-item-action">
+                                    <h5 class="list-group-item-heading">Price</h5>
+                                    <p class="list-group-item-text">1700 EUR</p>
+                                </a>
+                                <a class="list-group-item list-group-item-action">
+                                    <h5 class="list-group-item-heading">Start Date</h5>
+                                    <p class="list-group-item-text">2016-01-22</p>
+                                </a>
+                                <a class="list-group-item list-group-item-action">
+                                    <h5 class="list-group-item-heading">End Date</h5>
+                                    <p class="list-group-item-text">2016-7-8</p>
+                                </a>
+                            </div>
+
+                            <form>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="hidden" name="item_id" class="form-control" value="1"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-success btn-block" value="Change This Item"
+                                           name="change_item"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-danger btn-block" value="Delete This Item"
+                                           name="delete_item"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="col-sm-1" style="margin-top: 20px; padding: 0px 10px 25px 10px; border-radius: 10px">
+                <div></div>
+            </div>
+
+            <div class="col-md-4"
+                 style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
+
+                <div class="alert alert-warning" role="alert" style="margin-top: 20px">
+                    <strong>Hey!</strong> You can search items with options here !
+                </div>
+
+                <form>
+
+                    <div class="form-group">
+                        <label for="search_select">Select the option</label>
+                        <select class="form-control" id="search_select">
+                            <option disabled selected value> -- Select an option -- </option>
+                            <option value="username">Search by username</option>
+                            <option value="closest">Search the closest items</option>
+                            <option value="price">Search by price</option>
+                            <option value="currency">Search by currency</option>
+                            <option value="place">Search by place</option>
+                            <option value="newest">Search the newest items</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group hid_forms" style="display:none;" id="otherType">
+                            <label id="hid_label"></label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-zoom-in"></span>
+						</span>
+                                <input type="text" name="keyword" class="form-control"/>
+                            </div>
+                    </div>
+
+                    <div class="form-group hid_forms" style="display:none;" id="currencyType">
+                        <label for="currency_select">Select the currency</label>
+                        <select class="form-control" id="currency_select">
+                            <option value="EUR">Euro</option>
+                            <option value="USD">US Dollars</option>
+                            <option value="TL">Afyon Dinarı</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group hid_forms" style="display:none;" id="placeType">
+                        <label for="city_select">Select the city</label>
+                        <select class="form-control" id="city_select">
+                            <option value="Ankara-TUR">Ankara, TUR</option>
+                            <option value="Istanbul-TUR">Istanbul, TUR</option>
+                            <option value="Los_Angeles-US">Los Angeles, US</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-info btn-block" value="Search Item"
+                               name="search_item"/>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="add_new_item" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Change your profile infos</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{ url_for('site.user_profile_page', user_id=user.id) }}" method="post">
+
+                        <div class="form-group">
+                            <label>New Profile Image URL</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="imageURL" class="form-control" value="{{ user.profile_pic }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>New Cover Image URL</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="coverURL" class="form-control" value="{{ user.cover_pic }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Name</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="my_name" class="form-control" value="{{ real_name.name }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Surname</label>
+                            <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-camera"></span>
+						</span>
+                                <input type="text" name="my_surname" class="form-control"
+                                       value="{{ real_name.surname }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success btn-block" value="Change Info"
+                                   name="changeImage"/>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-danger btn-block" value="Delete My Real Name"
+                                   name="deleteReal"/>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        $('#search_select').on('change',function(){
+            var selection = $(this).val();
+
+            switch(selection){
+
+                case "price":
+                case "username":
+                    $(".hid_forms").hide();
+                    $("#hid_label").text("Enter the " + selection);
+                    $("#otherType").show();
+                        if(selection=="price") $("#currencyType").show();
+                    break;
+
+                case "currency":
+                    $(".hid_forms").hide();
+                    $("#currencyType").show();
+                    break;
+
+                case "place":
+                    $(".hid_forms").hide();
+                    $("#placeType").show();
+                    break;
+            default:
+                $(".hid_forms").hide();
+        }
+    });
+    </script>
+
+
+{% endblock %}

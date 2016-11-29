@@ -52,7 +52,8 @@ class CityDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT * FROM CITIES WHERE CITY_NAME=%s AND COUNTRY = %s"""
+            query = """SELECT * FROM CITIES WHERE CITY_NAME=%s AND COUNTRY = %s
+                       ORDER BY COUNTRY"""
 
             try:
                 cursor.execute(query, (name, country))

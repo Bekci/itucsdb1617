@@ -33,14 +33,14 @@ class DatabaseOPS:
             # ----------- Can Altinigne - USERS TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS USERS (
-                          USER_ID SERIAL PRIMARY KEY,
-                          USERNAME varchar(20) UNIQUE NOT NULL,
-                          USER_PASSWORD varchar(20) NOT NULL,
-                          PROFILE_PIC varchar(255) NOT NULL,
-                          COVER_PIC varchar(255) NOT NULL,
-                          MAIL_ADDRESS varchar(50) NOT NULL,
-                          REGISTER_DATE date NOT NULL
-                        )"""
+                                      USER_ID SERIAL PRIMARY KEY,
+                                      USERNAME varchar(20) UNIQUE NOT NULL,
+                                      USER_PASSWORD varchar(20) NOT NULL,
+                                      PROFILE_PIC varchar(255) NOT NULL,
+                                      COVER_PIC varchar(255) NOT NULL,
+                                      MAIL_ADDRESS varchar(50) NOT NULL,
+                                      REGISTER_DATE date NOT NULL
+                                    )"""
 
             cursor.execute(query)
 
@@ -51,7 +51,7 @@ class DatabaseOPS:
                                                             CITY_NAME varchar(50) NOT NULL,
                                                             DISTANCE_TO_CENTER integer NOT NULL,
                                                             COUNTRY varchar(3) NOT NULL
-                                                                      )"""
+                                                                                  )"""
 
             cursor.execute(query)
 
@@ -61,45 +61,44 @@ class DatabaseOPS:
                                                             CURRENCY_NAME varchar(3) PRIMARY KEY UNIQUE NOT NULL,
                                                             CURRENCY_TO_TL numeric(10,2) NOT NULL,
                                                             LAST_UPDATE date
-                                                                                  )"""
+                                                                              )"""
 
             cursor.execute(query)
 
             # ----------- Can Altinigne - ITEMS TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS ITEMS (
-                                                            ITEM_ID SERIAL PRIMARY KEY UNIQUE NOT NULL,
-                                                            ITEM_NAME varchar(50) NOT NULL,
-                                                            ITEM_PICTURE varchar(255) NOT NULL,
-                                                            ITEM_PRICE numeric(10,2) NOT NULL,
-                                                            ITEM_DESCRIPTION text,
-                                                            ITEM_CURRENCY varchar(3) REFERENCES CURRENCIES(CURRENCY_NAME)
-                                                          )"""
+                                                        ITEM_ID SERIAL PRIMARY KEY UNIQUE NOT NULL,
+                                                        ITEM_NAME varchar(50) NOT NULL,
+                                                        ITEM_PICTURE varchar(255) NOT NULL,
+                                                        ITEM_PRICE numeric(10,2) NOT NULL,
+                                                        ITEM_DESCRIPTION text,
+                                                        ITEM_CURRENCY varchar(3) REFERENCES CURRENCIES(CURRENCY_NAME)
+                                                                      )"""
 
             cursor.execute(query)
 
             # ----------- Can Altinigne - SALES TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS SALES (
-                                      SALE_ID SERIAL PRIMARY KEY,
-                                      SELLER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE,
-                                      ITEM_ID INTEGER REFERENCES ITEMS(ITEM_ID) ON DELETE CASCADE,
-                                      CITY_ID INTEGER REFERENCES CITIES(CITY_ID) ON DELETE CASCADE,
-                                      START_DATE date NOT NULL,
-                                      END_DATE date NOT NULL
-                                    )"""
+                                                  SALE_ID SERIAL PRIMARY KEY,
+                                                  SELLER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE,
+                                                  ITEM_ID INTEGER REFERENCES ITEMS(ITEM_ID) ON DELETE CASCADE,
+                                                  CITY_ID INTEGER REFERENCES CITIES(CITY_ID) ON DELETE CASCADE,
+                                                  START_DATE date NOT NULL,
+                                                  END_DATE date NOT NULL
+                                                )"""
 
             cursor.execute(query)
 
             # ----------- Can Altinigne - USER_DETAIL TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS USER_DETAIL (
-                                      USERNAME varchar(20) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
-                                      U_NAME varchar(30) NOT NULL,
-                                      U_SURNAME varchar(30) NOT NULL,
-                                      BIRTHDAY date,
-                                      CITY_ID INTEGER REFERENCES CITIES(CITY_ID)
-                                    )"""
+                                                  USERNAME varchar(20) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
+                                                  U_NAME varchar(30) NOT NULL,
+                                                  U_SURNAME varchar(30) NOT NULL,
+                                                  CITY_ID INTEGER REFERENCES CITIES(CITY_ID)
+                                                )"""
 
             cursor.execute(query)
 

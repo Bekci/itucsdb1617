@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3" style="margin-top:20%">
+            <div class="col-md-6 col-md-offset-3" style="margin-top:15%">
 
                 <form action="{{ url_for('site.signup_page') }}" method="post" data-toggle="validator" novalidate>
                     <div class="form-group">
@@ -38,6 +38,26 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Name</label>
+                        <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user"></span>
+						</span>
+                            <input type="text" name="real_name" class="form-control" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Surname</label>
+                        <div class="input-group">
+						<span class="input-group-addon">
+                                <span class="glyphicon glyphicon-user"></span>
+						</span>
+                            <input type="text" name="real_surname" class="form-control" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label>Profile Picture Address</label>
                         <div class="input-group">
 						<span class="input-group-addon">
@@ -62,6 +82,16 @@
                         <input type="email" class="form-control" id="inputEmail" name="inputEmail"
                                data-error="Hey look here ! That email address is invalid" required>
                         <div class="help-block with-errors"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city_select">Select the city</label>
+                        <select class="form-control" id="city_select" name="city" required>
+                            <option disabled selected value> -- Select an option -- </option>
+                            <option value="Ankara-TUR">Ankara, TUR</option>
+                            <option value="Istanbul-TUR">Istanbul, TUR</option>
+                            <option value="Los_Angeles-US">Los Angeles, US</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
