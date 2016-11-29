@@ -31,7 +31,7 @@
             <div class="col-md-2"
                  style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
                 <p style="text-align: center"><img
-                        src="https://pbs.twimg.com/profile_images/3185300157/8ffee78995192b6be24a293341519902.jpeg"
+                        src="{{ user.profile_pic }}"
                         height="150px"
                         width="150px"
                         style="margin-top:75px; border-radius: 25px; border: 5px solid red; text-align: center; vertical-align: center">
@@ -51,8 +51,8 @@
                     {% for currency in currency_list %}
                         <a class="list-group-item list-group-item-action">
                             <h5 class="list-group-item-heading">{{ currency.name }}</h5>
-                            <p class="list-group-item-text">{{ currency.to_tl }}</p>
-                            <strong class="list-group-item-text">{{ currency.date }}</strong>
+                            <p class="list-group-item-text">{{ currency.tl_value }}</p>
+                            <strong class="list-group-item-text">{{ currency.last_update }}</strong>
                         </a>
                     {% endfor %}
                 </div>

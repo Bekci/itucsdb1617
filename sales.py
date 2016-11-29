@@ -32,7 +32,7 @@ class Sale:
 
 class SaleDatabaseOPS:
     @classmethod
-    def add_sale(cls, seller_id, item_id, city_id, description, end_date):
+    def add_sale(cls, seller_id, item_id, city_id, end_date):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -45,13 +45,60 @@ class SaleDatabaseOPS:
                             )"""
 
             try:
-                cursor.execute(query, (seller_id, item_id, city_id, description, end_date))
+                cursor.execute(query, (seller_id, item_id, city_id, end_date))
             except dbapi2.Error:
                 connection.rollback()
             else:
                 connection.commit()
 
             cursor.close()
+
+    def add_item(cls, item_name, item_picture, item_price, item_description, item_currency):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+
+            query = """INSERT INTO ITEMS (ITEM_NAME, ITEM_PICTURE, ITEM_PRICE, ITEM_DESCRIPTION, ITEM_CURRENCY) VALUES (
+                                              %s,
+                                              %s,
+                                              %s,
+                                              CURRENT_DATE,
+                                              %s
+                            )"""
+
+            try:
+                cursor.execute(query, (item_name, item_picture, item_price, item_description, item_currency))
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+
+    def select_new_item_id(cls, item_name, item_picture, item_price):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+
+            query = """SELECT ITEM_ID FROM ITEMS WHERE ITEM_NAME=%s and ITEM_PICTURE=%s and ITEM_PRICE=%s"""
+
+            user_data = None
+
+            try:
+                cursor.execute(query, (item_name, item_picture, item_price))
+                user_data = cursor.fetchone()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            if user_data:
+                return user_data[0]
+            else:
+                return -1
 
     @classmethod
     def update_sale(cls, description, end_date, city_id, sale_id):

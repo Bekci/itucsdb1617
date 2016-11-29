@@ -191,7 +191,22 @@ def sales_page(user_id):
         cities = CityDatabaseOPS.select_all_cities()
         my_item_list = SaleDatabaseOPS.select_sales_of_a_user(user.username)
 
-        return render_template('sales_knitter.html', signedin=True, user=user, real_name=real_name,
+    else:
+        if 'add_new_item' in request.form:
+            user = UserDatabaseOPS.select_user_with_id(user_id)
+            real_name = UserDatabaseOPS.select_user_detail(user.username)
+            currency_list = CurrencyDatabaseOPS.select_all_currencies()
+            my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
+            cities = CityDatabaseOPS.select_all_cities()
+            SaleDatabaseOPS.add_item(request.form['item_name_form'], request.form['item_picture_form'], request.form['item_price_form'],
+                                     request.form['item_description_form'], request.form['item_change_currency'])
+
+            SaleDatabaseOPS.add_sale(user_id, SaleDatabaseOPS.select_new_item_id(request.form['item_name_form'], request.form['item_picture_form'],
+                                                                                 request.form['item_price_form']),
+                                     my_city.city_id, request.form['sale_end_date'])
+            my_item_list = SaleDatabaseOPS.select_sales_of_a_user(user.username)
+
+    return render_template('sales_knitter.html', signedin=True, user=user, real_name=real_name,
                                my_city=my_city, cities=cities, currency_list=currency_list, my_item_list=my_item_list)
 
 
