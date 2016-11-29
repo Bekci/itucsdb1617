@@ -18,8 +18,6 @@ from sales import  SaleDatabaseOPS, Sale
 
 site = Blueprint('site', __name__)
 
-sil_bunu = User(1,'Can', 'can', 'asdasd', 'asdasd', 'asdas', 'asdsad')
-
 
 @site.route('/', methods=['GET', 'POST'])
 def login_page():

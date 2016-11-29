@@ -12,8 +12,8 @@ class DatabaseOPS:
         if VCAP_SERVICES is not None:
             self.config = DatabaseOPS.get_elephantsql_dsn(VCAP_SERVICES)
         else:
-            self.config = """user='postgres' password='pamukkale'
-                                                       host='localhost' port=5432 dbname='proje'"""
+            self.config = """user='vagrant' password='vagrant'
+                                                       host='localhost' port=5432 dbname='itucsdb'"""
 
     @classmethod
     def get_elephantsql_dsn(cls, vcap_services):
