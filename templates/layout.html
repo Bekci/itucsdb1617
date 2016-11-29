@@ -52,7 +52,7 @@
 					<li>
 						<div class="dropdown">
 							<button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #222222">
-								<img src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg" style="width:36px;height:36px;border-radius:12px">
+								<img src="{{ user.profile_pic }}" style="width:36px;height:36px;border-radius:12px">
   							</button>
 							<ul class="dropdown-menu">
 								<li><a href="{{ url_for('site.user_profile_page', user_id=user.id) }}"><span><b>@{{ user.username }}</b><br>View Profile</span></a></li>

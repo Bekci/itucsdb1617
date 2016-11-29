@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}{{ user.username }}'s Sales Page - {% endblock %}
+{% block title %}{{ user.username }} - {% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -42,11 +42,13 @@
 
             <div class="col-sm-4">
                 <h3 style="text-align: center"><span class="glyphicon glyphicon-link"></span>{{ user.username }}</h3>
+                <p style="text-align: center"><span class="glyphicon glyphicon-home"></span> {{ real_name.city }}, {{ real_name.country }}</p>
             </div>
 
             <div class="col-sm-4" style="text-align: center; padding-top: 15px">
                 <p><span class="glyphicon glyphicon-resize-small"></span><a> {{ user.mail_address }}</a></p>
                 <p><span class="glyphicon glyphicon-share-alt"></span> {{ user.register_date }}</p>
+
             </div>
         </div>
 
@@ -130,54 +132,29 @@
             <div class="col-sm-7"
                  style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
                 <div id="knots" class="sections">
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
-                                Angular JS rullzzzz !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            </div>
-                        </div>
-                    </div>
+
+                    {% for knot in knot_list %}
 
                     <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
                         <div style="padding: 15px">
                             <div class="media-left">
                                 <a href="#">
                                     <img class="media-object"
-                                         src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
+                                         src="{{ user.profile_pic }}"
                                          alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
-                                Flask ? You gotta be kidding ! Use Angular2
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{ user.username }}</h4>
+                                {{ knot.knot_content }}
+                                <h6 style="text-align: right">{{ knot.post_date }}</h6>
                             </div>
                         </div>
                     </div>
 
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="https://pbs.twimg.com/profile_images/772712195918618625/bY7jZS80_400x400.jpg"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> saykolover</h4>
-                                I love python but when it comes to web development never use framework other than
-                                Angular 2 !
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+
+
                 </div>
 
                 <div id="followers" class="sections">
@@ -381,7 +358,7 @@
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-camera"></span>
 						</span>
-                                <input type="text" name="imageURL" class="form-control"  value="{{ user.profile_pic }}"/>
+                                <input type="text" name="imageURL" class="form-control" value="{{ user.profile_pic }}"/>
                             </div>
                         </div>
 
@@ -391,7 +368,7 @@
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-camera"></span>
 						</span>
-                                <input type="text" name="coverURL" class="form-control"  value="{{ user.cover_pic }}"/>
+                                <input type="text" name="coverURL" class="form-control" value="{{ user.cover_pic }}"/>
                             </div>
                         </div>
 
@@ -411,16 +388,40 @@
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-camera"></span>
 						</span>
-                                <input type="text" name="my_surname" class="form-control" value="{{ real_name.surname }}"/>
+                                <input type="text" name="my_surname" class="form-control"
+                                       value="{{ real_name.surname }}"/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="submit" class="btn btn-success btn-block" value="Change Info" name="changeImage"/>
+                            <label for="city_select">Select a new city</label>
+                            <select class="form-control" id="city_select" name="city" required>
+                                {% for city in cities %}
+                                    {% if city.name == real_name.city and city.country == real_name.country %}
+                                        <option selected
+                                                value="{{ city.id }}">{{ city.name }}, {{ city.country }}</option>
+                                    {% else %}
+                                        <option value="{{ city.id }}">{{ city.name }}, {{ city.country }}</option>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <input type="submit" class="btn btn-danger btn-block" value="Delete My Real Name" name="deleteReal"/>
+                            <div class="input-group">
+                                <input type="hidden" name="city_id" class="form-control" value="{{ my_city.id }}" id="city_id"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success btn-block" value="Change Info"
+                                   name="changeImage"/>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-danger btn-block" value="Delete My Real Name"
+                                   name="deleteReal"/>
                         </div>
                     </form>
 
@@ -477,6 +478,11 @@
             e.preventDefault();
             return false;
         })
+
+        $('#city_select').on('change', function () {
+            var selection = $(this).val();
+            $('#city_id').val(selection);
+        });
 
     </script>
 

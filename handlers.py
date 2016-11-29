@@ -10,6 +10,8 @@ from message import MessageDatabaseOPS
 from book_type import BookTypeDatabaseOPS
 from book import BookDatabaseOPS
 from datetime import datetime
+from city import CityDatabaseOPS, City
+from currency import CurrencyDatabaseOPS, Currency
 
 site = Blueprint('site', __name__)
 
@@ -35,10 +37,13 @@ def login_page():
 @site.route('/signup', methods=['GET', 'POST'])
 def signup_page():
     if request.method == 'GET':
-        return render_template('signup_page.html', signedin=False)
+        all_cities = CityDatabaseOPS.select_all_cities()
+        return render_template('signup_page.html', signedin=False, cities=all_cities)
     else:
         if 'signup' in request.form:
             user = UserDatabaseOPS.select_user(request.form['knittername'])
+
+            samename = False
 
             if user and user != -1:
                 if user.username == request.form['knittername']:
@@ -48,7 +53,12 @@ def signup_page():
                                          request.form['profile_pic'], request.form['cover_pic'],
                                          request.form['inputEmail'])
 
-            return render_template('login_page.html', newly_signup=True, signedin=False)
+                selected_city_id = request.form['city_id']
+
+                UserDatabaseOPS.add_user_detail(request.form['knittername'], request.form['real_name'],
+                                                request.form['real_surname'], selected_city_id)
+
+            return render_template('login_page.html', newly_signup=True, signedin=False, samename=samename)
 
 
 @site.route('/home/<int:user_id>', methods=['GET', 'POST'])
@@ -188,7 +198,11 @@ def user_profile_page(user_id):
     if request.method == 'GET':
         user = UserDatabaseOPS.select_user_with_id(user_id)
         real_name = UserDatabaseOPS.select_user_detail(user.username)
-        return render_template('user_profile.html', signedin=True, user=user, real_name=real_name)
+        my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
+        cities = CityDatabaseOPS.select_all_cities()
+        knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
+        return render_template('user_profile.html', signedin=True, user=user, real_name=real_name,
+                               my_city=my_city, cities=cities, knot_list=knot_list)
     else:
         if 'changeImage' in request.form:
             user = UserDatabaseOPS.select_user_with_id(user_id)
@@ -196,28 +210,32 @@ def user_profile_page(user_id):
             my_name = request.form['my_name']
             my_surname = request.form['my_surname']
             user.cover_pic = request.form['coverURL']
-            bday = request.form['birthday']
-            city = request.form['city']
-            country = request.form['country']
+            city_id = request.form['city_id']
+            cities = CityDatabaseOPS.select_all_cities()
 
-            user_details = UserDatabaseOPS.select_user_detail(user.username)
+            real_name = UserDatabaseOPS.select_user_detail(user.username)
 
-            if user_details == -1:
-                UserDatabaseOPS.add_user_detail(user.username, my_name, my_surname, bday, city, country)
+            if real_name == -1:
+                UserDatabaseOPS.add_user_detail(user.username, my_name, my_surname, city_id)
             else:
-                UserDatabaseOPS.update_user_detail(user.username, my_name, my_surname, bday, city, country)
+                UserDatabaseOPS.update_user_detail(user.username, my_name, my_surname, city_id)
 
             UserDatabaseOPS.update_user(user.username, user.password,
                                         user.profile_pic, user.cover_pic, user.mail_address)
 
-            user_details = UserDatabaseOPS.select_user_detail(user.username)
+            real_name = UserDatabaseOPS.select_user_detail(user.username)
+            my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
+            knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
 
         if 'deleteReal' in request.form:
             user = UserDatabaseOPS.select_user_with_id(user_id)
             UserDatabaseOPS.delete_user_detail(user.username)
-            user_details = UserDatabaseOPS.select_user_detail(user.username)
+            real_name = UserDatabaseOPS.select_user_detail(user.username)
+            my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
+            knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
 
-        return render_template('user_profile.html', signedin=True, user=user, real_name=user_details)
+        return render_template('user_profile.html', signedin=True, user=user, real_name=real_name,
+                               my_city=my_city, cities=cities, knot_list=knot_list)
 
 
 @site.route('/help')

@@ -35,7 +35,7 @@ class DatabaseOPS:
             query = """CREATE TABLE IF NOT EXISTS USERS (
                                       USER_ID SERIAL PRIMARY KEY,
                                       USERNAME varchar(20) UNIQUE NOT NULL,
-                                      USER_PASSWORD varchar(20) NOT NULL,
+                                      USER_PASSWORD varchar(255) NOT NULL,
                                       PROFILE_PIC varchar(255) NOT NULL,
                                       COVER_PIC varchar(255) NOT NULL,
                                       MAIL_ADDRESS varchar(50) NOT NULL,
@@ -51,7 +51,7 @@ class DatabaseOPS:
                                                             CITY_NAME varchar(50) NOT NULL,
                                                             DISTANCE_TO_CENTER integer NOT NULL,
                                                             COUNTRY varchar(3) NOT NULL
-                                                                                  )"""
+                                                          )"""
 
             cursor.execute(query)
 
@@ -84,7 +84,7 @@ class DatabaseOPS:
                                                   SALE_ID SERIAL PRIMARY KEY,
                                                   SELLER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE,
                                                   ITEM_ID INTEGER REFERENCES ITEMS(ITEM_ID) ON DELETE CASCADE,
-                                                  CITY_ID INTEGER REFERENCES CITIES(CITY_ID) ON DELETE CASCADE,
+                                                  CITY_ID INTEGER REFERENCES CITIES(CITY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
                                                   START_DATE date NOT NULL,
                                                   END_DATE date NOT NULL
                                                 )"""

@@ -237,7 +237,7 @@ class UserDatabaseOPS:
                                 """
 
             try:
-                cursor.execute(query, (real_name, real_surname, username, city_id))
+                cursor.execute(query, (real_name, real_surname, city_id, username))
             except dbapi2.Error:
                 connection.rollback()
             else:
