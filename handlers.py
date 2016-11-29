@@ -4,6 +4,7 @@ from database import database
 from knot import KnotDatabaseOPS
 from user import UserDatabaseOPS, User
 from notification import NotificationDatabaseOPS
+from poll import PollDatabaseOPS
 from interaction import InteractionDatabaseOPS
 from message import MessageDatabaseOPS
 from book_type import BookTypeDatabaseOPS
