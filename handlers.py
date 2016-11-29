@@ -14,6 +14,7 @@ from city import CityDatabaseOPS, City
 from events import EventDatabaseOPS
 from group import GroupDatabaseOPS
 from currency import CurrencyDatabaseOPS, Currency
+from sales import  SaleDatabaseOPS, Sale
 
 site = Blueprint('site', __name__)
 
@@ -157,42 +158,19 @@ def notifications_page(user_id):
         knots = NotificationDatabaseOPS.select_notifications(user)
         return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user, polls = polls)
 
+
 @site.route('/knitter_sales/<int:user_id>', methods=['GET', 'POST'])
 def sales_page(user_id):
+    if request.method == 'GET':
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        real_name = UserDatabaseOPS.select_user_detail(user.username)
+        currency_list = CurrencyDatabaseOPS.select_all_currencies()
+        my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
+        cities = CityDatabaseOPS.select_all_cities()
+        my_item_list = SaleDatabaseOPS.select_sales_of_a_user(user.username)
 
-    # if request.method == 'GET':
-    #     user = UserDatabaseOPS.select_user_with_id(user_id)
-    #     detail = UserDatabaseOPS.select_user_detail(user.username)
-    #     return render_template('user_profile.html', signedin=True, user=user, real_name=real_name)
-    # else:
-    #     if 'changeImage' in request.form:
-    #         user = UserDatabaseOPS.select_user_with_id(user_id)
-    #         user.profile_pic = request.form['imageURL']
-    #         my_name = request.form['my_name']
-    #         my_surname = request.form['my_surname']
-    #         user.cover_pic = request.form['coverURL']
-    #         bday = request.form['birthday']
-    #         city = request.form['city']
-    #         country = request.form['country']
-    #
-    #         user_details = UserDatabaseOPS.select_user_detail(user.username)
-    #
-    #         if user_details == -1:
-    #             UserDatabaseOPS.add_user_detail(user.username, my_name, my_surname, bday, city, country)
-    #         else:
-    #             UserDatabaseOPS.update_user_detail(user.username, my_name, my_surname, bday, city, country)
-    #
-    #         UserDatabaseOPS.update_user(user.username, user.password,
-    #                                     user.profile_pic, user.cover_pic, user.mail_address)
-    #
-    #         user_details = UserDatabaseOPS.select_user_detail(user.username)
-    #
-    #     if 'deleteReal' in request.form:
-    #         user = UserDatabaseOPS.select_user_with_id(user_id)
-    #         UserDatabaseOPS.delete_user_detail(user.username)
-    #         user_details = UserDatabaseOPS.select_user_detail(user.username)
-
-    return render_template('sales_knitter.html', signedin=True, user=sil_bunu, real_name={'name': 'Can', 'surname': 'Altinigne'})
+        return render_template('sales_knitter.html', signedin=True, user=user, real_name=real_name,
+                               my_city=my_city, cities=cities, currency_list=currency_list, my_item_list=my_item_list)
 
 
 @site.route('/user_profile/<int:user_id>', methods=['GET', 'POST'])

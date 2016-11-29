@@ -48,7 +48,8 @@
 					<li class="{% if request.path == '/notifications' %}active{% endif %}"><a href="{{ url_for('site.notifications_page', user_id=user.id) }}"><i class="fa fa-bell" style="font-size:18px"></i> Notifications</a></li>
 					<li class="{% if request.path == '/messages' %}active{% endif %}"><a href="{{ url_for('site.messages_page', user_id=user.id) }}"><i class="glyphicon glyphicon-envelope" style="font-size:18px"></i> Messages</a></li>
           <li class="{% if request.path == '/events' %}active{% endif %}"><a href="{{ url_for('site.events_page', user_id=user.id) }}"><i class="glyphicon glyphicon-glass" style="font-size:18px"></i> Events</a></li>
-        </ul>
+        <li class="{% if request.path == '/knitter_sales' %}active{% endif %}"><a href="{{ url_for('site.sales_page', user_id=user.id) }}"><i class="glyphicon glyphicon-usd" style="font-size:18px"></i> Knitter Sales</a></li>
+                </ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						<div class="dropdown">

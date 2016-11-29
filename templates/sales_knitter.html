@@ -38,6 +38,8 @@
                 </p>
                 <h3 style="text-align: center"><span class="glyphicon glyphicon-link"></span>{{ user.username }}</h3>
                 <h3 style="text-align: center">{{ real_name.name }} {{ real_name.surname }}</h3>
+                <p style="text-align: center"><span
+                        class="glyphicon glyphicon-home"></span> {{ real_name.city }}, {{ real_name.country }}</p>
                 <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#add_new_item"
                         style="margin-top: 20px">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new Item
@@ -46,20 +48,13 @@
 
                 <br><h4 style="text-align: center">Currencies to TL</h4>
                 <div class="list-group">
-                    <a class="list-group-item list-group-item-action">
-                        <h5 class="list-group-item-heading">Euro</h5>
-                        <p class="list-group-item-text">3.57</p>
-                        <strong class="list-group-item-text">Last Update: 2016-01-01</strong>
-                    </a>
-                    <a class="list-group-item list-group-item-action">
-                        <h5 class="list-group-item-heading">US Dollars</h5>
-                        <p class="list-group-item-text">3.32</p>
-                        <strong class="list-group-item-text">Last Update: 2016-01-01</strong>
-                    </a>
-                    <a class="list-group-item list-group-item-action">
-                        <h5 class="list-group-item-heading">TL</h5>
-                        <p class="list-group-item-text">1</p>
-                    </a>
+                    {% for currency in currency_list %}
+                        <a class="list-group-item list-group-item-action">
+                            <h5 class="list-group-item-heading">{{ currency.name }}</h5>
+                            <p class="list-group-item-text">{{ currency.to_tl }}</p>
+                            <strong class="list-group-item-text">{{ currency.date }}</strong>
+                        </a>
+                    {% endfor %}
                 </div>
             </div>
 
@@ -71,59 +66,77 @@
                  style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
                 <h2 style="text-align: center">My Items</h2>
 
-                <div class="panel panel-danger" style="margin-top: 20px; background-color: #f5f8fa; border-radius: 5px">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><a data-toggle="collapse" href="#collapse1">Electric Guitar</a></h3>
-                    </div>
-                    <div id="collapse1" class="panel-collapse collapse">
-                        <div class="panel-body">
-                            <p style="text-align: center"><img
-                                    src="http://previews.123rf.com/images/aberration/aberration1001/aberration100100128/6310306-green-electric-guitar-isolated-on-white-Stock-Photo-guitars.jpg"
-                                    height="360px"
-                                    width="480px"
-                                    style="margin-top:25px; border-radius: 25px; border: 5px solid red; text-align: center; vertical-align: center">
-                            </p>
+                {% for item in my_item_list %}
+                    <div class="panel panel-danger"
+                         style="margin-top: 20px; background-color: #f5f8fa; border-radius: 5px">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><a data-toggle="collapse"
+                                                       href="#collapse1">{{ item.item.item_name }}</a>
+                            </h3>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p style="text-align: center"><img
+                                        src="{{ item.item.item_picture }}"
+                                        height="360px"
+                                        width="480px"
+                                        style="margin-top:25px; border-radius: 25px; border: 5px solid red; text-align: center; vertical-align: center">
+                                </p>
 
-                            <p style="text-align: justify">Lorem Ipsum, dizgi ve baskı
-                                endüstrisinde kullanılan mıgır metinlerdir.
-                                Lorem Ipsum, adı bilinmeyen bir matbaacının bir hurufat numune kitabı
-                                oluşturmak üzere bir yazı galerisini alarak karıştırdığı 1500'lerden
-                                beri endüstri standardı sahte metinler olarak kullanılmıştır.</p>
+                                <p style="text-align: justify">{{ item.item_description }}</p>
 
-                            <div class="list-group">
-                                <a class="list-group-item list-group-item-action">
-                                    <h5 class="list-group-item-heading">Price</h5>
-                                    <p class="list-group-item-text">1700 EUR</p>
-                                </a>
-                                <a class="list-group-item list-group-item-action">
-                                    <h5 class="list-group-item-heading">Start Date</h5>
-                                    <p class="list-group-item-text">2016-01-22</p>
-                                </a>
-                                <a class="list-group-item list-group-item-action">
-                                    <h5 class="list-group-item-heading">End Date</h5>
-                                    <p class="list-group-item-text">2016-7-8</p>
-                                </a>
-                            </div>
+                                <div class="list-group">
+                                    <a class="list-group-item list-group-item-action">
+                                        <h5 class="list-group-item-heading">Price</h5>
+                                        <p class="list-group-item-text">{{ item.item.item_price }} {{ item.item.item_currency }}</p>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action">
+                                        <h5 class="list-group-item-heading">Start Date</h5>
+                                        <p class="list-group-item-text">{{ item.sale_start }}</p>
+                                    </a>
+                                    <a class="list-group-item list-group-item-action">
+                                        <h5 class="list-group-item-heading">End Date</h5>
+                                        <p class="list-group-item-text">{{ item.sale_end }}</p>
+                                    </a>
+                                </div>
 
-                            <form>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <input type="hidden" name="item_id" class="form-control" value="1"/>
+                                <form>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="hidden" name="item_id" class="form-control"
+                                                   value="{{ item.item.item_id }}"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="submit" class="btn btn-success btn-block" value="Change This Item"
-                                           name="change_item"/>
-                                </div>
 
-                                <div class="form-group">
-                                    <input type="submit" class="btn btn-danger btn-block" value="Delete This Item"
-                                           name="delete_item"/>
-                                </div>
-                            </form>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="hidden" name="sale_id" class="form-control"
+                                                   value="{{ item.sale_id }}"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn" data-toggle="modal"
+                                                data-target="#update_item">
+                                            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-danger btn-block" value="Delete This Sale"
+                                               name="delete_item"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="hidden" name="delete_this_sale" class="form-control"
+                                                   id="delete_this_sale" value="{{ item.sale_id }}"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% endfor %}
 
 
             </div>
@@ -144,7 +157,7 @@
                     <div class="form-group">
                         <label for="search_select">Select the option</label>
                         <select class="form-control" id="search_select">
-                            <option disabled selected value> -- Select an option -- </option>
+                            <option disabled selected value> -- Select an option --</option>
                             <option value="username">Search by username</option>
                             <option value="closest">Search the closest items</option>
                             <option value="price">Search by price</option>
@@ -154,31 +167,37 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="hidden" name="choose_search" class="form-control" id="choose_search"/>
+                        </div>
+                    </div>
+
                     <div class="form-group hid_forms" style="display:none;" id="otherType">
-                            <label id="hid_label"></label>
-                            <div class="input-group">
+                        <label id="hid_label"></label>
+                        <div class="input-group">
 						<span class="input-group-addon">
                                 <span class="glyphicon glyphicon-zoom-in"></span>
 						</span>
-                                <input type="text" name="keyword" class="form-control"/>
-                            </div>
+                            <input type="text" name="keyword" class="form-control"/>
+                        </div>
                     </div>
 
                     <div class="form-group hid_forms" style="display:none;" id="currencyType">
                         <label for="currency_select">Select the currency</label>
                         <select class="form-control" id="currency_select">
-                            <option value="EUR">Euro</option>
-                            <option value="USD">US Dollars</option>
-                            <option value="TL">Afyon Dinarı</option>
+                            {% for currency in currency_list %}
+                                <option value="{{ currency.name }}">{{ currency.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
                     <div class="form-group hid_forms" style="display:none;" id="placeType">
                         <label for="city_select">Select the city</label>
                         <select class="form-control" id="city_select">
-                            <option value="Ankara-TUR">Ankara, TUR</option>
-                            <option value="Istanbul-TUR">Istanbul, TUR</option>
-                            <option value="Los_Angeles-US">Los Angeles, US</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}, {{ city.country }}</option>
+                            {% endfor %}
                         </select>
                     </div>
 
@@ -201,62 +220,70 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Change your profile infos</h4>
+                    <h4 class="modal-title">Add new Item !</h4>
                 </div>
 
                 <div class="modal-body">
-                    <form action="{{ url_for('site.user_profile_page', user_id=user.id) }}" method="post">
+
+                    <form method="post">
 
                         <div class="form-group">
-                            <label>New Profile Image URL</label>
+                            <label>Item Name</label>
                             <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-camera"></span>
-						</span>
-                                <input type="text" name="imageURL" class="form-control" value="{{ user.profile_pic }}"/>
+                                <input type="text" name="item_name_form" class="form-control"/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>New Cover Image URL</label>
+                            <label>Item Picture Address</label>
                             <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-camera"></span>
-						</span>
-                                <input type="text" name="coverURL" class="form-control" value="{{ user.cover_pic }}"/>
+                                <input type="text" name="item_picture_form" class="form-control"/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Name</label>
+                            <label>Item Price</label>
                             <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-camera"></span>
-						</span>
-                                <input type="text" name="my_name" class="form-control" value="{{ real_name.name }}"/>
+                                <input type="text" name="item_price_form" class="form-control"/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label>Surname</label>
+                            <label>Item Description</label>
                             <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-camera"></span>
-						</span>
-                                <input type="text" name="my_surname" class="form-control"
-                                       value="{{ real_name.surname }}"/>
+                                <input type="text" name="item_description_form" class="form-control"/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <input type="submit" class="btn btn-success btn-block" value="Change Info"
-                                   name="changeImage"/>
+                            <label>Sale End Date</label>
+                            <div class="input-group">
+                                <input type="text" name="sale_end_date" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display:none;" id="currency_item">
+                            <label for="currency_select">Select the currency</label>
+                            <select class="form-control" id="currency_item">
+                                <option disabled selected value> -- Select an option --</option>
+                                {% for currency in currency_list %}
+                                    <option value="{{ currency.name }}">{{ currency.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <input type="submit" class="btn btn-danger btn-block" value="Delete My Real Name"
-                                   name="deleteReal"/>
+                            <div class="input-group">
+                                <input type="hidden" name="item_change_currency" class="form-control"
+                                       id="item_change_currency"/>
+                            </div>
                         </div>
+
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success btn-block" value="Add new Item"
+                                   name="add_new_item"/>
+                        </div>
+
                     </form>
 
                 </div>
@@ -269,17 +296,19 @@
     </div>
 
     <script>
-        $('#search_select').on('change',function(){
+        $('#search_select').on('change', function () {
             var selection = $(this).val();
 
-            switch(selection){
+            $('#choose_search').val(selection);
+
+            switch (selection) {
 
                 case "price":
                 case "username":
                     $(".hid_forms").hide();
                     $("#hid_label").text("Enter the " + selection);
                     $("#otherType").show();
-                        if(selection=="price") $("#currencyType").show();
+                    if (selection == "price") $("#currencyType").show();
                     break;
 
                 case "currency":
@@ -291,10 +320,16 @@
                     $(".hid_forms").hide();
                     $("#placeType").show();
                     break;
-            default:
-                $(".hid_forms").hide();
-        }
-    });
+                default:
+                    $(".hid_forms").hide();
+            }
+        });
+
+        $('#currency_item').on('change', function () {
+            var selection = $(this).val();
+            $('#item_change_currency').val(selection);
+        });
+
     </script>
 
 
