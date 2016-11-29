@@ -86,5 +86,33 @@ class CurrencyDatabaseOPS:
             else:
                 return -1
 
+    @classmethod
+    def select_all_currencies(cls):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            query = """SELECT * FROM CURRENCIES"""
+
+            currency_data = []
+
+            try:
+                cursor.execute(query, ())
+                currency_data = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            user_list = []
+
+            for row in currency_data:
+                user_list.append(
+                    Currency(name=row[0], to_tl=row[1], date=row[2])
+                )
+
+            return user_list
+
 
 currency_ops = CurrencyDatabaseOPS()

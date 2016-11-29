@@ -92,5 +92,33 @@ class CityDatabaseOPS:
             else:
                 return -1
 
+    @classmethod
+    def select_all_cities(cls):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            query = """SELECT * FROM CITIES"""
+
+            city_data = []
+
+            try:
+                cursor.execute(query, ())
+                city_data = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            user_list = []
+
+            for row in city_data:
+                user_list.append(
+                    City(city_id=row[0], name=row[1], distance=row[2], country=row[3])
+                )
+
+            return user_list
+
 
 city_ops = CityDatabaseOPS()
