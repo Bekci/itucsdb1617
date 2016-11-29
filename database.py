@@ -115,6 +115,28 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
+            # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
+
+            query = """CREATE TABLE IF NOT EXISTS EVENTS(
+                            EVENT_ID SERIAL PRIMARY KEY,
+                            OWNER_ID INTEGER NOT NULL,
+                            EVENT_CONTENT TEXT,
+                            EVENT_START_DATE DATE NOT NULL,
+                            EVENT_END_DATE DATE NOT NULL,
+                            IS_USER BOOLEAN NOT NULL
+                    )"""
+
+            cursor.execute(query)
+
+            # ----------- Tolga Bilbey - EVENT-PARTICIPANTS TABLE ----------------------
+
+            query = """CREATE TABLE IF NOT EXISTS EVENT_PARTICIPANTS(
+                            EVENT_ID INTEGER NOT NULL REFERENCES EVENTS(EVENT_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                            PARTICIPANT_ID INTEGER NOT NULL REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+            )"""
+
+            cursor.execute(query)
+
             # ----------- Ozan ATA - LIKE-REKNOT ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS LIKE_REKNOT(
@@ -124,9 +146,9 @@ class DatabaseOPS:
                     )"""
 
             cursor.execute(query)
-            
+
             # ----------- Ozan ATA - POLLs ----------------------
-            
+
             query = """CREATE TABLE IF NOT EXISTS POLLS(
                 POLL_ID SERIAL PRIMARY KEY,
                 OWNER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -138,16 +160,16 @@ class DatabaseOPS:
                 START_DATE date NOT NULL,
                 END_DATE date NOT NULL
                 )"""
-            
+
             cursor.execute(query)
-            
+
             # ----------- Ozan ATA - USER-POLL ----------------------
-            
+
             query = """CREATE TABLE IF NOT EXISTS USER_POLL(
                 POLL_ID INTEGER references POLLS(POLL_ID) ON DELETE CASCADE ON UPDATE CASCADE,
                 USER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
                 )"""
-            
+
             cursor.execute(query)
 
             # ----------- ilknur Meray - USER_INTERACTION TABLE ------------------
