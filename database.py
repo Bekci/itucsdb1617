@@ -125,6 +125,31 @@ class DatabaseOPS:
                     )"""
 
             cursor.execute(query)
+            
+            # ----------- Ozan ATA - POLLs ----------------------
+            
+            query = """CREATE TABLE IF NOT EXISTS POLLS(
+                POLL_ID SERIAL PRIMARY KEY,
+                OWNER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                POLL_CONTENT varchar(255) NOT NULL,
+                POLL_OPTION_1_CONTENT varchar(255) NOT NULL,
+                POLL_OPTION_1_COUNTER INTEGER DEFAULT 0,
+                POLL_OPTION_2_CONTENT varchar(255) NOT NULL,
+                POLL_OPTION_2_COUNTER INTEGER DEFAULT 0,
+                START_DATE date NOT NULL,
+                END_DATE date NOT NULL
+                )"""
+            
+            cursor.execute(query)
+            
+            # ----------- Ozan ATA - USER-POLL ----------------------
+            
+            query = """CREATE TABLE IF NOT EXISTS USER_POLL(
+                POLL_ID INTEGER references POLLS(POLL_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                USER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                )"""
+            
+            cursor.execute(query)
 
             # ----------- ilknur Meray - USER_INTERACTION TABLE ------------------
 

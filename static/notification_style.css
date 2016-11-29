@@ -6,21 +6,32 @@ body{
   margin-top:15px;
 }
 
-.userPanel{
-  background-color: white;
-}
-
 i.btn{
   margin-left:5px;
 }
 
-.trends{
-  background-color: white;
-  padding:10px;
-  border-radius: 8px;
-}
+.panel-body:not(.two-col) { padding:0px }
+.glyphicon-new-window { margin-left:5px; }
+.panel-body .radio,.panel-body .checkbox {margin-top: 0px;margin-bottom: 0px;}
+.panel-body .list-group {margin-bottom: 0;}
+.margin-bottom-none { margin-bottom: 0; }
+.panel-body .radio label,.panel-body .checkbox label { display:block; }
 
-.trend{
-  border-bottom:0.1em  #ccc solid;
-  margin-bottom:10px;
+.progress {
+  position: relative;
+	height: 25px;
+}
+.progress > .progress-type {
+	position: absolute;
+	left: 0px;
+	font-weight: 800;
+	padding: 3px 30px 2px 10px;
+	color: rgb(255, 255, 255);
+	background-color: rgba(25, 25, 25, 0.2);
+}
+.progress > .progress-completed {
+	position: absolute;
+	right: 0px;
+	font-weight: 800;
+	padding: 3px 10px 2px;
 }

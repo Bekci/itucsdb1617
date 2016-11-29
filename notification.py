@@ -71,7 +71,7 @@ class NotificationDatabaseOPS:
                     else:
                         action_type = 'reknotted'
 
-                    result.append(Notification(first_query[i][0], first_query[i][1], first_query[i][2] , first_query[i][3], first_query[i][4], first_query[i][4], second_query[i][0], second_query[i][1], action_type))
+                    result.append(Notification(first_query[i][0], first_query[i][1], first_query[i][2] , first_query[i][3], first_query[i][4], first_query[i][5], second_query[i][0], second_query[i][1], action_type))
                     i = i + 1
 
                 return result

@@ -18,22 +18,139 @@
 
 	<div class="row">
 
-		<div name='trends' class="col-sm-2">
-			<div class="alert alert-danger">This column of the page will show trends related with the user</div>
-			<div class="trends">
-				<h5>Istanbul Trends · <a href='#'>Change</a></h5>
-				{% for trend in trends %}
-				<div class="trend">
-					<a href="#">#{{trend.name}}</a><br>
-					<span>{{trend.info}}</span>
-				</div>
+		<div class="col-sm-1"></div>
+
+		<div name='polls' class="col-sm-3" style="border-radius: 8px;">
+			<div class="polls" style="background-color: white; padding:15px; border-radius: 8px;">
+				<form action="{{ url_for('site.notifications_page', user_id=user.id) }}" method="post" style="margin-top:5px;padding-bottom:0px;">
+					<div class="panel panel-primary" style="margin-top:5px;">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								<span class="glyphicon glyphicon-arrow-right"></span> Create a new Poll!
+							</h3>
+						</div>
+						<div class="panel-body">
+							<ul class="list-group">
+								<li class="list-group-item">
+									<div class="form-group">
+										<label>What is this Poll about?</label>
+										<div class="input-group">
+											<span class="input-group-addon">
+                        					<span class="glyphicon glyphicon-question-sign"></span>
+											</span>
+											<input type="text" name="poll_content" class="form-control" />
+										</div>
+									</div>
+								</li>
+								<li class="list-group-item">
+									<div class="form-group">
+										<label>Answer #1</label>
+										<div class="input-group">
+											<span class="input-group-addon">
+                                			<span class="glyphicon glyphicon-pushpin"></span>
+											</span>
+											<input type="text" name="answer_1" class="form-control" />
+										</div>
+									</div>
+								</li>
+								<li class="list-group-item">
+									<div class="form-group">
+										<label>Answer #2</label>
+										<div class="input-group">
+											<span class="input-group-addon">
+                                				<span class="glyphicon glyphicon-pushpin"></span>
+											</span>
+											<input type="text" name="answer_2" class="form-control" />
+										</div>
+									</div>
+								</li>
+								<li class="list-group-item">
+									<div class="form-group">
+										<label>End Date</label>
+										<div class="input-group">
+											<span class="input-group-addon">
+                                				<span class="glyphicon glyphicon-calendar"></span>
+											</span>
+											<input type="text" name="end_date" class="form-control" placeholder="YYYY/MM/DD" />
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="panel-footer">
+							<div class="form-group">
+								<input type="submit" class="btn btn-success btn-block" value="Create" name="create" />
+							</div>
+						</div>
+					</div>
+				</form>
+				<h5 style="margin-bottom:5px;">Start Voting!</h5>
+				{% for poll in polls %}
+				<form action="{{ url_for('site.notifications_page', user_id=user.id) }}" method="post" style="margin-top:5px;padding-bottom:0px;">
+					<div class="panel panel-primary" style="margin-top:5px;">
+						<div class="panel-heading">
+							<h3 class="panel-title">
+								<span class="glyphicon glyphicon-arrow-right"></span> {{ poll.content }}
+								<input type="submit" class="close" name="delete_poll" value ="x" style="padding:2px;"/>
+							</h3>
+						</div>
+						<div class="panel-body">
+							<ul class="list-group">
+								<li class="list-group-item">
+									<div class="radio">
+										{% if poll.is_voted %}
+										<div class="progress">
+											<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{ poll.option_1_counter }}% ;"
+												title="{{ poll.option_1 }}">
+												<span class="sr-only">{{ poll.option_1_counter }}% Complete</span>
+											</div>
+											<span class="progress-type"> {{ poll.option_1 }}</span>
+											<span class="progress-completed">{{ poll.option_1_counter }}%</span>
+										</div>
+										{% endif %} {% if not poll.is_voted %}
+										<label>
+                                    		<input type="radio" value="1" name="optionsRadios">{{ poll.option_1 }} 
+										</label> {% endif %}
+									</div>
+								</li>
+								<li class="list-group-item">
+									<div class="radio">
+										{% if poll.is_voted %}
+										<div class="progress">
+											<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:{{ poll.option_2_counter }}%"
+												title="{{ poll.option_2 }}">
+												<span class="sr-only">{{ poll.option_2_counter }}% Complete</span>
+											</div>
+											<span class="progress-type"> {{ poll.option_2 }}</span>
+											<span class="progress-completed">{{ poll.option_2_counter }}%</span>
+										</div>
+										{% endif %} {% if not poll.is_voted %}
+										<label>
+											<input type="radio" value="2" name="optionsRadios"> {{ poll.option_2 }} 
+										</label> {% endif %}
+									</div>
+								</li>
+							</ul>
+						</div>
+						<div class="panel-footer">
+							<div class="form-group">
+								{% if poll.is_voted %}
+								<h5 style="margin-bottom:5px;">You alread voted this one!</h5>
+								<input type="hidden" name="owner" value="{{ poll.owner_id }}">
+								<input type="hidden" name="id" value="{{ poll.id }}">
+								{% endif %} {% if not poll.is_voted %}
+								<input type="hidden" name="owner" value="{{ poll.owner_id }}">
+								<input type="hidden" name="id" value="{{ poll.id }}">
+								<input type="submit" class="btn btn-success btn-block" value="vote" name="vote" /> {% endif %}
+							</div>
+						</div>
+					</div>
+				</form>
 				{% endfor %}
 			</div>
 		</div>
 
-		<div class="col-sm-1"></div>
-
-		<div name='notifications' class="col-sm-5" style="background-color:white;">
+		<div name='notifications' class="col-sm-5" style="background-color:white; border-radius:8px;">
 			{% for knot in knots %}
 			<form action="{{ url_for('site.notifications_page', user_id=user.id) }}" method="POST">
 				<div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
@@ -54,7 +171,7 @@
 								</button>
 								<ul class="dropdown-menu" style="overflow:visible;background-color: #f5f8fa;">
 									<li style="border-bottom:0.01em solid white;">
-										<button class="btn dropdown-toggle" name="delete" id="delete" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+										<button class="btn dropdown-toggle" name="delete_knot" id="delete" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
 											<i class="glyphicon glyphicon-trash"></i> Delete This Knot
 										</button>
 									</li>
@@ -85,15 +202,12 @@
 			{% endfor %}
 		</div>
 
-		<div class="col-sm-1"></div>
-
-		<div name='users' class="col-sm-3">
-			<div class="alert alert-danger">This column of the page will show people related with the user</div>
-			<div class="userPanel">
-				<h5 style="padding:10px;padding-bottom:0px;">Can you Knot?</h5>
+		<div name='users' class="col-sm-2">
+			<div class="userPanel" style="padding:10px;background-color:white;border-radius:8px;">
+				<h5 style="margin:10px;margin-bottom:0px;">Can you Knot?</h5>
 				{% for knot in knots %}
 				<!-- style="margin-bottom:5px;padding:2px;border-radius:12px;" -->
-				<div class="media">
+				<div class="media" style="background-color: #f5f8fa; margin:5px; border-radius:15px; padding:15px;">
 					<div class="media-left">
 						<a href="#">
 							<img class="media-object" src="{{knot.user_pic_url}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
@@ -105,8 +219,11 @@
 					</div>
 				</div>
 				{% endfor %}
+				<h5 style="padding:10px;padding-bottom:0px;">Trending Topics</h5>
 			</div>
 		</div>
+
+		<div class="col-sm-1"></div>
 	</div>
 
 </div>
