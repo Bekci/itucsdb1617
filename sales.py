@@ -53,6 +53,7 @@ class SaleDatabaseOPS:
 
             cursor.close()
 
+    @classmethod
     def add_item(cls, item_name, item_picture, item_price, item_description, item_currency):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
@@ -62,7 +63,7 @@ class SaleDatabaseOPS:
                                               %s,
                                               %s,
                                               %s,
-                                              CURRENT_DATE,
+                                              %s,
                                               %s
                             )"""
 
@@ -75,7 +76,7 @@ class SaleDatabaseOPS:
 
             cursor.close()
 
-
+    @classmethod
     def select_new_item_id(cls, item_name, item_picture, item_price):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
@@ -180,7 +181,7 @@ class SaleDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.* FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                            INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                            INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                            INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -223,7 +224,7 @@ class SaleDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.* FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                                INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -265,7 +266,7 @@ class SaleDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.* FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                                    INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                    INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                    INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -307,7 +308,7 @@ class SaleDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.* FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                                        INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                        INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                        INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -352,7 +353,7 @@ class SaleDatabaseOPS:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.* FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                                            INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                            INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                            INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
