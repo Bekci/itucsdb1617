@@ -388,7 +388,6 @@ def confirm_delete_account_page(user_id):
 
 
 @site.route('/initdb')
-@login_required
 def database_initialization():
     database.create_tables()
     return redirect(url_for('site.login_page'))
