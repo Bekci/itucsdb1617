@@ -15,13 +15,15 @@ from events import EventDatabaseOPS
 from group import GroupDatabaseOPS
 from currency import CurrencyDatabaseOPS, Currency
 from sales import  SaleDatabaseOPS, Sale
+from flask import abort
+import urllib
+from flask_login import login_user, login_required, logout_user, current_user
 
 site = Blueprint('site', __name__)
 
 
 @site.route('/', methods=['GET', 'POST'])
 def login_page():
-
     if request.method == 'GET':
         return render_template('login_page.html', signedin=False)
     else:
@@ -30,6 +32,7 @@ def login_page():
 
             if user and user != -1:
                 if request.form['knotword'] == user.password:
+                    login_user(user)
                     return redirect(url_for('site.user_profile_page', user_id=user.id))
 
         return render_template('login_page.html', error=True, signedin=False)
@@ -63,8 +66,11 @@ def signup_page():
 
 
 @site.route('/home/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def home_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     real_name = UserDatabaseOPS.select_user_detail(user.username)
     if request.method == 'GET':
         my_followings_id = InteractionDatabaseOPS.select_followings_from_user_interaction(user.id)
@@ -94,8 +100,11 @@ def home_page(user_id):
 
 
 @site.route('/books_page/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def books_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     real_name = UserDatabaseOPS.select_user_detail(user.username)
     if request.method == 'GET':
         my_books = BookDatabaseOPS.select_all_books(user.id)
@@ -116,14 +125,20 @@ def books_page(user_id):
 
 
 @site.route('/home/knots/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def home_page_knots(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     return render_template('home_page.html', signedin=True, user=user)
 
 
 @site.route('/notifications/<int:user_id>', methods = ['GET','POST'])
+@login_required
 def notifications_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     trends = Trend(30,70)
     knots = NotificationDatabaseOPS.select_notifications(user)
     polls = []
@@ -180,9 +195,12 @@ def notifications_page(user_id):
 
 
 @site.route('/knitter_sales/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def sales_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     if request.method == 'GET':
-        user = UserDatabaseOPS.select_user_with_id(user_id)
         real_name = UserDatabaseOPS.select_user_detail(user.username)
         currency_list = CurrencyDatabaseOPS.select_all_currencies()
         my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
@@ -191,7 +209,7 @@ def sales_page(user_id):
 
     else:
         if 'add_new_item' in request.form:
-            user = UserDatabaseOPS.select_user_with_id(user_id)
+
             real_name = UserDatabaseOPS.select_user_detail(user.username)
             currency_list = CurrencyDatabaseOPS.select_all_currencies()
             my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
@@ -244,19 +262,23 @@ def sales_page(user_id):
 
 
 @site.route('/user_profile/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def user_profile_page(user_id):
-
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if user is -1:
+        abort(404)
+    user_check = True
+    if current_user != user:
+        user_check = False
     if request.method == 'GET':
-        user = UserDatabaseOPS.select_user_with_id(user_id)
         real_name = UserDatabaseOPS.select_user_detail(user.username)
         my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
         cities = CityDatabaseOPS.select_all_cities()
         knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
         return render_template('user_profile.html', signedin=True, user=user, real_name=real_name,
-                               my_city=my_city, cities=cities, knot_list=knot_list)
+                               my_city=my_city, cities=cities, knot_list=knot_list, user_check=user_check)
     else:
         if 'changeImage' in request.form:
-            user = UserDatabaseOPS.select_user_with_id(user_id)
             user.profile_pic = request.form['imageURL']
             my_name = request.form['my_name']
             my_surname = request.form['my_surname']
@@ -286,7 +308,7 @@ def user_profile_page(user_id):
             knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
 
         return render_template('user_profile.html', signedin=True, user=user, real_name=real_name,
-                               my_city=my_city, cities=cities, knot_list=knot_list)
+                               my_city=my_city, cities=cities, knot_list=knot_list, user_check=user_check)
 
 
 @site.route('/help')
@@ -294,15 +316,18 @@ def help_page():
     return render_template('help_page.html', signedin=True)
 
 @site.route('/settings/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def settings_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     if request.method == 'GET':
-        user = UserDatabaseOPS.select_user_with_id(user_id)
+
         real_name = UserDatabaseOPS.select_user_detail(user.username)
         return render_template('settings_page.html', signedin=True, user=user, real_name=real_name, error=False)
     else:
         if 'change-mail' in request.form:
             mail = request.form['mail_address']
-            user = UserDatabaseOPS.select_user_with_id(user_id)
             real_name = UserDatabaseOPS.select_user_detail(user.username)
             UserDatabaseOPS.update_user(user.username, user.password, user.profile_pic, user.cover_pic, mail)
             changed_user = UserDatabaseOPS.select_user_with_id(user_id)
@@ -322,21 +347,22 @@ def settings_page(user_id):
 
 @site.route('/about_us')
 def about_us_page():
-    user = UserDatabaseOPS.select_user_with_id(1)
-    return render_template('about_us.html', signedin=True, user=user)
+    return render_template('about_us.html', signedin=True)
 
 
 @site.route('/account/<int:user_id>/change/password', methods=['GET', 'POST'])
+@login_required
 def change_password_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     if request.method == 'GET':
-        user = UserDatabaseOPS.select_user_with_id(user_id)
         real_name = UserDatabaseOPS.select_user_detail(user.username)
         return render_template('password_change.html', signedin=True, user=user, real_name=real_name, error=False)
     else:
         current_password = request.form['CurrentPassword']
         new_password = request.form['NewPassword']
         confirm_password = request.form['ConfirmPassword']
-        user = UserDatabaseOPS.select_user_with_id(user_id)
         real_name = UserDatabaseOPS.select_user_detail(user.username)
         user = UserDatabaseOPS.select_user_with_id(user_id)
         if current_password != user.password:
@@ -349,26 +375,32 @@ def change_password_page(user_id):
 
 
 @site.route('/account/<int:user_id>/delete/confirm', methods=['GET', 'POST'])
+@login_required
 def confirm_delete_account_page(user_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     if request.method == 'GET':
-        user = UserDatabaseOPS.select_user_with_id(user_id)
         return render_template('account_delete_confirm.html', signedin=True, user=user)
     else:
-        user = UserDatabaseOPS.select_user_with_id(user_id)
         UserDatabaseOPS.delete_user(user.username)
         return redirect(url_for('site.login_page'))
 
 
 @site.route('/initdb')
+@login_required
 def database_initialization():
     database.create_tables()
     return redirect(url_for('site.login_page'))
 
 
 @site.route('/messages/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def messages_page(user_id):
 
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     my_followings = InteractionDatabaseOPS.select_followings_from_user_interaction(user_id)
     my_followers = InteractionDatabaseOPS.select_followers_from_user_interaction(user_id)
     contact_list = []
@@ -408,8 +440,11 @@ def messages_page(user_id):
 
 
 @site.route('/groups/<int:group_id>/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def group_page(group_id, user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     group_participants = GroupDatabaseOPS.select_group_participation(group_id)
     group_info = GroupDatabaseOPS.select_group(group_id)
     joined=False
@@ -433,8 +468,11 @@ def group_page(group_id, user_id):
 
 
 @site.route('/events/<int:user_id>', methods=['GET', 'POST'])
+@login_required
 def events_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
     if request.method == 'GET':
         organizer_ids = []
         organizer_ids.append(user_id)
@@ -470,6 +508,13 @@ def events_page(user_id):
             event_id = request.form['join-event']
             EventDatabaseOPS.add_participant(event_id, user_id)
         return redirect(url_for('site.events_page', user_id=user_id))
+
+
+@site.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('site.login_page'))
 
 
 @site.context_processor

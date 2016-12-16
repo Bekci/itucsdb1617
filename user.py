@@ -1,4 +1,5 @@
 from database import database
+from flask_login import UserMixin
 import psycopg2 as dbapi2
 
 
@@ -11,7 +12,7 @@ class UserDetails:
         self.country = country
 
 
-class User:
+class User(UserMixin):
     def __init__(self, id, username, password, profile_picture, cover_picture, mail_address, register_date):
         self.id = id
         self.username = username

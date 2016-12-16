@@ -22,11 +22,13 @@
         </div>
 
         <div class="row">
+            {% if user_check %}
             <p style="text-align: center">
                 <button type="button" class="btn" data-toggle="modal" data-target="#myModal">
                     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
                 </button>
             </p>
+            {% endif %}
         </div>
 
     </div>
@@ -68,9 +70,11 @@
                 <li id="li_like" class="nav-item">
                     <a class="nav-link" href="#" id="like_link">Likes <span class="badge">2</span></a>
                 </li>
+                {% if user_check %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('site.settings_page', user_id=user.id) }}">Profile Settings</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
 
