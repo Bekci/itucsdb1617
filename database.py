@@ -182,12 +182,14 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
-            # ----------- ilknur Meray - BOOK_TYPE TABLE ------------------------------
+            # ----------- ilknur Meray - SHELF TABLE ------------------------------
 
-            query = """CREATE TABLE IF NOT EXISTS BOOK_TYPE(
-                            TYPE_ID SERIAL PRIMARY KEY,
-                            TYPE_NAME VARCHAR(20) NOT NULL,
-                            TYPE_COUNTER INTEGER DEFAULT 0
+            query = """CREATE TABLE IF NOT EXISTS SHELF(
+                            SHELF_ID SERIAL PRIMARY KEY,
+                            SHELF_NAME VARCHAR(50) UNIQUE NOT NULL,
+                            IS_MAIN BOOLEAN,
+                            BOOK_COUNTER INTEGER DEFAULT 0,
+                            SHELF_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
             cursor.execute(query)
@@ -195,15 +197,27 @@ class DatabaseOPS:
             # ----------- ilknur Meray - BOOK TABLE ------------------------------
 
             query = """CREATE TABLE IF NOT EXISTS BOOK(
-                            BOOK_ID SERIAL UNIQUE NOT NULL,
-                            BOOK_TITLE VARCHAR(30) NOT NULL,
+                            BOOK_ID SERIAL PRIMARY KEY,
+                            BOOK_TITLE VARCHAR(50) NOT NULL,
                             BOOK_COVER VARCHAR(255) NOT NULL,
                             BOOK_WRITER VARCHAR(50) NOT NULL,
+                            BOOK_GENRE VARCHAR(50) NOT NULL,
                             DATE_READ DATE NOT NULL,
+                            USER_RATE INTEGER DEFAULT 0,
                             BOOK_REVIEW TEXT,
-                            BOOK_TYPE_ID INTEGER REFERENCES BOOK_TYPE(TYPE_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                            BOOK_READER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                            PRIMARY KEY(BOOK_ID,BOOK_READER_ID)
+                            BOOK_SHELF_ID INTEGER REFERENCES SHELF(SHELF_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                            BOOK_READER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                    )"""
+
+            cursor.execute(query)
+
+            # ----------- ilknur Meray - QUOTE TABLE ------------------------------
+
+            query = """CREATE TABLE IF NOT EXISTS QUOTE(
+                            QUOTE_ID SERIAL PRIMARY KEY,
+                            QUOTE_CONTENT TEXT NOT NULL,
+                            QUOTED_BOOK_ID INTEGER REFERENCES BOOK(BOOK_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                            QUOTE_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
             cursor.execute(query)

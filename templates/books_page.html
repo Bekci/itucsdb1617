@@ -1,9 +1,21 @@
 {% extends 'layout.html' %}
 {% block title %}Library Page{% endblock %}
+{% block head %}
+ {{ super() }}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+$(function(){
+  $('.datepicker').datepicker({
+     format: 'yyyy-mm-dd'
+   });
+});
+</script>
+{% endblock %}
 {% block content %}
         <div class="container">
             <div class="row">
-                <div class="col-md-3" style="text-align: center; margin-top: 20px; background-color: white; padding: 5px 5px 5px 5px; border-radius: 10px">
+                <div class="col-md-3" style="text-align: center; margin-top: 20px; margin-left:1px; background-color: white; padding: 5px 5px 5px 5px; border-radius: 10px">
                     <p><img
                         src={{ user.profile_pic }}
                         height="220px"
@@ -12,35 +24,17 @@
                     </p>
                     <h3>{{ real_name.name }} {{ real_name.surname }} </h3>
                     <p><span class="glyphicon glyphicon-link"></span>{{ user.username }}</p>
+                    <div class="alert" style="margin-top: 15px; text-align: left; background-color: #e6ecff">
+                        <div class="alert" style="text-align: left; background-color: #b3c6ff">
+                            <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                <div class="form-group">
+                                    <strong>{{ user.username }}'s  Bookshelf</strong>
+                                    <button class="btn btn-xs" data-toggle="modal" data-target="#myModal-{{ user.id }}" name="add" id="add" type="button" value="{{ user.id }}" style="background-color: #b3c6ff;margin-left:60px">
+											    <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </div>
 
-                    <div style="text-align: center; margin-top: 5px">
-                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal-{{user.id}}" name="new_book" id="new_book" value="{{ user.id }}">
-
-                                <span class="glyphicon glyphicon-upload"></span> Add New Book
-                        </button>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 5px">
-                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#secondModal-{{user.id}}" name="new_type" id="new_type" value="{{ user.id }}">
-
-                                <span class="glyphicon glyphicon-upload"></span> Add New Type
-                        </button>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 5px">
-                        <button type="submit" class="btn btn-default" name="list_books" value="list_books" >
-
-                                <span class="glyphicon glyphicon-th-list"></span> List All Books
-                        </button>
-                    </div>
-                    <div style="text-align: center; margin-top: 5px">
-                        <button type="submit" class="btn btn-default" name="list_types" value="list_types">
-
-                                <span class="glyphicon glyphicon-list-alt"></span> List Types
-                        </button>
-                    </div>
-
-                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
                                         <div class="form-group">
                                             <div class="modal fade" id="myModal-{{ user.id }}" role="dialog">
                                                 <div class="modal-dialog">
@@ -52,59 +46,48 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="title">Book Title:</label>
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" id="title" name="title">
-                                                                    </div>
+                                                                <label for="shelf_name">Shelf Name:</label>
+                                                                <input type="text" class="form-control" id="shelf_name" name="shelf_name">
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="cover">Book Cover URL:</label>
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" id="cover" name="cover">
-                                                                    </div>
+                                                                <label for="first_shelf">Is it first shelf?:</label>
+                                                                    <select class="form-control" id="first_shelf" name="first_shelf">
+											                            <option value="true">Yes</option>
+                                                                        <option value="false">No</option>
+								                                    </select>
                                                             </div>
 
-                                                             <div class="form-group">
-                                                                <label for="writer">Book Writer:</label>
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" id="writer" name="writer">
-                                                                    </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label for="date_read">Book Read Date:</label>
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" id="date_read" name="date_read">
-                                                                    </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label for="review">Book Review:</label>
-                                                                    <div class="input-group">
-                                                                        <textarea class="form-control" id="review" rows="2" name="review" style="resize: none">  </textarea>
-                                                                    </div>
-                                                            </div>
-
-                                                            <div class="form-group">
-                                                                <label for="b_type_name">Book Type Name:</label>
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" id="b_type_name" name="b_type_name">
-                                                                    </div>
-                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-info" name="add_book" id="add_book" value="{{ user.id }}"><span class="glyphicon glyphicon-upload"></span> Add </button>
+                                                            <button type="submit" class="btn btn-info" name="add_shelf" id="add_shelf" value="{{ user.id }}"><span class="glyphicon glyphicon-upload"></span> Add </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                </form>
+                            </form>
+                        </div>
 
-                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                    {%  for i in my_shelves %}
+                        <div class="list-group" style="background-color: #b3c6ff;border-radius: 5px">
+                        <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                            <div class="list-group-item" style="background-color: #ccd9ff;"><a href="{{ url_for('site.shelf_books_page', user_id=user.id, shelf_id=i.shelf_id) }}">{{ i.shelf_name }} ({{ i.book_counter }})</a>
+                                <button class="btn btn-xs" name="delete_shelf" id="delete_shelf" type="submit" value="{{ i.shelf_id }}" style="background-color: #b3c6ff;">
+											    <i class="glyphicon glyphicon-trash"></i>
+                                </button>
+                                <button class="btn btn-xs" data-toggle="modal" data-target="#secondModal-{{ i.shelf_id }}" name="update" id="update" type="button" value="{{ i.shelf_id }}" style="background-color: #b3c6ff;">
+											    <i class="glyphicon glyphicon-edit"></i>
+								</button>
+                                <button class="btn btn-xs" data-toggle="modal" data-target="#thirdModal-{{ i.shelf_id }}" name="add_b" id="add_b" type="button" value="{{ i.shelf_id }}" style="background-color: #b3c6ff;">
+											    <i class="glyphicon glyphicon-plus"></i>
+                                </button>
+                            </div>
+							    <div>
+                                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
                                         <div class="form-group">
-                                            <div class="modal fade" id="secondModal-{{ user.id }}" role="dialog">
+                                            <div class="modal fade" id="secondModal-{{ i.shelf_id }}" role="dialog">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -114,16 +97,20 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="type_name">Type Name:</label>
-                                                                    <div class="input-group">
-                                                                        <input type="text" class="form-control" id="type_name" name="type_name">
-                                                                    </div>
+                                                                <label for="shelf_name">Updated Shelf Name:</label>
+                                                                <input type="text" class="form-control" id="updated_shelf_name" name="updated_shelf_name">
                                                             </div>
 
-
+                                                            <div class="form-group">
+                                                                <label for="first_shelf">Do you want to set this shelf as first?:</label>
+                                                                    <select class="form-control" id="updated_first_shelf" name="updated_first_shelf">
+											                            <option value="true">Yes</option>
+                                                                        <option value="false">No</option>
+								                                    </select>
+                                                            </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-info" name="add_type" id="add_type" value="{{ user.id }} "><span class="glyphicon glyphicon-upload"></span> Add </button>
+                                                            <button type="submit" class="btn btn-info" name="update_shelf" id="update_shelf" value="{{ i.shelf_id }} "><span class="glyphicon glyphicon-edit"></span> Update </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -131,43 +118,300 @@
                                         </div>
                                     </form>
 
+                                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                        <div class="form-group">
+                                            <div class="modal fade" id="thirdModal-{{ i.shelf_id }}" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="book_title">Book Title:</label>
+                                                                <input type="text" class="form-control" id="book_title" name="book_title">
+                                                            </div>
 
+                                                            <div class="form-group">
+                                                                <label for="book_cover">Book Cover:</label>
+                                                                <input type="text" class="form-control" id="book_cover" name="book_cover">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="book_writer">Book Author:</label>
+                                                                <input type="text" class="form-control" id="book_writer" name="book_writer">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="book_genre">Book Genre:</label>
+                                                                <input type="text" class="form-control" id="book_genre" name="book_genre">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="book_title">Date Read:</label>
+                                                                <div class='input-group date'>
+                                                                    <input type='text' class="form-control datepicker" name="date_read"/>
+                                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="user_rate">User Rate:</label>
+                                                                <input type="number" class="form-control" id="user_rate" name="user_rate" min="1" max="5">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="book_review">User Review:</label>
+                                                                <textarea class="form-control" rows="4" id="book_review" name="book_review" style="resize: none"></textarea>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-info" name="add_book" id="add_book" value="{{ i.shelf_id }} "><span class="glyphicon glyphicon-upload"></span> Add </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+							    </div>
+                        </form>
+                        </div>
+                    {% endfor %}
+                    </div>
 
                 </div>
-                <div class="col-md-8" style="margin-top: 20px; margin-left: 25px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
-                    <div>
-                        <div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
-                            <table class="table table-striped table-hover" style="2px 2px 2px 2px">
-                                <thead>
-                                    <tr>
-                                        <th>Cover</th>
-                                        <th>Title</th>
-                                        <th>Author</th>
-                                        <th>Date Read</th>
-                                        <th>Review</th>
-                                    </tr>
-                                </thead>
 
-                                <tbody>
-                                {% for book_counter in my_books %}
-                                    <tr>
-                                        <td>{{ book_counter.book_cover }}</td>
-                                        <td>{{ book_counter.book_title }}</td>
-                                        <td>{{ book_counter.book_writer }}</td>
-                                        <td>{{ book_counter.date_read }}</td>
-                                        <td>
-                                            <a href="#"><span class="glyphicon glyphicon-folder-open"></span></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
 
-                            </table>
+                <div class="col-md-5" style="margin-top: 20px; margin-left: 30px; background-color: white; padding: 10px 10px 10px 10px; border-radius: 10px">
+                    {% for book_counter in my_books %}
+
+                    <div class="media" style="margin-top: 20px; margin-left: 5px; margin-right: 5px; background-color: #e6e6ff; padding: 10px 10px 10px 10px; border-radius: 5px">
+                        <div class="media-left media-middle" >
+                            <img src={{ book_counter.book_cover }} class="media-object" style="width: 170px; height: 200px;
+                                                                                        border-radius: 25px;
+                                                                                        border: 2px solid #f5f8fa; padding: 5px 5px 5px 5px;">
+                        </div>
+                        <div class="media-body" style="padding: 1px 10px 1px 10px">
+                            <div>
+                                <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                    <div style="padding: 15px 5px 10px 5px"><h4 class="media-heading" style="padding: 1px 5px 1px 5px"><u>{{ book_counter.book_title }}</u></h4>
+                                        <button class="btn btn-xs" name="delete_book" id="delete_book" type="submit" value="{{ book_counter.book_id }}" style="background-color: #b3c6ff;">
+											    <i class="glyphicon glyphicon-trash"></i>
+                                        </button>
+                                        <button class="btn btn-xs" data-toggle="modal" data-target="#fifthModal-{{ book_counter.book_id }}" name="update_b" id="update_b" type="button" value="{{ book_counter.book_id }}" style="background-color: #b3c6ff;">
+											    <i class="glyphicon glyphicon-edit"></i>
+								        </button>
+                                    </div>
+							    <div>
+                                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                        <div class="form-group">
+                                            <div class="modal fade" id="fifthModal-{{ book_counter.book_id }}" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="updated_book_title">Updated Book Title:</label>
+                                                                <input type="text" class="form-control" id="updated_book_title" name="updated_book_title">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_book_cover">Updated Book Cover:</label>
+                                                                <input type="text" class="form-control" id="updated_book_cover" name="updated_book_cover">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_book_writer">Updated Book Author:</label>
+                                                                <input type="text" class="form-control" id="updated_book_writer" name="updated_book_writer">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_book_genre">Updated Book Genre:</label>
+                                                                <input type="text" class="form-control" id="updated_book_genre" name="updated_book_genre">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_date_read">Updated Date Read:</label>
+                                                                <div class='input-group date'>
+                                                                    <input type='text' class="form-control datepicker" name="updated_date_read" id="updated_date_read"/>
+                                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_user_rate">Updated User Rate:</label>
+                                                                <input type="number" class="form-control" id="updated_user_rate" name="updated_user_rate" min="1" max="5">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_book_review">Updated User Review:</label>
+                                                                <textarea class="form-control" rows="4" id="updated_book_review" name="updated_book_review" style="resize: none"></textarea>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_book_shelf">Updated Book Shelf:</label>
+                                                                    <select class="form-control" id="updated_book_shelf" name="updated_book_shelf">
+                                                                        {% for shelf in my_shelves %}
+                                                                            <option value="{{ shelf.shelf_id }}">{{ shelf.shelf_name }}</option>
+                                                                        {% endfor %}
+								                                    </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-info" name="update_book" id="update_book" value="{{ book_counter.book_id }} "><span class="glyphicon glyphicon-edit"></span> Update </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                </form>
+                            </div>
+                            <div style="padding: 1px 5px 1px 5px"><strong>Author:</strong> {{ book_counter.book_writer }}</div>
+                            <div style="padding: 1px 5px 1px 5px"><strong>Genre: </strong>{{ book_counter.book_genre }}</div>
+                            <div style="padding: 1px 5px 1px 5px"><strong>Date Read: </strong>{{ book_counter.date_read }}</div>
+                            <div style="padding: 1px 5px 1px 5px"><strong>User Rate: </strong>{{ book_counter.user_rate }}</div>
+                            <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                <div style="padding: 1px 5px 1px 5px"><strong>User Review: </strong>
+                                    <button class="btn btn-link" data-toggle="modal" data-target="#forthModal-{{ book_counter.book_id }}" name="view" id="view" type="button" value="{{ book_counter.book_id }}">
+                                        <span class="glyphicon glyphicon-folder-open"></span></button>
+                                </div>
+                                <div>
+                                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                        <div class="form-group">
+                                            <div class="modal fade" id="forthModal-{{ book_counter.book_id }}" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 class="modal-title">User Review</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div style="padding: 1px 5px 1px 5px">{{ book_counter.book_review }}</div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                <div class="col-md-1">
-                    <div></div>
+
+                <div class="col-md-3" style="margin-top: 20px; margin-left: 15px; background-color: white; border-radius:10px">
+                    <div>
+                            <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                <div class="form-group well" style="margin-top: 25px; text-align: center; background-color: #faf3d1">
+                                    <strong>Quotes</strong>
+                                    <button class="btn btn-xs" data-toggle="modal" data-target="#quoteModal-{{ user.id }}" name="add_quot" id="add_quot" type="button" value="{{ user.id }}" style="background-color: transparent;">
+											    <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                </div>
+
+                                <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                        <div class="form-group">
+                                            <div class="modal fade" id="quoteModal-{{ user.id }}" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="quote_content">Quote Content:</label>
+                                                                <textarea class="form-control" rows="4" id="quote_content" name="quote_content" style="resize: none"></textarea>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="quoted_book">Quote is taken from: </label>
+                                                                    <select class="form-control" id="quoted_book" name="quoted_book">
+                                                                        {% for book in my_books %}
+                                                                            <option value="{{ book.book_id }}">{{ book.book_title }}</option>
+                                                                        {% endfor %}
+								                                    </select>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-info" name="add_quote" id="add_quote" value="{{ user.id }}"><span class="glyphicon glyphicon-upload"></span> Add </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </form>
+                            </form>
+                    </div>
+
+                    <div>
+                    {% for quote in my_quotes %}
+                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                    <div class="panel panel-warning" >
+                        <div class="panel-body">" {{ quote.quote_content }} "</div>
+                        <div class="panel-footer" style="background-color: #f7edba; text-align:right">{{ quote.book_name }}
+                            <button class="btn btn-xs" name="delete_quote" id="delete_quote" type="submit" value="{{ quote.quote_id }}" style="background-color: transparent;">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                            <button class="btn btn-xs" data-toggle="modal" data-target="#updateQuoteModal-{{ quote.quote_id }}" name="update_q" id="update_q" type="button" value="{{ quote.quote_id }}" style="background-color: transparent;">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </button>
+                        </div>
+                    </div>
+
+							    <div>
+                                    <form action="{{ url_for('site.books_page', user_id=user.id) }}" method="post">
+                                        <div class="form-group">
+                                            <div class="modal fade" id="updateQuoteModal-{{ quote.quote_id }}" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="updated_quote_content">Updated Quote Content:</label>
+                                                                <textarea class="form-control" rows="4" id="updated_quote_content" name="updated_quote_content" style="resize: none"></textarea>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="updated_quote_book">Update book where the quote is taken from:</label>
+                                                                    <select class="form-control" id="updated_quote_book" name="updated_quote_book">
+                                                                        {% for book in my_books %}
+                                                                            <option value="{{ book.book_id }}">{{ book.book_title }}</option>
+                                                                        {% endfor %}
+								                                    </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-info" name="update_quote" id="update_quote" value="{{ quote.quote_id }} "><span class="glyphicon glyphicon-edit"></span> Update </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                    </form>
+                    {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>

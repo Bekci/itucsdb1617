@@ -7,7 +7,7 @@ from notification import NotificationDatabaseOPS
 from poll import PollDatabaseOPS
 from interaction import InteractionDatabaseOPS
 from message import MessageDatabaseOPS
-from book_type import BookTypeDatabaseOPS
+from shelf import ShelfDatabaseOPS
 from book import BookDatabaseOPS
 from datetime import datetime
 from city import CityDatabaseOPS, City
@@ -15,6 +15,7 @@ from events import EventDatabaseOPS
 from group import GroupDatabaseOPS
 from currency import CurrencyDatabaseOPS, Currency
 from sales import  SaleDatabaseOPS, Sale
+from quote import QuoteDatabaseOPS
 from flask import abort
 import urllib
 from flask_login import login_user, login_required, logout_user, current_user
@@ -107,20 +108,93 @@ def books_page(user_id):
         abort(403)
     real_name = UserDatabaseOPS.select_user_detail(user.username)
     if request.method == 'GET':
-        my_books = BookDatabaseOPS.select_all_books(user.id)
-        return render_template('books_page.html', signedin=True, user=user, real_name=real_name, my_books=my_books)
+        my_shelves = ShelfDatabaseOPS.select_shelves(user_id)
+        my_books = []
+        my_quotes = []
+        my_books = BookDatabaseOPS.select_all_books_of_user(user_id)
+        my_quotes = QuoteDatabaseOPS.select_quotes(user_id)
+        return render_template('books_page.html', signedin=True, user=user, real_name=real_name, my_shelves=my_shelves, my_books=my_books, my_quotes=my_quotes)
     else:
-        if 'add_book' in request.form:
-            BookDatabaseOPS.add_book(request.form['title'], request.form['cover'], request.form['writer'], request.form['date_read'], request.form['review'], request.form['b_type_name'], user.id)
+        if 'add_shelf' in request.form:
+            ShelfDatabaseOPS.add_shelf(request.form['shelf_name'], request.form['first_shelf'], user_id)
             return redirect(url_for('site.books_page', user_id=user.id))
-        elif 'add_type' in request.form:
-            BookTypeDatabaseOPS.add_book_type(request.form['type_name'])
+        elif 'delete_shelf' in request.form:
+            ShelfDatabaseOPS.delete_shelf(request.form['delete_shelf'])
             return redirect(url_for('site.books_page', user_id=user.id))
-        elif 'delete' in request.form:
-            BookDatabaseOPS.delete_book(request.form['delete'], user.id)
+        elif 'update_shelf' in request.form:
+            ShelfDatabaseOPS.update_shelf_name(request.form['update_shelf'], request.form['updated_shelf_name'])
+            ShelfDatabaseOPS.update_main_shelf(request.form['update_shelf'], request.form['updated_first_shelf'])
+        elif 'add_book' in request.form:
+            BookDatabaseOPS.add_book(request.form['book_title'], request.form['book_cover'], request.form['book_writer'], request.form['book_genre'],
+                                     request.form['date_read'], request.form['user_rate'],request.form['book_review'], request.form['add_book'],
+                                     user_id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'delete_book' in request.form:
+            BookDatabaseOPS.delete_book(request.form['delete_book'])
             return redirect(url_for('site.books_page', user_id=user.id))
         elif 'update_book' in request.form:
-    # BookDatabaseOPS.update_book(request.form['new_book_title'], request.form['new_book_cover'], request.form['new_book_writer'], request.form['new_date_read'], request.form['new_book_review'], request.form['new_book_type_name'], user.id)
+            BookDatabaseOPS.update_book(request.form['update_book'], request.form['updated_book_title'], request.form['updated_book_cover'],
+                                        request.form['updated_book_writer'], request.form['updated_book_genre'],
+                                        request.form['updated_date_read'], request.form['updated_user_rate'], request.form['updated_book_review'],
+                                        request.form['updated_book_shelf'], user_id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'add_quote' in request.form:
+            QuoteDatabaseOPS.add_quote(request.form['quote_content'], request.form['quoted_book'], user_id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'delete_quote' in request.form:
+            QuoteDatabaseOPS.delete_quote(request.form['delete_quote'])
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'update_quote' in request.form:
+            QuoteDatabaseOPS.update_quote(request.form['update_quote'], request.form['updated_quote_content'], request.form['updated_quote_book'])
+            return redirect(url_for('site.books_page', user_id=user.id))
+
+
+@site.route('/books_page/<int:user_id>/<int:shelf_id>', methods=['GET', 'POST'])
+@login_required
+def shelf_books_page(user_id, shelf_id):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
+    real_name = UserDatabaseOPS.select_user_detail(user.username)
+    if request.method == 'GET':
+        my_shelves = ShelfDatabaseOPS.select_shelves(user_id)
+        my_books = []
+        my_quotes = []
+        my_books = BookDatabaseOPS.select_all_books_of_user(user_id)
+        my_quotes = QuoteDatabaseOPS.select_quotes(user_id)
+        return render_template('books_page.html', signedin=True, user=user, real_name=real_name, my_shelves=my_shelves, my_books=my_books, my_quotes=my_quotes)
+    else:
+        if 'add_shelf' in request.form:
+            ShelfDatabaseOPS.add_shelf(request.form['shelf_name'], request.form['first_shelf'], user_id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'delete_shelf' in request.form:
+            ShelfDatabaseOPS.delete_shelf(request.form['delete_shelf'])
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'update_shelf' in request.form:
+            ShelfDatabaseOPS.update_shelf_name(request.form['update_shelf'], request.form['updated_shelf_name'])
+            ShelfDatabaseOPS.update_main_shelf(request.form['update_shelf'], request.form['updated_first_shelf'])
+        elif 'add_book' in request.form:
+            BookDatabaseOPS.add_book(request.form['book_title'], request.form['book_cover'], request.form['book_writer'], request.form['book_genre'],
+                                     request.form['date_read'], request.form['user_rate'],request.form['book_review'], request.form['add_book'],
+                                     user_id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'delete_book' in request.form:
+            BookDatabaseOPS.delete_book(request.form['delete_book'])
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'update_book' in request.form:
+            BookDatabaseOPS.update_book(request.form['update_book'], request.form['updated_book_title'], request.form['updated_book_cover'],
+                                        request.form['updated_book_writer'], request.form['updated_book_genre'],
+                                        request.form['updated_date_read'], request.form['updated_user_rate'], request.form['updated_book_review'],
+                                        request.form['updated_book_shelf'], user_id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'add_quote' in request.form:
+            QuoteDatabaseOPS.add_quote(request.form['quote_content'], request.form['quoted_book'], user_id)
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'delete_quote' in request.form:
+            QuoteDatabaseOPS.delete_quote(request.form['delete_quote'])
+            return redirect(url_for('site.books_page', user_id=user.id))
+        elif 'update_quote' in request.form:
+            QuoteDatabaseOPS.update_quote(request.form['update_quote'], request.form['updated_quote_content'], request.form['updated_quote_book'])
             return redirect(url_for('site.books_page', user_id=user.id))
 
 

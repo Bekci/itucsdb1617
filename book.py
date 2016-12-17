@@ -1,29 +1,31 @@
 from database import database
 import psycopg2 as dbapi2
-from book_type import BookTypeDatabaseOPS
+from shelf import ShelfDatabaseOPS
+
 
 class Book:
-    def __init__(self, book_id, book_title, book_cover, book_writer, date_read, book_review, book_type_id, book_reader_id):
+    def __init__(self, book_id, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
         self.book_id = book_id
         self.book_title = book_title
         self.book_cover = book_cover
         self.book_writer = book_writer
+        self.book_genre = book_genre
         self.date_read = date_read
+        self.user_rate = user_rate
         self.book_review = book_review
-        self.book_type_id = book_type_id
+        self.book_shelf = book_shelf
         self.book_reader_id = book_reader_id
 
 
 class BookDatabaseOPS:
     @classmethod
-    def add_book(cls, book_title, book_cover, book_writer, date_read, book_review, book_type_name, book_reader_id):
+    def add_book(cls, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
 
-            type_info = BookTypeDatabaseOPS.select_book_type_with_name(book_type_name)
-            query = """INSERT INTO BOOK (BOOK_TITLE, BOOK_COVER, BOOK_WRITER, DATE_READ, BOOK_REVIEW, BOOK_TYPE_ID, BOOK_READER_ID) VALUES (
+            query = """INSERT INTO BOOK (BOOK_TITLE, BOOK_COVER, BOOK_WRITER, BOOK_GENRE, DATE_READ, USER_RATE, BOOK_REVIEW, BOOK_SHELF_ID, BOOK_READER_ID) VALUES (
                                                 %s,
                                                 %s,
                                                 %s,
@@ -31,34 +33,38 @@ class BookDatabaseOPS:
                                                 %s,
                                                 %s,
                                                 %s,
+                                                %s,
+                                                %s
                         )"""
 
             try:
-                cursor.execute(query, (book_title, book_cover, book_writer, date_read, book_review, type_info, book_reader_id))
+                cursor.execute(query, (book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
                 connection.commit()
 
             cursor.close()
+            ShelfDatabaseOPS.increase_book_counter(book_shelf)
 
     @classmethod
-    def update_book(cls, book_id, book_title, book_cover, book_writer, date_read, book_review, book_type_name, book_reader_id):
+    def update_book(cls, book_id, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
 
-            type_info = BookTypeDatabaseOPS.select_book_type_with_name(book_type_name)
             query = """UPDATE BOOK SET BOOK_TITLE=%s,
-                                    BOOK_COVER=%s,
-                                    BOOK_WRITER=%s,
-                                    DATE_READ=%s,
-                                    BOOK_REVIEW=%s,
-                                    BOOK_TYPE_ID=%s WHERE BOOK_ID=%s AND BOOK_READER_ID=%s"""
+                                    BOOK_COVER = %s,
+                                    BOOK_WRITER = %s,
+                                    BOOK_GENRE = %s,
+                                    DATE_READ = %s,
+                                    USER_RATE = %s,
+                                    BOOK_REVIEW = %s,
+                                    BOOK_SHELF_ID = %s WHERE BOOK_ID = %s AND BOOK_READER_ID = %s"""
 
             try:
-                cursor.execute(query, (book_title, book_cover, book_writer, date_read, book_review, type_info, book_id, book_reader_id))
+                cursor.execute(query, (book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_id, book_reader_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -67,16 +73,37 @@ class BookDatabaseOPS:
             cursor.close()
 
     @classmethod
-    def delete_book(cls, book_id, book_reader_id):
+    def find_shelf_from_id(cls, book_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
 
-            query = """DELETE FROM BOOK WHERE BOOK_ID = %s AND BOOK_READER_ID=%s"""
+            query = """SELECT BOOK_SHELF_ID FROM BOOK WHERE BOOK_ID=%s"""
 
             try:
-                cursor.execute(query, (book_id, book_reader_id))
+                cursor.execute(query, (book_id,))
+                book_data = cursor.fetchone()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            return book_data
+
+    @classmethod
+    def delete_book(cls, book_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- ilknur Meray - BOOK TABLE -----------------------
+
+            query = """DELETE FROM BOOK WHERE BOOK_ID = %s"""
+
+            try:
+                cursor.execute(query, (book_id,))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -85,13 +112,13 @@ class BookDatabaseOPS:
             cursor.close()
 
     @classmethod
-    def select_all_books(cls, book_reader_id):
+    def select_all_books_of_user(cls, book_reader_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
 
-            query = """SELECT * FROM BOOK WHERE BOOK_READER_ID=%s"""
+            query = """SELECT * FROM BOOK WHERE BOOK_READER_ID=%s ORDER BY USER_RATE DESC"""
 
             book_data = []
 
@@ -109,24 +136,23 @@ class BookDatabaseOPS:
 
             for element in book_data:
                 book_list.append(
-                    Book(book_id=element[0], book_title=element[1], book_cover=element[2], book_writer=element[3], date_read=element[4],
-                         book_review=element[5], book_type_id=element[6], book_reader_id=element[7]))
+                    Book(book_id=element[0], book_title=element[1], book_cover=element[2], book_writer=element[3], book_genre=element[4],
+                         date_read=element[5], user_rate=element[6], book_review=element[7], book_shelf=element[8], book_reader_id=element[9]))
 
             return book_list
 
     @classmethod
-    def select_books_with_type(cls, book_type_name):
+    def select_books_from_shelf(cls, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
-            type_info = BookTypeDatabaseOPS.select_book_type_with_name(book_type_name)
-            query = """SELECT * FROM BOOK WHERE BOOK_TYPE_ID=%s"""
+            query = """SELECT * FROM BOOK WHERE BOOK_SHELF_ID=%s AND BOOK_READER_ID = %s"""
 
             book_data = []
 
             try:
-                cursor.execute(query, (type_info[0],))
+                cursor.execute(query, (book_shelf, book_reader_id))
                 book_data = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
@@ -139,8 +165,8 @@ class BookDatabaseOPS:
 
             for element in book_data:
                 book_list.append(
-                    Book(book_id=element[0], book_title=element[1], book_cover=element[2], book_writer=element[3], date_read=element[4],
-                         book_review=element[5], book_type_id=element[6], book_reader_id=element[7]))
+                    Book(book_id=element[0], book_title=element[1], book_cover=element[2], book_writer=element[3], book_genre=element[4],
+                         date_read=element[5], user_rate=element[6], book_review=element[7], book_shelf=element[8], book_reader_id=element[9]))
 
             return book_list
 
