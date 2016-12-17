@@ -110,6 +110,7 @@ class DatabaseOPS:
                         KNOT_CONTENT TEXT,
                         LIKE_COUNTER INTEGER DEFAULT 0,
                         REKNOT_COUNTER INTEGER DEFAULT 0,
+                        IS_GROUP BOOLEAN NOT NULL,
                         POST_DATE DATE NOT NULL
                     )"""
 

@@ -3,28 +3,29 @@ import psycopg2 as dbapi2
 
 
 class Knot:
-    def __init__(self, knot_id, owner_id, knot_content, like_counter, reknot_counter, post_date):
+    def __init__(self, knot_id, owner_id, knot_content, like_counter, reknot_counter, is_group, post_date):
         self.knot_id = knot_id
         self.owner_id = owner_id
         self.knot_content = knot_content
         self.like_counter = like_counter
         self.reknot_counter = reknot_counter
+        self.is_group = is_group
         self.post_date = post_date
 
 
 class KnotDatabaseOPS:
     @classmethod
-    def add_knot(self, owner_id, knot_content, likes, reknots, post_date):
+    def add_knot(self, owner_id, knot_content, likes, reknots, is_group, post_date):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
-            query = """INSERT INTO KNOTS (OWNER_ID, KNOT_CONTENT, LIKE_COUNTER, REKNOT_COUNTER, POST_DATE) VALUES (
-                                          %s, %s, %s, %s, %s
+            query = """INSERT INTO KNOTS (OWNER_ID, KNOT_CONTENT, LIKE_COUNTER, REKNOT_COUNTER, IS_GROUP, POST_DATE) VALUES (
+                                          %s, %s, %s, %s, %s, %s
                         )"""
             try:
-                cursor.execute(query, (owner_id, knot_content, likes, reknots, post_date))
+                cursor.execute(query, (owner_id, knot_content, likes, reknots, is_group, post_date))
             except dbapi2.IntegrityError:
                 connection.rollback()
             else:
@@ -33,16 +34,16 @@ class KnotDatabaseOPS:
             cursor.close()
 
     @classmethod
-    def update_knot(self, owner_id, knot_content, likes, reknots, post_date, knot_id):
+    def update_knot(self, owner_id, knot_content, likes, reknots, is_group, post_date, knot_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
             query = """UPDATE KNOTS SET OWNER_ID=%s, KNOT_CONTENT=%s, LIKE_COUNTER=%s,
-                            REKNOT_COUNTER=%s, POST_DATE=%s  WHERE KNOT_ID=%s"""
+                            REKNOT_COUNTER=%s, IS_GROUP=%s POST_DATE=%s  WHERE KNOT_ID=%s"""
             try:
-                cursor.execute(query, (owner_id, knot_content, likes, reknots, post_date, knot_id))
+                cursor.execute(query, (owner_id, knot_content, likes, reknots, is_group, post_date, knot_id))
             except dbapi2.IntegrityError:
                 connection.rollback()
             else:
@@ -87,7 +88,7 @@ class KnotDatabaseOPS:
 
             if knot_data:
                 return Knot(knot_data[0], knot_data[1], knot_data[2], knot_data[3],
-                    knot_data[4], knot_data[5])
+                    knot_data[4], knot_data[5], knot_data[6])
             else:
                 return -1
 
@@ -98,7 +99,7 @@ class KnotDatabaseOPS:
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
-            query = """SELECT * FROM KNOTS WHERE OWNER_ID=%s ORDER BY POST_DATE DESC"""
+            query = """SELECT * FROM KNOTS WHERE OWNER_ID=%s AND IS_GROUP=False ORDER BY POST_DATE DESC"""
             knot_data = []
             knot_list = []
             try:
@@ -113,7 +114,7 @@ class KnotDatabaseOPS:
 
             for row in knot_data:
                 knot_list.append(
-                    Knot(row[0], row[1], row[2], row[3], row[4], row[5])
+                    Knot(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
                 )
             return knot_list
 
