@@ -159,8 +159,6 @@ class UserDatabaseOPS:
             else:
                 connection.commit()
 
-            cursor.close()
-
             query = """SELECT USERS.USER_ID FROM USERS
                        INNER JOIN USER_INTERACTION ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
                        WHERE USER_INTERACTION.BASE_USER_ID=%s AND (USERS.USERNAME LIKE %s)
