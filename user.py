@@ -116,7 +116,7 @@ class UserDatabaseOPS:
                 return -1
 
     @classmethod
-    def select_users_for_search(cls, username):
+    def select_users_for_search(cls, username, current_user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -124,7 +124,13 @@ class UserDatabaseOPS:
 
             str = "%{}%".format(username)
 
-            query = """SELECT * FROM USERS WHERE USERNAME LIKE %s"""
+            query = """SELECT USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC, USERS.PROFILE_PIC, COUNT(USER_INTERACTION.BASE_USER_ID) FROM USERS
+                       INNER JOIN USER_DETAIL ON USERS.USERNAME=USER_DETAIL.USERNAME
+                       LEFT JOIN USER_INTERACTION ON USERS.USER_ID=USER_INTERACTION.BASE_USER_ID
+                       WHERE USERS.USERNAME LIKE %s
+                       GROUP BY USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC, USERS.PROFILE_PIC, USER_INTERACTION.BASE_USER_ID
+                       ORDER BY USERS.USER_ID
+                    """
 
             user_data = []
 
@@ -136,14 +142,57 @@ class UserDatabaseOPS:
             else:
                 connection.commit()
 
+            query = """SELECT COUNT(USER_INTERACTION.TARGET_USER_ID) FROM USERS
+                       LEFT JOIN USER_INTERACTION ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
+                       WHERE USERS.USERNAME LIKE %s
+                       GROUP BY USERS.USERNAME, USER_INTERACTION.TARGET_USER_ID
+                       ORDER BY USERS.USER_ID
+                                """
+
+            user_follower_number = []
+
+            try:
+                cursor.execute(query, (str,))
+                user_follower_number = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            query = """SELECT USERS.USER_ID FROM USERS
+                       INNER JOIN USER_INTERACTION ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
+                       WHERE USER_INTERACTION.BASE_USER_ID=%s AND (USERS.USERNAME LIKE %s)
+                    """
+
+            people_that_i_follow = []
+
+            try:
+                cursor.execute(query, (current_user_id, str))
+                people_that_i_follow = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
             cursor.close()
 
             user_list = []
+            i = 0
 
             for row in user_data:
+
+                i_am_following = row[0] in people_that_i_follow
+
                 user_list.append(
-                    User(id=row[0], username=row[1], password=row[2], profile_picture=row[3], cover_picture=row[4],
-                         mail_address=row[5], register_date=row[6]))
+                    SearchedUser(id=row[0], username=row[1], follower_number=user_follower_number[i],
+                                 following_number=row[4], profile_picture=row[3],
+                                 cover_picture=row[2], maybe_i_am=i_am_following
+                                 )
+                )
+
+                i+=1
 
             return user_list
 
