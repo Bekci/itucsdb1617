@@ -23,15 +23,17 @@ class KnotDatabaseOPS:
 
             query = """INSERT INTO KNOTS (OWNER_ID, KNOT_CONTENT, LIKE_COUNTER, REKNOT_COUNTER, IS_GROUP, POST_DATE) VALUES (
                                           %s, %s, %s, %s, %s, %s
-                        )"""
+                        ) RETURNING KNOT_ID"""
             try:
                 cursor.execute(query, (owner_id, knot_content, likes, reknots, is_group, post_date))
+                knot_id = cursor.fetchone()
             except dbapi2.IntegrityError:
                 connection.rollback()
             else:
                 connection.commit()
 
             cursor.close()
+            return knot_id
 
     @classmethod
     def update_knot(self, owner_id, knot_content, likes, reknots, is_group, post_date, knot_id):
@@ -91,6 +93,7 @@ class KnotDatabaseOPS:
                     knot_data[4], knot_data[5], knot_data[6])
             else:
                 return -1
+
 
     @classmethod
     def select_knots_for_owner(self, owner_id):

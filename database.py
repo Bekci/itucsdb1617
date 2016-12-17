@@ -240,6 +240,13 @@ class DatabaseOPS:
 
             cursor.execute(query)
 
+            query = """CREATE TABLE IF NOT EXISTS GROUP_KNOT(
+                        GROUP_ID INTEGER REFERENCES GROUPS(GROUP_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                        KNOT_ID INTEGER REFERENCES KNOTS(KNOT_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                        )"""
+
+            cursor.execute(query)
+
             connection.commit()
             cursor.close()
 

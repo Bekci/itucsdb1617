@@ -12,20 +12,23 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-4" style="text-align: center">
-            <h3> </h3>
-            <p>{{ group_info.group_name }}</p>
+            <h3>
+                <p><span class="glyphicon glyphicon-indent-right"></span>{{ group_info.group_name }}
+                {% if not joined %}
+                <form action="" method="post">
+                  <button type="submit" class="btn btn-info" name="join-group" value="{{ group_info.group_id }}">Join</button>
+                </form>
+                {% else %}
+                <form action="" method="post">
+                  <button type="submit" class="btn btn-info" name="exit-group" value="{{ group_info.group_id }}">Joined</button>
+                </form>
+                {% endif %}
+                  </p></h3>
         </div>
         <div class="col-sm-4">
 </div>
         <div class="col-sm-4" style="text-align: center; padding-top: 15px">
-          {% if not joined %}
-          <form action="" method="post">
-            <button type="submit" class="btn btn-default" name="join-group" value="{{ group_info.group_id }}">Join</button>
-          </form>
-          {% else %}
-          <button type="button" class="btn btn-default" name="join-group">Joined</button>
-          {% endif %}
-            <p></p>
+          <p>{{ group_info.group_description }}</p>
         </div>
     </div>
     <div class="row">
@@ -48,9 +51,10 @@
 </div>
             </div>
             <div class="alert alert-info" role="alert" style="text-align: center">
-                Knitters liked this group.
+                Knitters who liked this group:
             </div>
-            {% for participant in group_participants %}
+            {% set counter = 0 %}
+            {% for participant in group_participants if counter<3 %}
             {% set participant = get_user_info(participant.user_id) %}
             <div class="media" style="margin-top: 30px">
                 <div class="media-left">
@@ -62,18 +66,47 @@
                     <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{ participant.username }}</h4>
                 </div>
             </div>
+            {% set counter = counter + 1 %}
             {% endfor %}
         </div>
         <div class="col-sm-1">
             <div></div>
         </div>
         <div class="col-sm-7" style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
-            <div class="row"></div>
-            <div class="row"></div>
-            <div class="row"></div>
             <div id="home" class="sections">
-                <p>{{ group_info.group_description }}</p>
+              <form action="" method="post" style="padding-bottom:30px;">
+                <div class="form-group">
+                  <label for="groupDescription">Knots of the Group</label>
+                  <span class="glyphicon glyphicon-globe"></span>
+                  <textarea class="form-control" rows="3" name="knot_content" style="resize:none;" placeholder="Enter your knot"></textarea>
+                </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-info" style="float:right" value="Knot" name="add_group_knot"/>
             </div>
+          </form>
+
+            {% for knot in group_knots %}
+            {% set knot_owner = get_user_info(knot.owner_id) %}
+            <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
+                <div style="padding: 15px">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object"
+                                 src="{{ knot_owner.profile_pic }}"
+                                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{ knot_owner.username }}</h4>
+                        {{ knot.knot_content }}
+                        <h6 style="text-align: right">{{ knot.post_date }}</h6>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+          </div>
             <div id='participants' class='sections'>
               {% for participant in group_participants %}
               {% set participant = get_user_info(participant.user_id) %}

@@ -13,6 +13,11 @@ class Group_Participation:
         self.group_id = group_id
         self.user_id = user_id
 
+class Group_Knot:
+    def __init__(self, group_id, knot_id):
+        self.group_id = group_id
+        self.knot_id = knot_id
+
 class GroupDatabaseOPS:
     @classmethod
     def add_group(cls, group_name, group_pic, group_description):
@@ -53,6 +58,24 @@ class GroupDatabaseOPS:
 
             cursor.close()
 
+
+    @classmethod
+    def add_group_knot(cls, group_id, knot_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO GROUP_KNOT (GROUP_ID, KNOT_ID) VALUES (
+                                        %s,
+                                        %s
+                            )"""
+            try:
+                cursor.execute(query, (group_id, knot_id))
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
     @classmethod
     def update_group_description(cls, group_id, group_description):
         with dbapi2.connect(database.config) as connection:
@@ -81,6 +104,20 @@ class GroupDatabaseOPS:
             else:
                 connection.commit()
 
+            cursor.close()
+
+    @classmethod
+    def exit_group_participation(cls, group_id, user_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM GROUP_PARTICIPANTS WHERE PARTICIPANT_ID=%s AND GROUP_ID=%s """
+
+            try:
+                cursor.execute(query, (group_id, user_id))
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
             cursor.close()
 
     @classmethod
@@ -152,6 +189,30 @@ class GroupDatabaseOPS:
                     Group_Participation(row[0], row[1])
                 )
             return participant_list
+
+    @classmethod
+    def select_group_knot(cls, group_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+            query= """SELECT * FROM GROUP_KNOT WHERE GROUP_ID=%s"""
+            knot_data = []
+            try:
+                cursor.execute(query, (group_id,))
+                knot_data = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+                cursor.close()
+
+            knot_list=[]
+            for row in knot_data:
+                knot_list.append(
+                    Group_Knot(row[0], row[1])
+                )
+            return knot_list
+
 
     @classmethod
     def select_participated_groups(cls, user_id):

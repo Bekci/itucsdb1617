@@ -447,12 +447,18 @@ def group_page(group_id, user_id):
     group_participants = GroupDatabaseOPS.select_group_participation(group_id)
     group_info = GroupDatabaseOPS.select_group(group_id)
     joined=False
+    knot_list = []
+    group_knots_id = [obj.knot_id for obj in GroupDatabaseOPS.select_group_knot(group_id) ]
+    for knot_id in group_knots_id:
+        knot = KnotDatabaseOPS.select_knot(knot_id)
+        if knot != -1:
+            knot_list.append(knot)
     for participant in group_participants:
         if user_id == participant.user_id:
             joined=True
     if request.method=='GET':
 
-        return render_template('groups.html', joined=joined, signedin=True, user=user, group_participants=group_participants, group_info=group_info)
+        return render_template('groups.html', joined=joined, signedin=True, user=user, group_participants=group_participants, group_info=group_info, group_knots=knot_list)
     elif request.method=='POST':
         if 'update-description' in request.form:
             group_description = request.form['group_description']
@@ -463,6 +469,14 @@ def group_page(group_id, user_id):
         elif 'join-group' in request.form:
             group_id = int(request.form["join-group"])
             GroupDatabaseOPS.add_group_participation(group_id,user_id)
+        elif 'exit-group' in request.form:
+            group_id = int(request.form["exit-group"])
+            GroupDatabaseOPS.exit_group_participation(group_id, user_id)
+        elif 'add_group_knot' in request.form:
+            knot_content = request.form['knot_content']
+            group_id = group_id
+            knot_id = KnotDatabaseOPS.add_knot(user_id, knot_content, 0, 0, True, datetime.now().date().isoformat())
+            GroupDatabaseOPS.add_group_knot(group_id, knot_id)
         return redirect(url_for('site.group_page', group_id=group_id, user_id=user_id))
 
 
