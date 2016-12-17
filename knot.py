@@ -118,5 +118,31 @@ class KnotDatabaseOPS:
                 )
             return knot_list
 
+    @classmethod
+    def select_knots_for_search(self, content):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
+            formatted_string = "%{}%".format(content)
+            query = """SELECT * FROM KNOTS WHERE KNOT_CONTENT LIKE %s AND IS_GROUP=False ORDER BY POST_DATE DESC"""
+            knot_data = []
+            knot_list = []
+            try:
+                cursor.execute(query, (formatted_string,))
+                knot_data = cursor.fetchall()
+            except dbapi2.IntegrityError:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            for row in knot_data:
+                knot_list.append(
+                    Knot(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+                )
+            return knot_list
+
 
 knot_ops = KnotDatabaseOPS()
