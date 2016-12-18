@@ -7,7 +7,9 @@
 
 {% block content %}
     <div class="container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="logo"/ id="logo">
         <div class="login-container">
+
             <form class="form-signin" action="{{ url_for('site.login_page') }}" method="post">
                 <div class="form-group">
                     <label>Knitter Name</label>

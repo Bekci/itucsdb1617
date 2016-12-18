@@ -22,7 +22,7 @@
         }
         </style>
         <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-social.css') }}" />
-
+         <link rel="icon" href="{{ url_for('static', filename='icon.png') }}">
     {% endblock %}
 </head>
 
@@ -98,7 +98,7 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-                    <li><a class="navbar-brand" href="{{ url_for('site.login_page') }}">Knitter</a></li>
+                    <li><span><img src="{{ url_for('static', filename='icon.png') }}" alt="logo" width="50px" height="50px" style="float:left;"/></span><a class="navbar-brand" href="{{ url_for('site.login_page') }}">Knitter</a></li>
 					<li><a href="{{ url_for('site.about_us_page') }}">About Us</a></li>
 				</ul>
 			</div>

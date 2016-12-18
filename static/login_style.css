@@ -7,10 +7,15 @@ html,body{
     height: 100%;
 }
 
+#logo {
+    display:block;
+    margin:0 auto;
+}
+
 .login-container{
     position: relative;
     width: 300px;
-    margin: 80px auto;
+    margin: 50px auto;
     padding: 20px 40px 40px;
     text-align: center;
     background: #fff;
