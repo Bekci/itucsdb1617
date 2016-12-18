@@ -32,7 +32,9 @@
                         </div>
                         <div class="info">
                             <div class="title">
-                                <i class="glyphicon glyphicon-link"></i> {{result.username}}
+                                <a href="{{ url_for('site.user_profile_page', user_id=result.id)}}">
+                                    <i class="glyphicon glyphicon-link"></i> {{result.username}}
+                                </a>
                             </div>
                             <div class="desc">Following: {{result.following_number}}</div>
                             <div class="desc">Followers: {{result.follower_number}}</div>
