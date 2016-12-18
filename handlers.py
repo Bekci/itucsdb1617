@@ -95,12 +95,30 @@ def home_page(user_id):
             KnotDatabaseOPS.delete_knot(request.form['delete'])
             return redirect(url_for('site.home_page', user_id=user.id))
         elif 'update_knot' in request.form:
-            KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, datetime.now().date().isoformat(), request.form['update_knot'])
+            KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, False, datetime.now().date().isoformat(), request.form['update_knot'])
             return redirect(url_for('site.home_page', user_id=user.id))
         elif 'search' in request.form:
             query = request.form['search_bar']
             print(query)
             return redirect(url_for('site.search_page', user_id=user.id, query=query))
+        elif 'like' in request.form:
+            is_like = NotificationDatabaseOPS.check_like(request.form['like'], user.id, True)
+            if is_like:
+                NotificationDatabaseOPS.delete_relation(request.form['like'], user.id, True)
+                NotificationDatabaseOPS.decrease_knot_like(request.form['like'])
+            else:
+                NotificationDatabaseOPS.insert_relation(request.form['like'], user.id, True)
+                NotificationDatabaseOPS.increase_knot_like(request.form['like'])
+            return redirect(url_for('site.home_page', user_id=user.id))
+        elif 'reknot' in request.form:
+            is_reknot = NotificationDatabaseOPS.check_reknot(request.form['reknot'], user.id, False)
+            if is_reknot:
+                NotificationDatabaseOPS.delete_relation(request.form['reknot'], user.id, False)
+                NotificationDatabaseOPS.decrease_knot_reknot(request.form['reknot'])
+            else:
+                NotificationDatabaseOPS.insert_relation(request.form['reknot'], user.id, False)
+                NotificationDatabaseOPS.increase_knot_reknot(request.form['reknot'])
+            return redirect(url_for('site.home_page', user_id=user.id))
 
 
 @site.route('/books_page/<int:user_id>', methods=['GET', 'POST'])

@@ -43,7 +43,7 @@ class KnotDatabaseOPS:
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
             query = """UPDATE KNOTS SET OWNER_ID=%s, KNOT_CONTENT=%s, LIKE_COUNTER=%s,
-                            REKNOT_COUNTER=%s, IS_GROUP=%s POST_DATE=%s  WHERE KNOT_ID=%s"""
+                            REKNOT_COUNTER=%s, IS_GROUP=%s, POST_DATE=%s  WHERE KNOT_ID=%s"""
             try:
                 cursor.execute(query, (owner_id, knot_content, likes, reknots, is_group, post_date, knot_id))
             except dbapi2.IntegrityError:

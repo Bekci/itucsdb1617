@@ -144,19 +144,20 @@
 						    </h4>
                             <p style="margin-left: 10px">{{ knot_counter.knot_content }}</p>
 					    </div>
+                        <form action="{{ url_for('site.home_page', user_id=user.id) }}" method="post">
 					    <div class="media-bottom" style="overflow:hidden;">
 						    <div class="pull-left" style="margin-left:20%">
-							    <button class="btn dropdown-toggle" name="like" id="like" type="submit" style="background-color: #f5f8fa;">
+							    <button class="btn dropdown-toggle" name="like" id="like" value="{{knot_counter.knot_id}}" type="submit" style="background-color: #f5f8fa;">
 								    <i class="glyphicon glyphicon-heart" style="background-color: #f5f8fa;">{{ knot_counter.like_counter }}</i>
 							    </button>
 						    </div>
-						    <div class="pull-left" style="margin-left:5%;">
-							    <button class="btn dropdown-toggle" name="reknot" id="reknot" type="submit" style="background-color: #f5f8fa;">
-								    <i type="button" class="glyphicon glyphicon-link" style="background-color: #f5f8fa;">{{ knot_counter.reknot_counter }}</i>
+						    <div class="pull-left" style="margin-left:10%;">
+							    <button class="btn dropdown-toggle" name="reknot" id="reknot" value="{{knot_counter.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+								    <i class="glyphicon glyphicon-link" style="background-color: #f5f8fa;">{{ knot_counter.reknot_counter }}</i>
 							    </button>
 						    </div>
 					    </div>
-
+                        </form>
 				    </div>
                             {% endif %}
                         {% endfor %}
