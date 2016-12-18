@@ -66,12 +66,12 @@
 						</div>
 					</li>
 				</ul>
-				<form class="navbar-form navbar-right" role="search">
+				<form action="{{ url_for('site.home_page', user_id= current_user.id)}}" method="post" class="navbar-form navbar-right" role="search">
 					<div id="custom-search-input">
 						<div class="input-group col-md-12">
-							<input type="text" class="  search-query form-control" placeholder="Search Knitter" />
+							<input type="text" name="search_bar" class="  search-query form-control" placeholder="Search Knitter" />
 							<span class="input-group-btn">
-                                    <button class="btn" type="button">
+                                    <button class="btn" name="search" type="submit">
                                         <span class=" glyphicon glyphicon-search black" ></span>
 							</button>
 							</span>

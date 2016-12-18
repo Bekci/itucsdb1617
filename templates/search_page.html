@@ -1,0 +1,109 @@
+{% extends "layout.html" %} {% block title %} Knitter Search Page {% endblock %} {% block head %} {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='search_page_style.css') }}" /> {% endblock %} {% block content %}
+<div class="container">
+    <div class="row" style="margin-top:20px;">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <form action="{{ url_for('site.home_page', user_id= current_user.id)}}" method="post">
+                <div id="custom-search-input">
+                    <div class="input-group col-md-12">
+                        <input type="text" name="search_bar" class="form-control input-lg" placeholder="What are you looking for?" value="{{query}}"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-info btn-lg" name="search" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h2>Looking for {{query}} in users!</h2>
+            <div style="display:inline-flex">
+                {% for result in users %}
+                    <div class="card hovercard" style="margin:15px;">
+                        <img name="background" src="{{result.cover_picture}}" alt=""/>
+                        <div name="avatar" class="avatar">
+                            <img src="{{result.profile_picture}}" alt="" />
+                        </div>
+                        <div class="info">
+                            <div class="title">
+                                <i class="glyphicon glyphicon-link"></i> {{result.username}}
+                            </div>
+                            <div class="desc">Following: {{result.following_number}}</div>
+                            <div class="desc">Followers: {{result.follower_number}}</div>
+                        </div>
+                        <div class="bottom">
+                            <form action="{{ url_for('site.search_page', user_id=user.id, query=query) }}" method="POST">
+                                <input type="hidden" name="active_user" value="{{ user_id }}">
+                                <input type="hidden" name="target_user" value="{{ result.id }}">
+                                {% if not result.are_you_following_me %}
+                                    <button name="follow" type="submit" class="btn btn-default">Add</button>
+                                {% endif %}
+                                {% if result.are_you_following_me %}
+                                    <button name="unfollow" type="submit" class="btn btn-default">Remove</button>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <h2>Looking for {{query}} in knots!</h2>
+            <div style="background-color:white;padding:5px;border-radius:8px;">
+                {% for knot in knots %}
+                    {% set owner = get_user_info (knot.owner_id) %}
+                    <form action="{{ url_for('site.search_page', user_id=user.id, query=query) }}" method="POST">
+                        <div class="media" style="overflow:visible;background-color: #f5f8fa; margin:15px;border-radius:15px;padding:15px;">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object" src="{{owner.profile_pic}}" alt="userPhoto" style="height: 60px; width: 60px; border-radius: 60%">
+                                </a>
+                            </div>
+                            <div class="media-body" style="border-bottom:0.01em solid white;overflow:visible;">
+                                <h4 class="media-heading">
+                                    <span class="glyphicon glyphicon-link"></span> {{owner.username}}
+                                    <div class="dropdown pull-right">
+                                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" style="background-color: #f5f8fa;">
+                                            <i class="glyphicon glyphicon-option-horizontal"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" style="overflow:visible;background-color: #f5f8fa;">
+                                            <li style="border-bottom:0.01em solid white;">
+                                                <button class="btn dropdown-toggle" name="delete_knot" id="delete" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+                                                    <i class="glyphicon glyphicon-trash"></i> Delete This Knot
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="btn dropdown-toggle" name="update" id="update" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+                                                    <i class="glyphicon glyphicon-edit"></i> Update This Knot
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </h4>
+                                {{knot.knot_content}}
+                            </div>
+                            <div class="media-bottom" style="overflow:hidden;">
+                                <div class="pull-left" style="margin-left:10%">
+                                    <button class="btn dropdown-toggle" name="like" id="like" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+                                        <i class="glyphicon glyphicon-heart" style="background-color: #f5f8fa;"> {{knot.like_counter}}</i>
+                                    </button>
+                                </div>
+                                <div class="pull-left" style="margin-left:10%;">
+                                    <button class="btn dropdown-toggle" name="reknot" id="reknot" value="{{knot.knot_id}}" type="submit" style="background-color: #f5f8fa;">
+                                        <i type="button" class="glyphicon glyphicon-link" style="background-color: #f5f8fa;"> {{knot.reknot_counter}}</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+{% endblock %}

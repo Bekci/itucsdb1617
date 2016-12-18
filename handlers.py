@@ -22,7 +22,6 @@ from flask_login import login_user, login_required, logout_user, current_user
 
 site = Blueprint('site', __name__)
 
-
 @site.route('/', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'GET':
@@ -96,8 +95,12 @@ def home_page(user_id):
             KnotDatabaseOPS.delete_knot(request.form['delete'])
             return redirect(url_for('site.home_page', user_id=user.id))
         elif 'update_knot' in request.form:
-            KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, False, datetime.now().date().isoformat(), request.form['update_knot'])
+            KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, datetime.now().date().isoformat(), request.form['update_knot'])
             return redirect(url_for('site.home_page', user_id=user.id))
+        elif 'search' in request.form:
+            query = request.form['search_bar']
+            print(query)
+            return redirect(url_for('site.search_page', user_id=user.id, query=query))
 
 
 @site.route('/books_page/<int:user_id>', methods=['GET', 'POST'])
@@ -598,6 +601,61 @@ def events_page(user_id):
             EventDatabaseOPS.add_participant(event_id, user_id)
         return redirect(url_for('site.events_page', user_id=user_id))
 
+
+@site.route('/search/<int:user_id>/<query>', methods=['GET', 'POST'])
+@login_required
+def search_page(user_id, query):
+    user = UserDatabaseOPS.select_user_with_id(user_id)
+    if current_user != user:
+        abort(403)
+    if request.method == 'GET':
+        query_in_users = UserDatabaseOPS.select_users_for_search(query,user_id)
+        query_in_knots = KnotDatabaseOPS.select_knots_for_search(query)
+        print(query_in_knots[0])
+        return render_template('search_page.html',signed_in=True,user=user,users=query_in_users, knots=query_in_knots, query=query)
+    else:
+        if 'delete_knot' in request.form:
+            knot_id = request.form['delete_knot']
+            print("Update Knot function is not working on the Search Page :(")
+
+        elif 'update' in request.form:
+            knot_id = request.form['update']
+            print("Update Knot function is not working on the Search Page :(")
+
+        elif 'like' in request.form:
+            knot_id = request.form['like']
+            is_like = NotificationDatabaseOPS.check_like(knot_id,user.id, True)
+            if is_like:
+                NotificationDatabaseOPS.delete_relation(knot_id, user.id, True)
+                NotificationDatabaseOPS.decrease_knot_like(knot_id)
+            else:
+                NotificationDatabaseOPS.insert_relation(knot_id, user.id, True)
+                NotificationDatabaseOPS.increase_knot_like(knot_id)
+
+        elif 'reknot' in request.form:
+            knot_id = request.form['reknot']
+            is_reknot = NotificationDatabaseOPS.check_reknot(knot_id,user.id, False)
+            if is_reknot:
+                NotificationDatabaseOPS.delete_relation(knot_id, user.id, False)
+                NotificationDatabaseOPS.decrease_knot_reknot(knot_id)
+            else:
+                NotificationDatabaseOPS.insert_relation(knot_id, user.id, False)
+                NotificationDatabaseOPS.increase_knot_reknot(knot_id)
+
+        elif 'follow' in request.form:
+            target_user = request.form['target_user']
+            UserDatabaseOPS.follow(user_id,target_user)
+
+        elif 'unfollow' in request.form:
+            target_user = request.form['target_user']
+            UserDatabaseOPS.unfollow(user_id,target_user)
+
+        else:
+            print(request.form)
+
+        query_in_users = UserDatabaseOPS.select_users_for_search(query,user_id)
+        query_in_knots = KnotDatabaseOPS.select_knots_for_search(query)
+        return render_template('search_page.html',signed_in=True,user=user,users=query_in_users, knots=query_in_knots, query=query)
 
 @site.route("/logout")
 @login_required
