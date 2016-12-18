@@ -62,7 +62,7 @@ class NotificationDatabaseOPS:
             cursor.close()
             if len(first_query) > 0 and len(second_query) > 0:
                 i = 0
-                max = len(first_query)
+                max = len(second_query)
                 result = []
 
                 while i < max:
