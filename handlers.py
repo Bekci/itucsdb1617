@@ -295,6 +295,7 @@ def notifications_page(user_id):
 @login_required
 def sales_page(user_id):
     user = UserDatabaseOPS.select_user_with_id(user_id)
+    _isSearched=False
     if current_user != user:
         abort(403)
     if request.method == 'GET':
@@ -305,6 +306,7 @@ def sales_page(user_id):
         my_item_list = SaleDatabaseOPS.select_sales_of_a_user(user.username)
 
     else:
+        _isSearched = True
         if 'add_new_item' in request.form:
 
             real_name = UserDatabaseOPS.select_user_detail(user.username)
@@ -355,7 +357,7 @@ def sales_page(user_id):
 
 
     return render_template('sales_knitter.html', signedin=True, user=user, real_name=real_name,
-                               my_city=my_city, cities=cities, currency_list=currency_list, my_item_list=my_item_list)
+                               my_city=my_city, cities=cities, currency_list=currency_list, my_item_list=my_item_list,isSearched=_isSearched)
 
 
 @site.route('/user_profile/<int:user_id>', methods=['GET', 'POST'])

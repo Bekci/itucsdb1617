@@ -64,7 +64,15 @@
 
             <div class="col-md-4"
                  style="margin-top: 20px; background-color: white; padding: 0px 10px 25px 10px; border-radius: 10px">
-                <h2 style="text-align: center">My Items</h2>
+
+                {% if not isSearched %}
+                    <h2 style="text-align: center">My Items</h2>
+                {% endif %}
+                
+                {% if isSearched %}
+                    <h2 style="text-align: center">Searched items</h2>
+                {% endif %}
+
 
                 {% for item in my_item_list %}
                     <div class="panel panel-danger"
@@ -78,9 +86,7 @@
                             <div class="panel-body">
                                 <p style="text-align: center"><img
                                         src="{{ item.item.item_picture }}"
-                                        height="360px"
-                                        width="480px"
-                                        style="margin-top:25px; border-radius: 25px; border: 5px solid red; text-align: center; vertical-align: center">
+                                        style=" margin-top:25px; border-radius: 25px; max-width:100%; height:auto; border: 5px solid red; text-align: center; vertical-align: center">
                                 </p>
 
                                 <p style="text-align: justify">{{ item.item_description }}</p>
@@ -104,8 +110,10 @@
 
                                 <form method="post">
                                     <div class="form-group">
-                                        <input type="submit" class="btn btn-danger btn-block" value="Delete This Sale"
-                                               name="delete_item"/>
+                                        {% if user.username == item.seller.username %}
+                                            <input type="submit" class="btn btn-danger btn-block" value="Delete This Sale"
+                                                name="delete_item"/>
+                                        {% endif %}
                                     </div>
 
                                     <div class="form-group">

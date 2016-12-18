@@ -330,5 +330,46 @@ class UserDatabaseOPS:
 
             cursor.close()
 
+    @classmethod
+    def follow(cls, user_id, target_user):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Ozan ATA - USERS TABLE ----------------------
+
+            query = """INSERT INTO user_interaction (base_user_id, target_user_id)
+                        VALUES (%s, %s)
+                            """
+
+            try:
+                cursor.execute(query, (user_id, target_user))
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+    @classmethod
+    def unfollow(cls, user_id, target_user):
+       with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Ozan ATA - USERS TABLE ----------------------
+
+            query = """delete from user_interaction
+                            where 
+                        base_user_id = %s
+                        and target_user_id = %s
+                            """
+
+            try:
+                cursor.execute(query, (user_id, target_user))
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
 
 user_ops = UserDatabaseOPS()
