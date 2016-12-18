@@ -611,7 +611,6 @@ def search_page(user_id, query):
     if request.method == 'GET':
         query_in_users = UserDatabaseOPS.select_users_for_search(query,user_id)
         query_in_knots = KnotDatabaseOPS.select_knots_for_search(query)
-        print(query_in_knots[0])
         return render_template('search_page.html',signed_in=True,user=user,users=query_in_users, knots=query_in_knots, query=query)
     else:
         if 'delete_knot' in request.form:
