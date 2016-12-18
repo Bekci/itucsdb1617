@@ -22,6 +22,17 @@ class User(UserMixin):
         self.mail_address = mail_address
         self.register_date = register_date
 
+        
+class SearchedUser:
+    def __init__(self, id, username, follower_number, following_number, profile_picture, cover_picture, maybe_i_am):
+        self.id = id
+        self.username = username
+        self.follower_number = follower_number
+        self.following_number = following_number
+        self.profile_picture = profile_picture
+        self.cover_picture = cover_picture
+        self.are_you_following_me = maybe_i_am
+
 
 class UserDatabaseOPS:
     @classmethod
@@ -145,11 +156,12 @@ class UserDatabaseOPS:
             query = """SELECT COUNT(USER_INTERACTION.TARGET_USER_ID) FROM USERS
                        LEFT JOIN USER_INTERACTION ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
                        WHERE USERS.USERNAME LIKE %s
-                       GROUP BY USERS.USERNAME, USER_INTERACTION.TARGET_USER_ID
+                       GROUP BY USERS.USERNAME, USER_INTERACTION.TARGET_USER_ID, USERS.USER_ID
                        ORDER BY USERS.USER_ID
                                 """
 
             user_follower_number = []
+            followers = []
 
             try:
                 cursor.execute(query, (str,))
@@ -159,12 +171,16 @@ class UserDatabaseOPS:
             else:
                 connection.commit()
 
+            for row in user_follower_number:
+                followers.append(row[0])
+
             query = """SELECT USERS.USER_ID FROM USERS
                        INNER JOIN USER_INTERACTION ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
                        WHERE USER_INTERACTION.BASE_USER_ID=%s AND (USERS.USERNAME LIKE %s)
                     """
 
             people_that_i_follow = []
+            i_followed = []           
 
             try:
                 cursor.execute(query, (current_user_id, str))
@@ -174,6 +190,9 @@ class UserDatabaseOPS:
             else:
                 connection.commit()
 
+            for row in people_that_i_follow:
+                i_followed.append(row[0])
+
             cursor.close()
 
             user_list = []
@@ -181,10 +200,10 @@ class UserDatabaseOPS:
 
             for row in user_data:
 
-                i_am_following = row[0] in people_that_i_follow
+                i_am_following = row[0] in i_followed
 
                 user_list.append(
-                    SearchedUser(id=row[0], username=row[1], follower_number=user_follower_number[i],
+                    SearchedUser(id=row[0], username=row[1], follower_number=followers[i],
                                  following_number=row[4], profile_picture=row[3],
                                  cover_picture=row[2], maybe_i_am=i_am_following
                                  )
