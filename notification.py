@@ -33,12 +33,13 @@ class NotificationDatabaseOPS:
                         FROM knots
                             INNER JOIN users ON knots.owner_id = users.user_id
                             INNER JOIN like_reknot ON knots.knot_id = like_reknot.knot_id
-                            where like_counter > 0 OR reknot_counter > 0
-                            where knots.owner_id = user.user.id;"""
+                            where like_counter > 0 OR reknot_counter > 0 
+                            and
+                            knots.owner_id = %s;"""
 
 
             try:
-                cursor.execute(query)
+                cursor.execute(query,[user_id.id])
                 first_query = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
