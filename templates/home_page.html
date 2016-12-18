@@ -148,13 +148,16 @@
 					    <div class="media-bottom" style="overflow:hidden;">
 						    <div class="pull-left" style="margin-left:20%">
 							    <button class="btn dropdown-toggle" name="like" id="like" value="{{knot_counter.knot_id}}" type="submit" style="background-color: #f5f8fa;">
-								    <i class="glyphicon glyphicon-heart" style="background-color: #f5f8fa;">{{ knot_counter.like_counter }}</i>
+								    <i class="glyphicon glyphicon-heart" style="background-color: #f5f8fa;"> {{ knot_counter.like_counter }}</i>
 							    </button>
 						    </div>
 						    <div class="pull-left" style="margin-left:10%;">
 							    <button class="btn dropdown-toggle" name="reknot" id="reknot" value="{{knot_counter.knot_id}}" type="submit" style="background-color: #f5f8fa;">
-								    <i class="glyphicon glyphicon-link" style="background-color: #f5f8fa;">{{ knot_counter.reknot_counter }}</i>
+								    <i class="glyphicon glyphicon-link" style="background-color: #f5f8fa;"> {{ knot_counter.reknot_counter }}</i>
 							    </button>
+						    </div>
+                            <div class="pull-right" style="margin-left:10%;">
+							    <i>{{ knot_counter.post_date }}</i>
 						    </div>
 					    </div>
                         </form>
