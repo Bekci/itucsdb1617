@@ -21,11 +21,11 @@
     </div>
     <div class="row" style="margin-top:10px;">
         <div class="col-md-2"></div>
-        <div class="col-md-8">
+        <div class="col-md-10">
             <h2>Looking for {{query}} in users!</h2>
-            <div style="display:inline-flex">
+            <div style="display:inline-block overflow:visible;">
                 {% for result in users %}
-                    <div class="card hovercard" style="margin:15px;">
+                    <div class="card hovercard" style="float:left;display:block;margin:15px;">
                         <img name="background" src="{{result.cover_picture}}" alt=""/>
                         <div name="avatar" class="avatar">
                             <img src="{{result.profile_picture}}" alt="" />
@@ -52,7 +52,11 @@
                     </div>
                 {% endfor %}
             </div>
-            <h2>Looking for {{query}} in knots!</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h2>Looking for {{query}} in knots!</h2>
             <div style="background-color:white;padding:5px;border-radius:8px;">
                 {% for knot in knots %}
                     {% set owner = get_user_info (knot.owner_id) %}
@@ -102,8 +106,9 @@
                     </form>
                 {% endfor %}
             </div>
+            </div>
+            <div class="col-md-2"></div>
         </div>
-        <div class="col-md-2"></div>
     </div>
 </div>
 {% endblock %}

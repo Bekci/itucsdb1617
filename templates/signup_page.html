@@ -8,116 +8,109 @@
 {% block content %}
 
     <div class="container">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="logo"/ id="logo">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3" style="margin-top:5%">
-
-                <form action="{{ url_for('site.signup_page') }}" method="post" data-toggle="validator" novalidate>
-                    <div class="form-group">
-                        <label>Knitter Name</label>
-                        <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-user"></span>
-						</span>
-                            <input type="text" name="knittername" class="form-control" required/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="inputPassword" class="control-label">Password</label>
+        <div class="login-container" style="">
+                    <form action="{{ url_for('site.signup_page') }}" method="post" data-toggle="validator" novalidate>
                         <div class="form-group">
-                            <input type="password" data-minlength="8" class="form-control" id="inputPassword"
-                                   name="inputPassword"
-                                   placeholder="Password" required>
-                            <div class="help-block">Minimum of 8 characters</div>
+                            <label>Knitter Name</label>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-user"></span>
+                            </span>
+                                <input type="text" name="knittername" class="form-control" required/>
+                            </div>
                         </div>
+
                         <div class="form-group">
-                            <input type="password" class="form-control" id="inputPasswordConfirm"
-                                   data-match="#inputPassword" data-match-error="Whoops, these don't match"
-                                   placeholder="Confirm" required>
+                            <label for="inputPassword" class="control-label">Password</label>
+                            <div class="form-group">
+                                <input type="password" data-minlength="8" class="form-control" id="inputPassword"
+                                    name="inputPassword"
+                                    placeholder="Password" required>
+                                <div class="help-block">Minimum of 8 characters</div>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" id="inputPasswordConfirm"
+                                    data-match="#inputPassword" data-match-error="Whoops, these don't match"
+                                    placeholder="Confirm" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Name</label>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-user"></span>
+                            </span>
+                                <input type="text" name="real_name" class="form-control" required/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Surname</label>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-user"></span>
+                            </span>
+                                <input type="text" name="real_surname" class="form-control" required/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Profile Picture Address</label>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-camera"></span>
+                            </span>
+                                <input type="text" name="profile_pic" class="form-control" required/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cover Picture Address</label>
+                            <div class="input-group">
+                            <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-picture"></span>
+                            </span>
+                                <input type="text" name="cover_pic" class="form-control" required/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputEmail" class="control-label">Email</label>
+                            <input type="email" class="form-control" id="inputEmail" name="inputEmail"
+                                data-error="Hey look here ! That email address is invalid" required>
                             <div class="help-block with-errors"></div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Name</label>
-                        <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-user"></span>
-						</span>
-                            <input type="text" name="real_name" class="form-control" required/>
+                        <div class="form-group">
+                            <label for="city_select">Select the city</label>
+                            <select class="form-control" id="city_select" name="city" required>
+                            <option disabled selected value> -- Select an city --</option>
+                                {% for city in cities %}
+                                    <option value="{{ city.id }}">{{ city.name}}, {{ city.country }}</option>
+                                {% endfor %}
+
+                            </select>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Surname</label>
-                        <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-user"></span>
-						</span>
-                            <input type="text" name="real_surname" class="form-control" required/>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="hidden" name="city_id" class="form-control" value="" id="city_id"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Profile Picture Address</label>
-                        <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-camera"></span>
-						</span>
-                            <input type="text" name="profile_pic" class="form-control" required/>
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-success btn-block" value="Sign up" name="signup"
+                                id="signup"/>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Cover Picture Address</label>
-                        <div class="input-group">
-						<span class="input-group-addon">
-                                <span class="glyphicon glyphicon-picture"></span>
-						</span>
-                            <input type="text" name="cover_pic" class="form-control" required/>
+                    </form>
+                    {% if samename %}
+                        <div class="alert alert-danger">
+                            <strong>Username is already taken !</strong>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="inputEmail" class="control-label">Email</label>
-                        <input type="email" class="form-control" id="inputEmail" name="inputEmail"
-                               data-error="Hey look here ! That email address is invalid" required>
-                        <div class="help-block with-errors"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="city_select">Select the city</label>
-                        <select class="form-control" id="city_select" name="city" required>
-                        <option disabled selected value> -- Select an city --</option>
-                            {% for city in cities %}
-                                <option value="{{ city.id }}">{{ city.name}}, {{ city.country }}</option>
-                            {% endfor %}
-
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input type="hidden" name="city_id" class="form-control" value="" id="city_id"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="submit" class="btn btn-success btn-block" value="Sign up" name="signup"
-                               id="signup"/>
-                    </div>
-
-                </form>
-
-                {% if samename %}
-                    <div class="alert alert-danger">
-                        <strong>Username is already taken !</strong>
-                    </div>
-                {% endif %}
-
-            </div>
-
+                    {% endif %}
         </div>
     </div>
 
