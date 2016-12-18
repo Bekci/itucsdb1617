@@ -33,7 +33,8 @@ class NotificationDatabaseOPS:
                         FROM knots
                             INNER JOIN users ON knots.owner_id = users.user_id
                             INNER JOIN like_reknot ON knots.knot_id = like_reknot.knot_id
-                            where like_counter > 0 OR reknot_counter > 0;"""
+                            where like_counter > 0 OR reknot_counter > 0
+                            where knots.owner_id = user.user.id;"""
 
 
             try:
