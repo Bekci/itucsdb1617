@@ -59,20 +59,43 @@ class ShelfDatabaseOPS:
             cursor = connection.cursor()
 
             # ----------- ilknur Meray - SHELF TABLE -----------------------
-
-            query = """UPDATE SHELF SET IS_MAIN = %s WHERE SHELF_ID = %s"""
-
-            try:
-                cursor.execute(query, (is_main, shelf_id,))
-            except dbapi2.Error:
-                connection.rollback()
-            else:
-                connection.commit()
-
-            cursor.close()
             if is_main:
+                query = """UPDATE SHELF SET IS_MAIN = %s WHERE SHELF_ID = %s"""
+
+                try:
+                    cursor.execute(query, (is_main, shelf_id,))
+                except dbapi2.Error:
+                    connection.rollback()
+                else:
+                    connection.commit()
+
+                cursor.close()
+
                 cursor = connection.cursor()
-                query = """UPDATE SHELF SET IS_MAIN = FALSE WHERE SHELF_ID != %s"""
+                query = """UPDATE SHELF SET IS_MAIN = FALSE WHERE SHELF_ID <> %s"""
+
+                try:
+                    cursor.execute(query, (shelf_id,))
+                except dbapi2.Error:
+                    connection.rollback()
+                else:
+                    connection.commit()
+
+                cursor.close()
+            else:
+                query = """UPDATE SHELF SET IS_MAIN = %s WHERE SHELF_ID = %s"""
+
+                try:
+                    cursor.execute(query, (is_main, shelf_id,))
+                except dbapi2.Error:
+                    connection.rollback()
+                else:
+                    connection.commit()
+
+                cursor.close()
+
+                cursor = connection.cursor()
+                query = """UPDATE SHELF SET IS_MAIN = TRUE WHERE SHELF_ID <> %s"""
 
                 try:
                     cursor.execute(query, (shelf_id,))
@@ -126,6 +149,11 @@ class ShelfDatabaseOPS:
             for element in shelf_data:
                 shelf_list.append(
                     Shelf(shelf_id=element[0], shelf_name=element[1], is_main=element[2], book_counter=element[3], shelf_user_id=element[4]))
+
+            for j in shelf_list:
+                if j.is_main:
+                    a, b = shelf_list.index(j), 0
+                    shelf_list[b], shelf_list[a] = shelf_list[a], shelf_list[b]
 
             return shelf_list
 

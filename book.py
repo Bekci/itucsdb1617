@@ -95,6 +95,8 @@ class BookDatabaseOPS:
 
     @classmethod
     def delete_book(cls, book_id):
+        shelf_id = BookDatabaseOPS.find_shelf_from_id(book_id)
+        ShelfDatabaseOPS.decrease_book_counter(shelf_id)
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
