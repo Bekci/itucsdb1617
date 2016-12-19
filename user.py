@@ -319,6 +319,7 @@ class UserDatabaseOPS:
             query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID  FROM USER_INTERACTION
                            RIGHT JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
                            WHERE USER_INTERACTION.BASE_USER_ID <> %s
+                           LIMIT 3
                                     """
             user_list = []
             try:
