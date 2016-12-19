@@ -102,7 +102,7 @@ class KnotDatabaseOPS:
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
-            query = """SELECT * FROM KNOTS WHERE OWNER_ID=%s AND IS_GROUP=False ORDER BY POST_DATE"""
+            query = """SELECT * FROM KNOTS WHERE OWNER_ID=%s AND IS_GROUP=False ORDER BY POST_DATE DESC"""
             knot_data = []
             knot_list = []
             try:
@@ -128,7 +128,7 @@ class KnotDatabaseOPS:
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
             formatted_string = "%{}%".format(content)
-            query = """SELECT * FROM KNOTS WHERE KNOT_CONTENT LIKE %s AND IS_GROUP=False ORDER BY POST_DATE"""
+            query = """SELECT * FROM KNOTS WHERE KNOT_CONTENT LIKE %s AND IS_GROUP=False ORDER BY POST_DATE DESC"""
             knot_data = []
             knot_list = []
             try:
