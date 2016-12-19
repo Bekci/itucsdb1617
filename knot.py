@@ -162,7 +162,7 @@ class KnotDatabaseOPS:
                                 """
             knot_list = []
             try:
-                cursor.execute(query, (user_id))
+                cursor.execute(query, (user_id,))
                 knot_list = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
