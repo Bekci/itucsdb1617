@@ -246,14 +246,14 @@ class UserDatabaseOPS:
             else:
                 return -1
 
-    @classmethod
+@classmethod
     def get_followers(cls, user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
             # ----------- Can Yilmaz Altinigne - USERS TABLE ----------------------
 
-            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME FROM USER_INTERACTION
+            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID FROM USER_INTERACTION
                        INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.BASE_USER_ID
                        WHERE USER_INTERACTION.TARGET_USER_ID = %s
                     """
@@ -272,7 +272,7 @@ class UserDatabaseOPS:
 
             for row in user_list:
                 follower.append(
-                    FollowerOrFollwingUser(username=row[1], profile_pic=row[0])
+                    FollowerOrFollwingUser(username=row[1], profile_pic=row[0], user_id=row[2])
                 )
 
             return follower
@@ -284,7 +284,7 @@ class UserDatabaseOPS:
 
             # ----------- Can Yilmaz Altinigne - USERS TABLE ----------------------
 
-            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME FROM USER_INTERACTION
+            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID  FROM USER_INTERACTION
                        INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
                        WHERE USER_INTERACTION.BASE_USER_ID = %s
                                 """
@@ -304,7 +304,7 @@ class UserDatabaseOPS:
             for row in user_list:
 
                 following.append(
-                    FollowerOrFollwingUser(username=row[1], profile_pic=row[0])
+                    FollowerOrFollwingUser(username=row[1], profile_pic=row[0], user_id=row[2])
                 )
 
             return following
