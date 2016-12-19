@@ -316,10 +316,11 @@ class UserDatabaseOPS:
 
             # ----------- Can Yilmaz Altinigne - USERS TABLE ----------------------
 
-            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID  FROM USER_INTERACTION
-                           RIGHT JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
-                           WHERE USER_INTERACTION.BASE_USER_ID <> %s
-                           LIMIT 3
+            query = """ SELECT DISTINCT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID  FROM USERS, USER_INTERACTION
+                        WHERE USER_ID != 1 AND USER_ID NOT IN (SELECT TARGET_USER_ID FROM USER_INTERACTION
+                       INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
+                       WHERE USER_INTERACTION.BASE_USER_ID = 1)
+                       LIMIT 3
                                     """
             user_list = []
             try:

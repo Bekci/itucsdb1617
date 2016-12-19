@@ -415,6 +415,7 @@ def user_profile_page(user_id):
 
         if 'deleteReal' in request.form:
             user = UserDatabaseOPS.select_user_with_id(user_id)
+            cities = CityDatabaseOPS.select_all_cities()
             UserDatabaseOPS.delete_user_detail(user.username)
             real_name = UserDatabaseOPS.select_user_detail(user.username)
             my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
@@ -429,6 +430,7 @@ def user_profile_page(user_id):
         if 'follow' in request.form:
             user = UserDatabaseOPS.select_user_with_id(user_id)
             target_user = request.form['target_user']
+            cities = CityDatabaseOPS.select_all_cities()
             UserDatabaseOPS.follow(user_id, target_user)
             real_name = UserDatabaseOPS.select_user_detail(user.username)
             my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
