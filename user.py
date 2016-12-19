@@ -35,9 +35,10 @@ class SearchedUser:
 
 
 class FollowerOrFollwingUser:
-    def __init__(self, username, profile_pic):
+    def __init__(self, username, profile_pic, user_id):
         self.username = username
         self.profile_pic = profile_pic
+        self.id = user_id
 
 
 class UserDatabaseOPS:
