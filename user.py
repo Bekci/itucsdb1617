@@ -34,6 +34,12 @@ class SearchedUser:
         self.are_you_following_me = maybe_i_am
 
 
+class FollowerOrFollwingUser:
+    def __init__(self, username, profile_pic):
+        self.username = username
+        self.profile_pic = profile_pic
+
+
 class UserDatabaseOPS:
     @classmethod
     def add_user(cls, username, password, profile_picture, cover_picture, mail_address):
@@ -239,6 +245,68 @@ class UserDatabaseOPS:
             else:
                 return -1
 
+    @classmethod
+    def get_followers(cls, user_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Can Yilmaz Altinigne - USERS TABLE ----------------------
+
+            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME FROM USER_INTERACTION
+                       INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.BASE_USER_ID
+                       WHERE USER_INTERACTION.TARGET_USER_ID = %s
+                    """
+            user_list = []
+            try:
+                cursor.execute(query, (user_id,))
+                user_list = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            follower = []
+
+            for row in user_list:
+                follower.append(
+                    FollowerOrFollwingUser(username=row[1], profile_pic=row[0])
+                )
+
+            return follower
+
+    @classmethod
+    def get_following(cls, user_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Can Yilmaz Altinigne - USERS TABLE ----------------------
+
+            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME FROM USER_INTERACTION
+                       INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
+                       WHERE USER_INTERACTION.BASE_USER_ID = %s
+                                """
+            user_list = []
+            try:
+                cursor.execute(query, (user_id,))
+                user_list = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            following = []
+
+            for row in user_list:
+
+                following.append(
+                    FollowerOrFollwingUser(username=row[1], profile_pic=row[0])
+                )
+
+            return following
 
     @classmethod
     def select_user_detail(cls, username):

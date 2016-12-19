@@ -57,18 +57,18 @@
         <div class="row">
             <ul class="nav nav-tabs nav-justified" style="background-color: white">
                 <li id="li_knot" class="nav-item">
-                    <a class="nav-link" href="#" id="knot_link">Knots <span class="badge">3</span></a>
+                    <a class="nav-link" href="#" id="knot_link">Knots <span class="badge">{{ lengths['knot_len'] }}</span></a>
                 </li>
                 <li id="li_following" class="nav-item">
                     <a class="nav-link" href="#" id="following_link">Following <span
-                            class="badge">3</span></a>
+                            class="badge">{{ lengths['followings_len'] }}</span></a>
                 </li>
                 <li id="li_follower" class="nav-item">
                     <a class="nav-link" href="#" id="follower_link">Followers <span
-                            class="badge">4</span></a>
+                            class="badge">{{ lengths['followers_len'] }}</span></a>
                 </li>
                 <li id="li_like" class="nav-item">
-                    <a class="nav-link" href="#" id="like_link">Likes <span class="badge">2</span></a>
+                    <a class="nav-link" href="#" id="like_link">Likes <span class="badge">{{ lengths['like_len'] }}</span></a>
                 </li>
                 {% if user_check %}
                 <li class="nav-item">
@@ -162,185 +162,71 @@
                 </div>
 
                 <div id="followers" class="sections">
+                    {% for follower in followers %}
                     <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
                         <div style="padding: 15px">
                             <div class="media-left">
                                 <a href="#">
                                     <img class="media-object"
-                                         src="http://www.cheatsheet.com/wp-content/uploads/2016/04/doctor-strange-pic-full.jpg"
+                                         src={{ follower.profile_pic }}
                                          alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> drstrange</h4>
-                                <button type="button" class="btn btn-info"><span
-                                        class="glyphicon glyphicon-plus"></span>
-                                    Add
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{ follower.username }}</h4>
 
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="https://i.ytimg.com/vi/nSK1vSjRG6g/maxresdefault.jpg"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>
-                                    bulentbinbas_1950
-                                </h4>
-                                <button type="button" class="btn btn-info"><span
-                                        class="glyphicon glyphicon-plus"></span>
-                                    Add
-                                </button>
                             </div>
                         </div>
                     </div>
-
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvwaQaYhdR4210oruGycYgJF1e-AS9g_m0aGggRZQWMAqtvujV"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> amokachi_bjk
-                                </h4>
-                                <button type="button" class="btn btn-warning"><span
-                                        class="glyphicon glyphicon-plus"></span>
-                                    Send a Message
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="http://static.businessinsider.com/image/57d31321b0ef97011d8b4834/image.jpg"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> erlich</h4>
-                                <button type="button" class="btn btn-info"><span
-                                        class="glyphicon glyphicon-plus"></span>
-                                    Add
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
+
                 <div id="followings" class="sections">
-
+                    {% for following in followings %}
                     <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
                         <div style="padding: 15px">
                             <div class="media-left">
                                 <a href="#">
                                     <img class="media-object"
-                                         src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS0Z1kJk6aPJ12xMROqK6cOAr7TGFo1MDYD56GYbCi7MgWv88VO3w"
+                                         src={{ follower.profile_pic }}
                                          alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> engin_jurnal
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{ following.username }}
                                 </h4>
-                                <button type="button" class="btn btn-warning"><span
-                                        class="glyphicon glyphicon-plus"></span> Send a Message
-                                </button>
+
                             </div>
                         </div>
                     </div>
-
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="http://vignette1.wikia.nocookie.net/marvelmovies/images/1/16/Deadpool_Total_Film_4.jpg/revision/latest/zoom-crop/width/320/height/320?cb=20160118020149"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span>
-                                    where_is_francis</h4>
-                                <button type="button" class="btn btn-warning"><span
-                                        class="glyphicon glyphicon-plus"></span> Send a Message
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvwaQaYhdR4210oruGycYgJF1e-AS9g_m0aGggRZQWMAqtvujV"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> amokachi_bjk
-                                </h4>
-                                <button type="button" class="btn btn-warning"><span
-                                        class="glyphicon glyphicon-plus"></span> Send a Message
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-
+                    {% endfor %}
                 </div>
 
                 <div id="likes" class="sections">
+                    {% for like in likes %}
+                        {% set owner = get_user_info(like.owner_id) %}
                     <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
                         <div style="padding: 15px">
                             <div class="media-left">
                                 <a href="#">
                                     <img class="media-object"
-                                         src="https://avatars3.githubusercontent.com/u/1024025?v=3&s=400"
+                                         src={{ owner.profile_pic }}
                                          alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
                                 </a>
                             </div>
                             <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> linus_torvalds
+                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{ owner.username }}
                                 </h4>
-                                I suggest you to use Angular2 also !
+                                {{ like.knot_content }}
+                                <h6 style="text-align: right">{{ like.post_date }}</h6>
                             </div>
                         </div>
                     </div>
-
-                    <div class="media" style="margin-top: 25px; background-color: #f5f8fa; border-radius: 15px">
-                        <div style="padding: 15px">
-                            <div class="media-left">
-                                <a href="#">
-                                    <img class="media-object"
-                                         src="http://a5.files.biography.com/image/upload/c_fill,cs_srgb,dpr_1.0,g_face,h_300,q_80,w_300/MTE1ODA0OTcxODMwMDUyMzY1.jpg"
-                                         alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                                </a>
-                            </div>
-                            <div class="media-body">
-                                <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> the_woz</h4>
-                                When we built Apple II, there was only one thing in my mind, when will Angular2 come ?
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
 
             </div>
         </div>
-
     </div>
 
     <div id="myModal" class="modal fade" role="dialog">

@@ -147,5 +147,38 @@ class KnotDatabaseOPS:
                 )
             return knot_list
 
+    @classmethod
+    def get_likes(cls, user_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+
+            query = """SELECT KNOTS.KNOT_ID, KNOTS.OWNER_ID, KNOTS.KNOT_CONTENT, KNOTS.LIKE_COUNTER,
+                              KNOTS.REKNOT_COUNTER, KNOTS.IS_GROUP, KNOTS.POST_DATE,
+                            FROM LIKE_REKNOT
+                            INNER JOIN KNOTS on KNOTS.KNOT_ID = LIKE_REKNOT.KNOT_ID
+                            WHERE BASE_USER_ID = %s
+                            AND LIKE_REKNOT.IS_LIKE = True
+                                """
+            knot_list = []
+            try:
+                cursor.execute(query, (user_id))
+                knot_list = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            result = []
+
+            for row in knot_list:
+                result.append(
+                    Knot(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+                )
+
+            return result
+
 
 knot_ops = KnotDatabaseOPS()

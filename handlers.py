@@ -374,8 +374,14 @@ def user_profile_page(user_id):
         my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
         cities = CityDatabaseOPS.select_all_cities()
         knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
+        like_list = KnotDatabaseOPS.get_likes(user_id)
+        followers = UserDatabaseOPS.get_followers(user_id)
+        followings = UserDatabaseOPS.get_following(user_id)
+        lengths = {'knot_len': len(knot_list), 'like_len': len(like_list), 'followers_len': len(followers),
+                   'followings_len': len(followings)}
         return render_template('user_profile.html', signedin=True, user=user, real_name=real_name,
-                               my_city=my_city, cities=cities, knot_list=knot_list, user_check=user_check)
+                               my_city=my_city, cities=cities, knot_list=knot_list, user_check=user_check,
+                               likes=like_list, followers=followers, followings=followings, lengths=lengths)
     else:
         if 'changeImage' in request.form:
             user.profile_pic = request.form['imageURL']
@@ -398,6 +404,11 @@ def user_profile_page(user_id):
             real_name = UserDatabaseOPS.select_user_detail(user.username)
             my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
             knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
+            like_list = KnotDatabaseOPS.get_likes(user_id)
+            followers = UserDatabaseOPS.get_followers(user_id)
+            followings = UserDatabaseOPS.get_following(user_id)
+            lengths = {'knot_len': len(knot_list), 'like_len': len(like_list), 'followers_len': len(followers),
+                       'followings_len': len(followings)}
 
         if 'deleteReal' in request.form:
             user = UserDatabaseOPS.select_user_with_id(user_id)
@@ -405,9 +416,15 @@ def user_profile_page(user_id):
             real_name = UserDatabaseOPS.select_user_detail(user.username)
             my_city = CityDatabaseOPS.select_city(real_name.city, real_name.country)
             knot_list = KnotDatabaseOPS.select_knots_for_owner(user.id)
+            like_list = KnotDatabaseOPS.get_likes(user_id)
+            followers = UserDatabaseOPS.get_followers(user_id)
+            followings = UserDatabaseOPS.get_following(user_id)
+            lengths = {'knot_len': len(knot_list), 'like_len': len(like_list), 'followers_len': len(followers),
+                       'followings_len': len(followings)}
 
         return render_template('user_profile.html', signedin=True, user=user, real_name=real_name,
-                               my_city=my_city, cities=cities, knot_list=knot_list, user_check=user_check)
+                               my_city=my_city, cities=cities, knot_list=knot_list, user_check=user_check,
+                               likes=like_list, followers=followers, followings=followings, lengths=lengths)
 
 
 @site.route('/help')
