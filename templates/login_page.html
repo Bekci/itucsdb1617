@@ -36,6 +36,8 @@
                 </div>
 
                 <a href="{{ url_for('site.signup_page') }}">Not a member yet ?</a>
+                <hr>
+                <a href="{{ url_for('site.database_initialization') }}" class="btn btn-info">Initialize DB</a>
 
                 {% if error %}
                     <div class="alert alert-danger">
