@@ -246,7 +246,7 @@ class UserDatabaseOPS:
             else:
                 return -1
 
-@classmethod
+    @classmethod
     def get_followers(cls, user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
