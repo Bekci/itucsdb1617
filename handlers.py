@@ -627,10 +627,19 @@ def events_page(user_id):
     if request.method == 'GET':
         organizer_ids = []
         organizer_ids.append(user_id)
+        groups = GroupDatabaseOPS.select_participated_groups(user_id)
+        for group in groups:
+            organizer_ids.append(group.group_id)
         my_events = EventDatabaseOPS.select_organized_events_with_user_id(user_id)
+        group_events = []
+        for group in groups:
+            group_event = EventDatabaseOPS.select_group_events_with_group_id(group.group_id)
+            for event in group_event:
+                group_events.append(event)
+
         joined_events = EventDatabaseOPS.select_joined_events_with_user_id(user_id)
         joinable_events = EventDatabaseOPS.select_joinable_events_with_user_id(user_id)
-        return render_template('events.html', signedin=True, user=user, my_events=my_events, joined_events=joined_events, joinable_events=joinable_events, organizer_ids=organizer_ids)
+        return render_template('events.html', signedin=True, user=user, my_events=my_events, joined_events=joined_events, joinable_events=joinable_events, organizer_ids=organizer_ids, group_events=group_events)
     elif request.method == 'POST':
         if 'create-event' in request.form:
             owner_id = user_id
@@ -734,4 +743,8 @@ def utility_processor():
         user = UserDatabaseOPS.select_user_with_id(user_id)
         return user
 
-    return dict(get_real_name=get_real_name, get_user_info=get_user_info)
+    def get_group_info(group_id):
+        group = GroupDatabaseOPS.select_group(group_id)
+        return group
+
+    return dict(get_real_name=get_real_name, get_user_info=get_user_info, get_group_info=get_group_info)

@@ -144,7 +144,7 @@ class EventDatabaseOPS:
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID=%s ORDER BY EVENT_END_DATE DESC"""
+            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID=%s AND IS_USER=True ORDER BY EVENT_END_DATE DESC"""
             event_data = []
             participants = []
             event_list = []
@@ -157,13 +157,48 @@ class EventDatabaseOPS:
                 connection.commit()
 
             cursor.close()
-
+            event_ids = []
             for row in event_data:
+                participants = []
                 event = Event(row[0], row[1], row[2], row[3], row[4], row[5], None)
-                if event.event_id not in [event.event_id for event in event_list]:
-                    for row2 in event_data:
-                        if row2[0] == event.event_id:
-                            participants.append(row2[6])
+                for row2 in event_data:
+                    if row[0] == row2[0]:
+                        participants.append(row2[7])
+                if not row[0] in event_ids:
+                    event_ids.append(row[0])
+                    event.participants = participants
+                    event_list.append(event)
+            return event_list
+
+    @classmethod
+    def select_group_events_with_group_id(self, group_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
+
+            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID=%s AND IS_USER=False ORDER BY EVENT_END_DATE DESC"""
+            event_data = []
+            participants = []
+            event_list = []
+            try:
+                cursor.execute(query, (group_id,))
+                event_data = cursor.fetchall()
+            except dbapi2.IntegrityError:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+            event_ids = []
+            for row in event_data:
+                participants = []
+                event = Event(row[0], row[1], row[2], row[3], row[4], row[5], None)
+                for row2 in event_data:
+                    if row[0] == row2[0]:
+                        participants.append(row2[7])
+                if not row[0] in event_ids:
+                    event_ids.append(row[0])
                     event.participants = participants
                     event_list.append(event)
             return event_list
@@ -189,12 +224,15 @@ class EventDatabaseOPS:
 
             cursor.close()
 
+            event_ids = []
             for row in event_data:
+                participants = []
                 event = Event(row[0], row[1], row[2], row[3], row[4], row[5], None)
-                if event.event_id not in [event.event_id for event in event_list]:
-                    for row2 in event_data:
-                        if row2[0] == event.event_id:
-                            participants.append(row2[6])
+                for row2 in event_data:
+                    if row[0] == row2[0]:
+                        participants.append(row2[7])
+                if not row[0] in event_ids:
+                    event_ids.append(row[0])
                     event.participants = participants
                     event_list.append(event)
             return event_list
@@ -219,12 +257,15 @@ class EventDatabaseOPS:
                 connection.commit()
 
             cursor.close()
+            event_ids = []
             for row in event_data:
+                participants = []
                 event = Event(row[0], row[1], row[2], row[3], row[4], row[5], None)
-                if event.event_id not in [event.event_id for event in event_list]:
-                    for row2 in event_data:
-                        if row2[0] == event.event_id:
-                            participants.append(row2[6])
+                for row2 in event_data:
+                    if row[0] == row2[0]:
+                        participants.append(row2[7])
+                if not row[0] in event_ids:
+                    event_ids.append(row[0])
                     event.participants = participants
                     event_list.append(event)
             return event_list

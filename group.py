@@ -236,7 +236,7 @@ class GroupDatabaseOPS:
 
             for row in group_data:
                 group_list.append(
-                    Group(group_data[2], group_data[3], group_date[4], group_data[5])
+                    Group(row[2], row[3], row[4], row[5])
                 )
             return group_list
 
