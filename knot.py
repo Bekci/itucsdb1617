@@ -154,10 +154,10 @@ class KnotDatabaseOPS:
 
 
             query = """SELECT KNOTS.KNOT_ID, KNOTS.OWNER_ID, KNOTS.KNOT_CONTENT, KNOTS.LIKE_COUNTER,
-                              KNOTS.REKNOT_COUNTER, KNOTS.IS_GROUP, KNOTS.POST_DATE,
+                              KNOTS.REKNOT_COUNTER, KNOTS.IS_GROUP, KNOTS.POST_DATE
                             FROM LIKE_REKNOT
                             INNER JOIN KNOTS on KNOTS.KNOT_ID = LIKE_REKNOT.KNOT_ID
-                            WHERE BASE_USER_ID = %s
+                            WHERE USER_ID = %s
                             AND LIKE_REKNOT.IS_LIKE = True
                                 """
             knot_list = []
