@@ -85,50 +85,27 @@
                     are lots of Knitters here !
                 </div>
 
-                <div class="media" style="margin-top: 30px">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object"
-                                 src="https://s-media-cache-ak0.pinimg.com/564x/d3/98/3e/d3983e83c8b95cbedadd03c181abbb53.jpg"
-                                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> adrian_smith</h4>
-                        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Add
-                        </button>
-                    </div>
-                </div>
+                {% for random_user in random %}
 
                 <div class="media" style="margin-top: 30px">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object"
-                                 src="http://optimusprime.fansector.com/images/gallery/optimus_prime_gallery_0003.jpg"
+                                 src={{ random_user.profile_pic }}
                                  alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> iamoptimusprime</h4>
-                        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Add
-                        </button>
+                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> {{ random_user.username }}</h4>
+                        {% if user_check %}
+                        <form action="{{ url_for('site.user_profile_page', user_id=user.id) }}" method="POST">
+                                <input type="hidden" name="active_user" value="{{ random_user.id }}">
+                                <button name="follow" type="submit" class="btn btn-default">Add</button>
+                        </form>
+                        {% endif %}
                     </div>
                 </div>
-
-                <div class="media" style="margin-top: 30px">
-                    <div class="media-left">
-                        <a href="#">
-                            <img class="media-object"
-                                 src="https://pbs.twimg.com/profile_images/3185300157/8ffee78995192b6be24a293341519902.jpeg"
-                                 alt="userPhoto" style="height: 60px; width: 60px; border-radius: 30px">
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading"><span class="glyphicon glyphicon-link"></span> hakan_tasiyan_01</h4>
-                        <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span> Add
-                        </button>
-                    </div>
-                </div>
+                 {% endfor %}
             </div>
             <div class="col-sm-1" style="max-height: 100%">
                 <div></div>

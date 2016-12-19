@@ -310,6 +310,37 @@ class UserDatabaseOPS:
             return following
 
     @classmethod
+    def get_random_users(cls, user_id):
+        with dbapi2.connect(database.config) as connection:
+            cursor = connection.cursor()
+
+            # ----------- Can Yilmaz Altinigne - USERS TABLE ----------------------
+
+            query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID  FROM USER_INTERACTION
+                           RIGHT JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
+                           WHERE USER_INTERACTION.BASE_USER_ID <> %s
+                                    """
+            user_list = []
+            try:
+                cursor.execute(query, (user_id,))
+                user_list = cursor.fetchall()
+            except dbapi2.Error:
+                connection.rollback()
+            else:
+                connection.commit()
+
+            cursor.close()
+
+            following = []
+
+            for row in user_list:
+                following.append(
+                    FollowerOrFollwingUser(username=row[1], profile_pic=row[0], user_id=row[2])
+                )
+
+            return following
+
+    @classmethod
     def select_user_detail(cls, username):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
