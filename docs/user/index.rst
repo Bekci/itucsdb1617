@@ -10,9 +10,10 @@ not a member they can divert to sign up page and get a new membership.
     :height: 400px
     :align: center
 
-    *The login page for Knitter*
+    *The login page of Knitter*
 
-After the user logs in, he/she can see variety of choices from his/her profile page.
+After the user logs in, he/she can see variety of choices from his/her profile page. All of the Knitter's functionalities
+are just one click away now !
 
 .. figure:: /images/profile_page.png
     :alt: login page
@@ -20,7 +21,7 @@ After the user logs in, he/she can see variety of choices from his/her profile p
     :height: 400px
     :align: center
 
-    *The profile page for Knitter*
+    *The profile page of Knitter*
 
 All of these pages are implemented by itucsdb1617 team and you can see which person implements which part of Knitter in
 the list below.
@@ -29,7 +30,7 @@ the list below.
 
    OzanAta
    TolgaBilbey
-   member3
+   CanAltinigne
    member4
    member5
    
