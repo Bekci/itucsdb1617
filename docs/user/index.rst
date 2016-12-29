@@ -14,8 +14,8 @@ screenshots whereever appropriate**
 
 .. toctree::
 
-   member1
-   member2
+   Ozan Ata
+   TolgaBilbey
    member3
    member4
    member5
