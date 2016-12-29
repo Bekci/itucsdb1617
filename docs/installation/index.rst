@@ -34,5 +34,5 @@ Requirements
 
 7. Run the server.py file, Then enter localhost:5000 from your browser then Voila !
 
-8. You can access Knitter from itucsdb1617.mybluemix.net anytime !
+8. Also you can access Knitter from itucsdb1617.mybluemix.net anytime !
 
