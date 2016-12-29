@@ -177,3 +177,128 @@ In user_profile page, user can see the knots that he/she liked before. Liked kno
                 AND LIKE_REKNOT.IS_LIKE = True
                     """
     cursor.execute(query, (user_id,))
+    
+Handlers.py
+-----------------------------
+handlers.py for notifications_page
+
+.. code-block:: python
+
+    @site.route('/notifications/<int:user_id>', methods = ['GET','POST'])
+    @login_required
+    def notifications_page(user_id):
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        if current_user != user:
+            abort(403)
+        trends = Trend(30,70)
+        knots = NotificationDatabaseOPS.select_notifications(user)
+        polls = []
+        polls = PollDatabaseOPS.select_poll(user.id)
+
+        if request.method == 'GET':
+            return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user, polls = polls)
+
+        else:
+            if 'delete_knot' in request.form:
+                knot_id = request.form['delete_knot']
+                KnotDatabaseOPS.delete_knot(knot_id)
+
+            elif 'update' in request.form:
+                knot_id = request.form['update']
+                print("Update Knot function is currently not working :(")
+
+            elif 'like' in request.form:
+                knot_id = request.form['like']
+                is_like = NotificationDatabaseOPS.check_like(knot_id,user.id, True)
+                if is_like:
+                    NotificationDatabaseOPS.delete_relation(knot_id, user.id, True)
+                    NotificationDatabaseOPS.decrease_knot_like(knot_id)
+                else:
+                    NotificationDatabaseOPS.insert_relation(knot_id, user.id, True)
+                    NotificationDatabaseOPS.increase_knot_like(knot_id)
+
+            elif 'reknot' in request.form:
+                knot_id = request.form['reknot']
+                is_reknot = NotificationDatabaseOPS.check_reknot(knot_id,user.id, False)
+                if is_reknot:
+                    NotificationDatabaseOPS.delete_relation(knot_id, user.id, False)
+                    NotificationDatabaseOPS.decrease_knot_reknot(knot_id)
+                else:
+                    NotificationDatabaseOPS.insert_relation(knot_id, user.id, False)
+                    NotificationDatabaseOPS.increase_knot_reknot(knot_id)
+
+            elif 'create' in request.form:
+                PollDatabaseOPS.add_poll(user.id, request.form['poll_content'], request.form['answer_1'], request.form['answer_2'], datetime.now().date().isoformat(), request.form['end_date'])
+
+            elif 'vote' in request.form:
+                PollDatabaseOPS.update_poll(int(request.form['optionsRadios']),request.form['id'])
+                PollDatabaseOPS.add_relation(user.id,request.form['id'])
+
+            elif 'delete_poll' in request.form:
+                if user.id == int(request.form['owner']):
+                    PollDatabaseOPS.delete_poll(request.form['id'])
+            else:
+                print(request.form)
+
+            polls = PollDatabaseOPS.select_poll(user.id)
+            knots = NotificationDatabaseOPS.select_notifications(user)
+            return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user, polls = polls)
+
+
+handlers.py for search_page
+
+.. code-block:: python
+
+    @site.route('/search/<int:user_id>/<query>', methods=['GET', 'POST'])
+    @login_required
+    def search_page(user_id, query):
+        user = UserDatabaseOPS.select_user_with_id(user_id)
+        if current_user != user:
+            abort(403)
+        if request.method == 'GET':
+            query_in_users = UserDatabaseOPS.select_users_for_search(query,user_id)
+            query_in_knots = KnotDatabaseOPS.select_knots_for_search(query)
+            return render_template('search_page.html',signed_in=True,user=user,users=query_in_users, knots=query_in_knots, query=query)
+        else:
+            if 'delete_knot' in request.form:
+                knot_id = request.form['delete_knot']
+                print("Update Knot function is not working on the Search Page :(")
+
+            elif 'update' in request.form:
+                knot_id = request.form['update']
+                print("Update Knot function is not working on the Search Page :(")
+
+            elif 'like' in request.form:
+                knot_id = request.form['like']
+                is_like = NotificationDatabaseOPS.check_like(knot_id,user.id, True)
+                if is_like:
+                    NotificationDatabaseOPS.delete_relation(knot_id, user.id, True)
+                    NotificationDatabaseOPS.decrease_knot_like(knot_id)
+                else:
+                    NotificationDatabaseOPS.insert_relation(knot_id, user.id, True)
+                    NotificationDatabaseOPS.increase_knot_like(knot_id)
+
+            elif 'reknot' in request.form:
+                knot_id = request.form['reknot']
+                is_reknot = NotificationDatabaseOPS.check_reknot(knot_id,user.id, False)
+                if is_reknot:
+                    NotificationDatabaseOPS.delete_relation(knot_id, user.id, False)
+                    NotificationDatabaseOPS.decrease_knot_reknot(knot_id)
+                else:
+                    NotificationDatabaseOPS.insert_relation(knot_id, user.id, False)
+                    NotificationDatabaseOPS.increase_knot_reknot(knot_id)
+
+            elif 'follow' in request.form:
+                target_user = request.form['target_user']
+                UserDatabaseOPS.follow(user_id,target_user)
+
+            elif 'unfollow' in request.form:
+                target_user = request.form['target_user']
+                UserDatabaseOPS.unfollow(user_id,target_user)
+
+            else:
+                print(request.form)
+
+            query_in_users = UserDatabaseOPS.select_users_for_search(query,user_id)
+            query_in_knots = KnotDatabaseOPS.select_knots_for_search(query)
+            return render_template('search_page.html',signed_in=True,user=user,users=query_in_users, knots=query_in_knots, query=query)
