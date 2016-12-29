@@ -101,6 +101,7 @@ Polls are stored in a table called Polls, which is created with the following sc
 When a user votes a poll, it is stored in a relation table named user_poll. By doing this, we prevent users from voting a single poll multiple times. This process is handled using the following scripts
 
 .. code-block:: python
+
     query = """UPDATE POLLS SET POLL_OPTION_1_COUNTER= POLL_OPTION_1_COUNTER+1 WHERE POLL_ID=%s"""
 
     cursor.execute(query, (poll_id))
@@ -111,10 +112,23 @@ When a user votes a poll, it is stored in a relation table named user_poll. By d
 
     cursor.execute(query, (poll_id,user_id))
     
-Following Users
+Following and Unfollowing Users
 -----------------------------
 
 Following and unfollowing processes are handled on the user_interaction table. It only has two columns called base_user_id and target_user_id ,in other words action_source and action_target. Follow and unfollow operations insert  a new relation to this table or removes a row from this table.
 
+.. code-block:: python
 
+    query = """INSERT INTO user_interaction (base_user_id, target_user_id)
+                          VALUES (%s, %s)
+            """
 
+    cursor.execute(query, (user_id, target_user))
+
+    query = """delete from user_interaction
+                    where 
+                base_user_id = %s
+                and target_user_id = %s
+            """
+
+    cursor.execute(query, (user_id, target_user))
