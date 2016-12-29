@@ -11,7 +11,7 @@ If some likes or re-knots your knots. You can see it in your Notifications Page.
 
 Search Page:
 ----------------
-You can search users and knots containing the given word.
+You can search users and knots containing the given word. User can also follow and unfollow users from this page
 
 .. figure:: https://cloud.githubusercontent.com/assets/15929904/21542353/306ae848-cdce-11e6-97fe-1e3337e8d008.png
    :scale: 50 %
