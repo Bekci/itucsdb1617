@@ -11,6 +11,13 @@ Welcome to itucsdb1617's documentation!
    * İlknur Meray
    * Can Yılmaz Altıniğne
 
+
+.. figure:: /images/logo.png
+    :alt: logo
+    :width: 200px
+    :height: 200px
+    :align: center
+
 **Before building Knitter, there is only one thing in our minds:
 Gain a better vision of life, SHARE EVERYTHING !**
 
@@ -21,5 +28,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
+   installation/index
    user/index
    developer/index
+

@@ -1,4 +1,4 @@
-Parts Implemented by Ozan ATA
+Parts Implemented by Ozan Ata
 ================================
 
 Notifications Page:

@@ -24,7 +24,7 @@ Code
 
 .. toctree::
 
-   Ozan Ata
+   OzanAta
    TolgaBilbey
    member3
    member4
