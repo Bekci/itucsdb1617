@@ -26,6 +26,6 @@ Code
 
    OzanAta
    TolgaBilbey
-   member3
+   CanAltinigne
    member4
    member5
