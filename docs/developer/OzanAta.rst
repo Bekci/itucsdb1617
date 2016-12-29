@@ -132,3 +132,48 @@ Following and unfollowing processes are handled on the user_interaction table. I
             """
 
     cursor.execute(query, (user_id, target_user))
+    
+    
+Get Followings
+-----------------------------
+In user_profile page, user can see the users that he/she already follow. Followings are selected with the following query
+
+.. code-block:: python
+
+    query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID  FROM USER_INTERACTION
+           INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
+           WHERE USER_INTERACTION.BASE_USER_ID = %s
+                    """
+                    
+    cursor.execute(query, (user_id,))
+
+
+Get Followers
+-----------------------------
+In user_profile page, user can see the users that already follow him/her. Followers are selected with the following query
+
+.. code-block:: python
+
+    query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID FROM USER_INTERACTION
+               INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.BASE_USER_ID
+               WHERE USER_INTERACTION.TARGET_USER_ID = %s
+            """
+
+    cursor.execute(query, (user_id,))
+                
+                
+                
+Get Likes
+-----------------------------
+In user_profile page, user can see the knots that he/she liked before. Liked knots selected with the following query
+
+.. code-block:: python
+
+    query = """SELECT KNOTS.KNOT_ID, KNOTS.OWNER_ID, KNOTS.KNOT_CONTENT, KNOTS.LIKE_COUNTER,
+                  KNOTS.REKNOT_COUNTER, KNOTS.IS_GROUP, KNOTS.POST_DATE,
+                FROM LIKE_REKNOT
+                INNER JOIN KNOTS on KNOTS.KNOT_ID = LIKE_REKNOT.KNOT_ID
+                WHERE LIKE_REKNOT.USER_ID = %s
+                AND LIKE_REKNOT.IS_LIKE = True
+                    """
+    cursor.execute(query, (user_id,))
