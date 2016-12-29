@@ -778,14 +778,9 @@ The columns of City table are given below.
 * CITY_NAME varchar(50) NOT NULL
    City name is kept here
 * DISTANCE_TO_CENTER integer NOT NULL
-   This column has a funny story. I was trying to write a item finding function which finds the closest items to users.
-So I give this value to every cities. There is a function named *select_closest_items()* in sales.py. I tried to find
-closest items by benefiting this variable. Then I realized we live on Earth. I need at least two coordinates to define
-specific location. Because I am ashamed, I did not put that function in documentation and it was a very sad moment when I
-realized the situation :)
+   This column has a funny story. I was trying to write a item finding function which finds the closest items to users. So I give this value to every cities. There is a function named *select_closest_items()* in sales.py. I tried to find closest items by benefiting this variable. Then I realized we live on Earth. I need at least two coordinates to define specific location. Because I am ashamed, I did not put that function in documentation and it was a very sad moment when I realized the situation :)
 * COUNTRY varchar(3) NOT NULL
    Country code is kept here
-
 
 In city.py file CityDatabaseOPS class is created and all city related functions are in this class.
 
@@ -854,10 +849,6 @@ Currency Table is created for sales page. Add, delete, update and select functio
 but actually just select functions are used for web page.
 
 The columns of Currency table are given below.
-
-CURRENCY_NAME varchar(3) PRIMARY KEY UNIQUE NOT NULL,
-                                                            CURRENCY_TO_TL numeric(10,2) NOT NULL,
-                                                            LAST_UPDATE date
 
 * CURRENCY_NAME varchar(3) PRIMARY KEY UNIQUE NOT NULL
    This column is the primary key and it keeps the code of currency
