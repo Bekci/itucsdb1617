@@ -1,7 +1,7 @@
 Parts Implemented by Ozan Ata
 ================================
 
-Getting the Notifications:
+Getting the Notifications
 -----------------------------
 To get the notifications, we need to keep track of the knot(target), user(action_source) and action_type(is it a like or not)
 we keep those in a table called like_reknot.
