@@ -19,6 +19,7 @@ we keep those in a table called like_reknot.
 And to get notifications we use the following query to get all the notifications for the active_user.
 
 .. code-block:: python
+
   query = """SELECT
                 knots.knot_id as knot_id,
                 knots.knot_content as knot_content,
@@ -44,6 +45,7 @@ Like and Re-Knot
 How like and re-knot works? When the active user clicks the like button it runs the following script
 
 .. code-block:: python
+
     query = """UPDATE KNOTS SET LIKE_COUNTER= LIKE_COUNTER+1 WHERE KNOT_ID=%s"""
 
     cursor.execute(query, (knot_id))
@@ -61,6 +63,7 @@ How like and re-knot works? When the active user clicks the like button it runs 
 When the active user clicks the like button, on a knot which he/she already liked. It runs the following script
 
 .. code-block:: python
+
     query = """UPDATE KNOTS SET LIKE_COUNTER=LIKE_COUNTER-1 WHERE KNOT_ID=%s"""
 
     cursor.execute(query, (knot_id))
@@ -80,6 +83,7 @@ Using Polls
 Polls are stored in a table called Polls, which is created with the following script
 
 .. code-block:: python
+
     query = """CREATE TABLE IF NOT EXISTS POLLS(
                     POLL_ID SERIAL PRIMARY KEY,
                     OWNER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -110,7 +114,7 @@ When a user votes a poll, it is stored in a relation table named user_poll. By d
 Following Users
 -----------------------------
 
-
+Following and unfollowing processes are handled on the user_interaction table. It only has two columns called base_user_id and target_user_id ,in other words action_source and action_target. Follow and unfollow operations insert  a new relation to this table or removes a row from this table.
 
 
 
