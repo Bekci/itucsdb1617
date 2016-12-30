@@ -286,7 +286,6 @@ User Detail Table references to Users Table with username column and references 
 The columns of User Detail table are given below.
 
 * USERNAME varchar(20) REFERENCES USERS(USERNAME)
-ON DELETE CASCADE ON UPDATE CASCADE
    This column references to Users table
 * U_NAME varchar(30) NOT NULL
    Real name of user is kept here
@@ -577,7 +576,8 @@ The function shown below selects item by their location.
             cursor = connection.cursor()
 
             query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS,
-            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
+            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS 
+            AS u
                                    INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                    INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                    INNER JOIN CURRENCIES AS c
