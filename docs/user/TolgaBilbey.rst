@@ -10,7 +10,7 @@ Events Page
     :height: 400px
     :align: center
 
-    Events page homepage screen
+.. centered:: Events page homepage screen
 
 User can organize events in this page. 
 
