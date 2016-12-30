@@ -1,5 +1,5 @@
-Parts Implemented by Member Name
-================================
+Parts Implemented by Nurşah Melis Çinar
+==================================
 
 Knitter’s Messages and Groups parts are consist of the basic operations on a social media website specialties. Messages of the users can be accessed from the navigation bar while groups and group knots are accessible from the home page.
 
