@@ -119,3 +119,5 @@ sells. After clicking the button, the data found is retrieved to page.
     :align: center
 
     *Retrieved items*
+    
+Sale page pictures are given above.
