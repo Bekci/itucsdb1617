@@ -6,7 +6,7 @@ Login Page
 When the user enters itucsdb1617.mybluemix.net in web bar, this page shows. User can enter his/her Knitter name and
 Knotword to enter Knitter.
 
-.. figure:: /images/login_page.png
+.. |can1| figure:: /images/login_page.png
     :alt: login page
     :width: 640px
     :height: 400px
@@ -20,7 +20,7 @@ When the user wants to sign up Knitter, the user enters his/her details in the f
 operation completes and sends user to login page. Then user can enter his/her profile and start Knitting. Also form
 validation is ensured in this page.
 
-.. figure:: /images/sign_up.png
+.. |can2| figure:: /images/sign_up.png
     :alt: sign-up page
     :width: 640px
     :height: 400px
@@ -34,7 +34,7 @@ In the profile page, user can see his/her knots, followers, followings and likes
 profile settings page from that navigation bar. Basic details about the user are shown top of the navigation bar. From
 left side user can add recommended users.
 
-.. figure:: /images/profile_page.png
+.. |can3| figure:: /images/profile_page.png
     :alt: profile page
     :width: 640px
     :height: 400px
@@ -45,7 +45,7 @@ left side user can add recommended users.
 On the top of the page the profile picture and cover picture of the user can be seen. There is a little refresh button
 below the profile picture. By using that button user can change his/her details from opening menu.
 
-.. figure:: /images/before_refresh.png
+.. |can4| figure:: /images/before_refresh.png
     :alt: refresh page
     :width: 640px
     :height: 400px
@@ -56,7 +56,7 @@ below the profile picture. By using that button user can change his/her details 
 User enters his/her new details and change his/her details by clicking 'Change Info' button. User can also delete his/her
 details by clicking 'Delete My Real Name' button and the refreshed page is shown below.
 
-.. figure:: /images/after_refresh.png
+.. |can5| figure:: /images/after_refresh.png
     :alt: after refresh page
     :width: 640px
     :height: 400px
@@ -66,7 +66,7 @@ details by clicking 'Delete My Real Name' button and the refreshed page is shown
 
 If user wants to see his/her followings, followers or likes, he/she just uses the navigation bar to manage that.
 
-.. figure:: /images/followers.png
+.. |can6| figure:: /images/followers.png
     :alt: after refresh page
     :width: 640px
     :height: 400px
@@ -79,7 +79,7 @@ Sales Page
 
 In the sales page, user can add items that he/she wants to sell easily.
 
-.. figure:: /images/sales.png
+.. |sale1| figure:: /images/sales.png
     :alt: sales page
     :width: 640px
     :height: 400px
@@ -90,7 +90,7 @@ In the sales page, user can add items that he/she wants to sell easily.
 From left side of the page user details can be seen and user can use 'Add new item' button in that section to
 add a new item with details. Also the current currencies that items use are shown on left side.
 
-.. figure:: /images/add_new_ite.png
+.. |sale2| figure:: /images/add_new_ite.png
     :alt: add item page
     :width: 640px
     :height: 400px
@@ -101,7 +101,7 @@ add a new item with details. Also the current currencies that items use are show
 The new item is added to user's item list and user can also delete his/her items if he/she wants to. From the menu on the
 right, user can search items in Knitter with different options.
 
-.. figure:: /images/refreshed_sal.png
+.. |sale3| figure:: /images/refreshed_sal.png
     :alt: refreshed page
     :width: 640px
     :height: 400px
@@ -112,7 +112,7 @@ right, user can search items in Knitter with different options.
 For example in the situation above, user searches items by username. He enters husnu_coban and found items that husnu_coban
 sells. After clicking the button, the data found is retrieved to page.
 
-.. figure:: /images/searched_item.png
+.. |sale4| figure:: /images/searched_item.png
     :alt: search page
     :width: 640px
     :height: 400px
