@@ -27,8 +27,10 @@ USER_INTERACTION table is used to hold following/follower relation between users
 .. code-block:: python
 
     query = """CREATE TABLE IF NOT EXISTS USER_INTERACTION(
-                        BASE_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                        TARGET_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                        BASE_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE
+                        ON UPDATE CASCADE,
+                        TARGET_USER_ID INTEGER REFERENCES USERS(USER_ID)
+                        ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
 
@@ -73,7 +75,8 @@ This method deletes a row from USER_INTERACTION table when current user unfollow
 
             # ----------- ilknur Meray - USER_INTERACTION TABLE -----------------------
 
-            query = """DELETE FROM USER_INTERACTION WHERE BASE_USER_ID = %s AND TARGET_USER_ID = %s"""
+            query = """DELETE FROM USER_INTERACTION WHERE BASE_USER_ID = %s
+            AND TARGET_USER_ID = %s"""
 
             try:
                 cursor.execute(query, (base_id, target_id))
@@ -98,7 +101,8 @@ This method selects the followings' id from USER_INTERACTION table.
 
             # ----------- ilknur Meray - USER_INTERACTION TABLE -----------------------
 
-            query = """SELECT TARGET_USER_ID FROM USER_INTERACTION WHERE BASE_USER_ID = %s"""
+            query = """SELECT TARGET_USER_ID FROM USER_INTERACTION
+            WHERE BASE_USER_ID = %s"""
             followings_ids = []
             # followings_list = []
             try:
@@ -127,7 +131,8 @@ This method selects the followers' id from USER_INTERACTION table.
 
             # ----------- ilknur Meray - USER_INTERACTION TABLE -----------------------
 
-            query = """SELECT BASE_USER_ID FROM USER_INTERACTION WHERE TARGET_USER_ID = %s"""
+            query = """SELECT BASE_USER_ID FROM USER_INTERACTION
+            WHERE TARGET_USER_ID = %s"""
             followers_ids = []
             # followers_list = []
 
@@ -235,7 +240,8 @@ SHELF table is used to store user's shelf. Its columns are:
                             SHELF_NAME VARCHAR(50) UNIQUE NOT NULL,
                             IS_MAIN BOOLEAN,
                             BOOK_COUNTER INTEGER DEFAULT 0,
-                            SHELF_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                            SHELF_USER_ID INTEGER REFERENCES USERS(USER_ID)
+                            ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
 
@@ -409,7 +415,8 @@ This method selects the shelves of bookcase. It sorts taken shelfs again, if one
 
             for element in shelf_data:
                 shelf_list.append(
-                    Shelf(shelf_id=element[0], shelf_name=element[1], is_main=element[2], book_counter=element[3], shelf_user_id=element[4]))
+                    Shelf(shelf_id=element[0], shelf_name=element[1],
+                    is_main=element[2], book_counter=element[3], shelf_user_id=element[4]))
 
             for j in shelf_list:
                 if j.is_main:
@@ -432,7 +439,8 @@ This method increases book_counter value of the shelf with given id when a new b
 
             # ----------- ilknur Meray - SHELF TABLE -----------------------
 
-            query = """UPDATE SHELF SET BOOK_COUNTER = BOOK_COUNTER+1 WHERE SHELF_ID = %s"""
+            query = """UPDATE SHELF SET BOOK_COUNTER = BOOK_COUNTER+1
+                    WHERE SHELF_ID = %s"""
 
             try:
                 cursor.execute(query, (shelf_id,))
@@ -457,7 +465,8 @@ This method decreases book_counter value of the shelf with given id when a book 
 
             # ----------- ilknur Meray - SHELF TABLE -----------------------
 
-            query = """UPDATE SHELF SET BOOK_COUNTER = BOOK_COUNTER-1 WHERE SHELF_ID = %s"""
+            query = """UPDATE SHELF SET BOOK_COUNTER = BOOK_COUNTER-1
+                    WHERE SHELF_ID = %s"""
 
             try:
                 cursor.execute(query, (shelf_id,))
@@ -550,8 +559,10 @@ BOOK table is used to store user's books. Its columns are:
                             DATE_READ DATE NOT NULL,
                             USER_RATE INTEGER DEFAULT 0,
                             BOOK_REVIEW TEXT,
-                            BOOK_SHELF_ID INTEGER REFERENCES SHELF(SHELF_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                            BOOK_READER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                            BOOK_SHELF_ID INTEGER REFERENCES SHELF(SHELF_ID)
+                            ON DELETE CASCADE ON UPDATE CASCADE,
+                            BOOK_READER_ID INTEGER REFERENCES USERS(USER_ID)
+                            ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
 
@@ -570,7 +581,9 @@ This will increase the book_cunter of the shelf since a new book is added.
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
 
-            query = """INSERT INTO BOOK (BOOK_TITLE, BOOK_COVER, BOOK_WRITER, BOOK_GENRE, DATE_READ, USER_RATE, BOOK_REVIEW, BOOK_SHELF_ID, BOOK_READER_ID) VALUES (
+            query = """INSERT INTO BOOK (BOOK_TITLE, BOOK_COVER, BOOK_WRITER,
+            BOOK_GENRE, DATE_READ, USER_RATE, BOOK_REVIEW, BOOK_SHELF_ID, BOOK_READER_ID)
+            VALUES (
                                                 %s,
                                                 %s,
                                                 %s,
@@ -583,7 +596,8 @@ This will increase the book_cunter of the shelf since a new book is added.
                         )"""
 
             try:
-                cursor.execute(query, (book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id))
+                cursor.execute(query, (book_title, book_cover, book_writer, book_genre,
+                date_read, user_rate, book_review, book_shelf, book_reader_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -600,7 +614,8 @@ This method used to update book with given book_id and user_id. Book's all infor
 
 .. code-block:: python
 
-    def update_book(cls, book_id, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
+    def update_book(cls, book_id, book_title, book_cover, book_writer, book_genre,
+                    date_read, user_rate, book_review, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -613,10 +628,12 @@ This method used to update book with given book_id and user_id. Book's all infor
                                     DATE_READ = %s,
                                     USER_RATE = %s,
                                     BOOK_REVIEW = %s,
-                                    BOOK_SHELF_ID = %s WHERE BOOK_ID = %s AND BOOK_READER_ID = %s"""
+                                    BOOK_SHELF_ID = %s WHERE BOOK_ID = %s
+                                    AND BOOK_READER_ID = %s"""
 
             try:
-                cursor.execute(query, (book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_id, book_reader_id))
+                cursor.execute(query, (book_title, book_cover, book_writer, book_genre,
+                date_read, user_rate, book_review, book_shelf, book_id, book_reader_id))
             except dbapi2.Error:
                 connection.rollback()
             else:
@@ -711,8 +728,10 @@ When books page is opened first, all books should be viewed, so this function is
 
             for element in book_data:
                 book_list.append(
-                    Book(book_id=element[0], book_title=element[1], book_cover=element[2], book_writer=element[3], book_genre=element[4],
-                         date_read=element[5], user_rate=element[6], book_review=element[7], book_shelf=element[8], book_reader_id=element[9]))
+                    Book(book_id=element[0], book_title=element[1], book_cover=element[2],
+                    book_writer=element[3], book_genre=element[4],
+                         date_read=element[5], user_rate=element[6], book_review=element[7],
+                         book_shelf=element[8], book_reader_id=element[9]))
 
             return book_list
 
@@ -792,8 +811,10 @@ QUOTE table is used to store quotes which are chosen from the user's books by us
     query = """CREATE TABLE IF NOT EXISTS QUOTE(
                             QUOTE_ID SERIAL PRIMARY KEY,
                             QUOTE_CONTENT TEXT NOT NULL,
-                            QUOTED_BOOK_ID INTEGER REFERENCES BOOK(BOOK_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                            QUOTE_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                            QUOTED_BOOK_ID INTEGER REFERENCES BOOK(BOOK_ID)
+                            ON DELETE CASCADE ON UPDATE CASCADE,
+                            QUOTE_USER_ID INTEGER REFERENCES USERS(USER_ID)
+                            ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
 
@@ -810,7 +831,8 @@ This method adds quote to QUOTE table and new quote's information are sent as pa
             cursor = connection.cursor()
             # ----------- ilknur Meray - QUOTE TABLE -----------------------
 
-            query = """INSERT INTO QUOTE (QUOTE_CONTENT, QUOTED_BOOK_ID, QUOTE_USER_ID) VALUES (
+            query = """INSERT INTO QUOTE (QUOTE_CONTENT, QUOTED_BOOK_ID, QUOTE_USER_ID)
+            VALUES (
                                                 %s,
                                                 %s,
                                                 %s
@@ -890,8 +912,10 @@ This method selects quotes of user with given user id from QUOTE table.
 
             # ----------- ilknur Meray - QUOTE TABLE -----------------------
 
-            query = """SELECT q.QUOTE_ID, q.QUOTE_CONTENT, q.QUOTED_BOOK_ID, q.QUOTE_USER_ID, b.BOOK_TITLE
-                        FROM QUOTE AS q LEFT JOIN BOOK AS b ON q.QUOTED_BOOK_ID = b.BOOK_ID WHERE q.QUOTE_USER_ID = %s"""
+            query = """SELECT q.QUOTE_ID, q.QUOTE_CONTENT, q.QUOTED_BOOK_ID,
+                        q.QUOTE_USER_ID, b.BOOK_TITLE
+                        FROM QUOTE AS q LEFT JOIN BOOK AS b
+                        ON q.QUOTED_BOOK_ID = b.BOOK_ID WHERE q.QUOTE_USER_ID = %s"""
 
             quote_data = []
             try:
@@ -908,7 +932,9 @@ This method selects quotes of user with given user id from QUOTE table.
 
             for element in quote_data:
                 quote_list.append(
-                    Quote(quote_id=element[0], quote_content=element[1], quoted_book_id=element[2], quote_user_id=element[3], book_name=element[4]))
+                    Quote(quote_id=element[0], quote_content=element[1],
+                    quoted_book_id=element[2], quote_user_id=element[3],
+                    book_name=element[4]))
 
             return quote_list
 
@@ -930,7 +956,8 @@ Function for Home Page in handlers.py :
             abort(403)
         real_name = UserDatabaseOPS.select_user_detail(user.username)
         if request.method == 'GET':
-            my_followings_id = InteractionDatabaseOPS.select_followings_from_user_interaction(user.id)
+            my_followings_id =
+            InteractionDatabaseOPS.select_followings_from_user_interaction(user.id)
             my_followings_user = []
             my_followings_user.append(user)
             my_followings_knots = []
@@ -943,37 +970,47 @@ Function for Home Page in handlers.py :
                 temp_knot_list = KnotDatabaseOPS.select_knots_for_owner(index)
                 for element in temp_knot_list:
                     my_followings_knots.append(element)
-            return render_template('home_page.html', signedin=True, user=user, real_name=real_name, my_followings_knots=my_followings_knots, my_followings_user=my_followings_user, new_groups=new_groups)
+            return render_template('home_page.html', signedin=True, user=user,
+            real_name=real_name, my_followings_knots=my_followings_knots,
+            my_followings_user=my_followings_user, new_groups=new_groups)
         else:
             if 'add_knot' in request.form:
-                KnotDatabaseOPS.add_knot(user_id, request.form['new_knot_content'], 0, 0, False, datetime.now().date().isoformat())
+                KnotDatabaseOPS.add_knot(user_id, request.form['new_knot_content'],
+                0, 0, False, datetime.now().date().isoformat())
                 return redirect(url_for('site.home_page', user_id=user.id))
             elif 'delete' in request.form:
                 KnotDatabaseOPS.delete_knot(request.form['delete'])
                 return redirect(url_for('site.home_page', user_id=user.id))
             elif 'update_knot' in request.form:
-                KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'], 0, 0, False, datetime.now().date().isoformat(), request.form['update_knot'])
+                KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'],
+                 0, 0, False, datetime.now().date().isoformat(), request.form['update_knot'])
                 return redirect(url_for('site.home_page', user_id=user.id))
             elif 'search' in request.form:
                 query = request.form['search_bar']
                 print(query)
                 return redirect(url_for('site.search_page', user_id=user.id, query=query))
             elif 'like' in request.form:
-                is_like = NotificationDatabaseOPS.check_like(request.form['like'], user.id, True)
+                is_like = NotificationDatabaseOPS.check_like(request.form['like'],
+                                                             user.id, True)
                 if is_like:
-                    NotificationDatabaseOPS.delete_relation(request.form['like'], user.id, True)
+                    NotificationDatabaseOPS.delete_relation(request.form['like'],
+                                                            user.id, True)
                     NotificationDatabaseOPS.decrease_knot_like(request.form['like'])
                 else:
-                    NotificationDatabaseOPS.insert_relation(request.form['like'], user.id, True)
+                    NotificationDatabaseOPS.insert_relation(request.form['like'],
+                                                            user.id, True)
                     NotificationDatabaseOPS.increase_knot_like(request.form['like'])
                 return redirect(url_for('site.home_page', user_id=user.id))
                 elif 'reknot' in request.form:
-                is_reknot = NotificationDatabaseOPS.check_reknot(request.form['reknot'], user.id, False)
+                is_reknot = NotificationDatabaseOPS.check_reknot(request.form['reknot'],
+                                                                 user.id, False)
                 if is_reknot:
-                    NotificationDatabaseOPS.delete_relation(request.form['reknot'], user.id, False)
+                    NotificationDatabaseOPS.delete_relation(request.form['reknot'],
+                                                            user.id, False)
                     NotificationDatabaseOPS.decrease_knot_reknot(request.form['reknot'])
                 else:
-                    NotificationDatabaseOPS.insert_relation(request.form['reknot'], user.id, False)
+                    NotificationDatabaseOPS.insert_relation(request.form['reknot'],
+                                                            user.id, False)
                     NotificationDatabaseOPS.increase_knot_reknot(request.form['reknot'])
                 return redirect(url_for('site.home_page', user_id=user.id))
 
@@ -1005,40 +1042,59 @@ Function for Books Page in handlers.py :
             my_quotes = []
             my_books = BookDatabaseOPS.select_all_books_of_user(user_id)
             my_quotes = QuoteDatabaseOPS.select_quotes(user_id)
-            return render_template('books_page.html', signedin=True, user=user, real_name=real_name, my_shelves=my_shelves, my_books=my_books, my_quotes=my_quotes)
+            return render_template('books_page.html', signedin=True, user=user,
+                                    real_name=real_name, my_shelves=my_shelves,
+                                    my_books=my_books, my_quotes=my_quotes)
         else:
             if 'add_shelf' in request.form:
-                ShelfDatabaseOPS.add_shelf(request.form['shelf_name'], request.form['first_shelf'], user_id)
+                ShelfDatabaseOPS.add_shelf(request.form['shelf_name'],
+                                           request.form['first_shelf'], user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'delete_shelf' in request.form:
                 ShelfDatabaseOPS.delete_shelf(request.form['delete_shelf'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'update_shelf' in request.form:
-                ShelfDatabaseOPS.update_shelf_name(request.form['update_shelf'], request.form['updated_shelf_name'])
-                ShelfDatabaseOPS.update_main_shelf(request.form['update_shelf'], request.form['updated_first_shelf'])
+                ShelfDatabaseOPS.update_shelf_name(request.form['update_shelf'],
+                                                   request.form['updated_shelf_name'])
+                ShelfDatabaseOPS.update_main_shelf(request.form['update_shelf'],
+                                                   request.form['updated_first_shelf'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'add_book' in request.form:
-                BookDatabaseOPS.add_book(request.form['book_title'], request.form['book_cover'], request.form['book_writer'], request.form['book_genre'],
-                                        request.form['date_read'], request.form['user_rate'],request.form['book_review'], request.form['add_book'],
-                                        user_id)
+                BookDatabaseOPS.add_book(request.form['book_title'],
+                                         request.form['book_cover'],
+                                         request.form['book_writer'],
+                                         request.form['book_genre'],
+                                         request.form['date_read'],
+                                         request.form['user_rate'],
+                                         request.form['book_review'],
+                                         request.form['add_book'],
+                                         user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'delete_book' in request.form:
                 BookDatabaseOPS.delete_book(request.form['delete_book'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'update_book' in request.form:
-                BookDatabaseOPS.update_book(request.form['update_book'], request.form['updated_book_title'], request.form['updated_book_cover'],
-                                            request.form['updated_book_writer'], request.form['updated_book_genre'],
-                                            request.form['updated_date_read'], request.form['updated_user_rate'], request.form['updated_book_review'],
+                BookDatabaseOPS.update_book(request.form['update_book'],
+                                            request.form['updated_book_title'],
+                                            request.form['updated_book_cover'],
+                                            request.form['updated_book_writer'],
+                                            request.form['updated_book_genre'],
+                                            request.form['updated_date_read'],
+                                            request.form['updated_user_rate'],
+                                            request.form['updated_book_review'],
                                             request.form['updated_book_shelf'], user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'add_quote' in request.form:
-                QuoteDatabaseOPS.add_quote(request.form['quote_content'], request.form['quoted_book'], user_id)
+                QuoteDatabaseOPS.add_quote(request.form['quote_content'],
+                                            request.form['quoted_book'], user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'delete_quote' in request.form:
                 QuoteDatabaseOPS.delete_quote(request.form['delete_quote'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'update_quote' in request.form:
-                QuoteDatabaseOPS.update_quote(request.form['update_quote'], request.form['updated_quote_content'], request.form['updated_quote_book'])
+                QuoteDatabaseOPS.update_quote(request.form['update_quote'],
+                                              request.form['updated_quote_content'],
+                                              request.form['updated_quote_book'])
                 return redirect(url_for('site.books_page', user_id=user.id))
 
 
@@ -1055,38 +1111,57 @@ Function for Books Page in handlers.py :
             my_quotes = []
             my_books = BookDatabaseOPS.select_books_from_shelf(shelf_id, user_id)
             my_quotes = QuoteDatabaseOPS.select_quotes(user_id)
-            return render_template('books_page.html', signedin=True, user=user, real_name=real_name, my_shelves=my_shelves, my_books=my_books, my_quotes=my_quotes)
+            return render_template('books_page.html', signedin=True, user=user,
+            real_name=real_name, my_shelves=my_shelves, my_books=my_books,
+            my_quotes=my_quotes)
         else:
             if 'add_shelf' in request.form:
-                ShelfDatabaseOPS.add_shelf(request.form['shelf_name'], request.form['first_shelf'], user_id)
+                ShelfDatabaseOPS.add_shelf(request.form['shelf_name'],
+                request.form['first_shelf'], user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'delete_shelf' in request.form:
                 ShelfDatabaseOPS.delete_shelf(request.form['delete_shelf'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'update_shelf' in request.form:
-                ShelfDatabaseOPS.update_shelf_name(request.form['update_shelf'], request.form['updated_shelf_name'])
-                ShelfDatabaseOPS.update_main_shelf(request.form['update_shelf'], request.form['updated_first_shelf'])
+                ShelfDatabaseOPS.update_shelf_name(request.form['update_shelf'],
+                request.form['updated_shelf_name'])
+                ShelfDatabaseOPS.update_main_shelf(request.form['update_shelf'],
+                request.form['updated_first_shelf'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'add_book' in request.form:
-                BookDatabaseOPS.add_book(request.form['book_title'], request.form['book_cover'], request.form['book_writer'], request.form['book_genre'],
-                                        request.form['date_read'], request.form['user_rate'],request.form['book_review'], request.form['add_book'],
+                BookDatabaseOPS.add_book(request.form['book_title'],
+                                        request.form['book_cover'],
+                                        request.form['book_writer'],
+                                        request.form['book_genre'],
+                                        request.form['date_read'],
+                                        request.form['user_rate'],
+                                        request.form['book_review'],
+                                        request.form['add_book'],
                                         user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'delete_book' in request.form:
                 BookDatabaseOPS.delete_book(request.form['delete_book'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'update_book' in request.form:
-                BookDatabaseOPS.update_book(request.form['update_book'], request.form['updated_book_title'], request.form['updated_book_cover'],
-                                            request.form['updated_book_writer'], request.form['updated_book_genre'],
-                                            request.form['updated_date_read'], request.form['updated_user_rate'], request.form['updated_book_review'],
+                BookDatabaseOPS.update_book(request.form['update_book'],
+                                            request.form['updated_book_title'],
+                                            request.form['updated_book_cover'],
+                                            request.form['updated_book_writer'],
+                                            request.form['updated_book_genre'],
+                                            request.form['updated_date_read'],
+                                            request.form['updated_user_rate'],
+                                            request.form['updated_book_review'],
                                             request.form['updated_book_shelf'], user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'add_quote' in request.form:
-                QuoteDatabaseOPS.add_quote(request.form['quote_content'], request.form['quoted_book'], user_id)
+                QuoteDatabaseOPS.add_quote(request.form['quote_content'],
+                request.form['quoted_book'], user_id)
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'delete_quote' in request.form:
                 QuoteDatabaseOPS.delete_quote(request.form['delete_quote'])
                 return redirect(url_for('site.books_page', user_id=user.id))
             elif 'update_quote' in request.form:
-                QuoteDatabaseOPS.update_quote(request.form['update_quote'], request.form['updated_quote_content'], request.form['updated_quote_book'])
+                QuoteDatabaseOPS.update_quote(request.form['update_quote'],
+                                              request.form['updated_quote_content'],
+                                              request.form['updated_quote_book'])
                 return redirect(url_for('site.books_page', user_id=user.id))

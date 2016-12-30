@@ -58,7 +58,8 @@ Code block for this implementation is below:
   def add_message(cls, content, from_user, to_user):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO MESSAGES (MESSAGE_CONTENT, FROM_USER_ID, TO_USER_ID, MESSAGE_DATE) VALUES (
+            query = """INSERT INTO MESSAGES (MESSAGE_CONTENT, FROM_USER_ID,
+            TO_USER_ID, MESSAGE_DATE) VALUES (
                                               %s,
                                               %s,
                                               %s,
@@ -159,10 +160,12 @@ Related method’s code blow:
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
  
-            query = """SELECT * FROM MESSAGES WHERE FROM_USER_ID=%s AND TO_USER_ID=%s OR FROM_USER_ID=%s AND TO_USER_ID=%s ORDER BY MESSAGE_DATE"""
+            query = """SELECT * FROM MESSAGES WHERE FROM_USER_ID=%s
+            AND TO_USER_ID=%s OR FROM_USER_ID=%s AND TO_USER_ID=%s ORDER BY MESSAGE_DATE"""
  
             try:
-                cursor.execute(query, (from_user_id, to_user_id, to_user_id, from_user_id, ))
+                cursor.execute(query, (from_user_id, to_user_id, to_user_id,
+                                        from_user_id, ))
                 message_data = cursor.fetchall()
             except dbapi2.Error:
                 connection.rollback()
@@ -239,7 +242,8 @@ This method takes name, content and the cover picture from the user and adds the
  def add_group(cls, group_name, group_pic, group_description):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO GROUPS (GROUP_NAME, GROUP_PIC, GROUP_DESCRIPTION) VALUES (
+            query = """INSERT INTO GROUPS (GROUP_NAME, GROUP_PIC, GROUP_DESCRIPTION)
+            VALUES (
                                             %s,
                                             %s,
                                             %s
@@ -385,7 +389,8 @@ This method adds the users to the currently selected group by sending user ID an
  def add_group_participation(cls, group_id, user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO GROUP_PARTICIPANTS (GROUP_ID, PARTICIPANT_ID) VALUES (
+            query = """INSERT INTO GROUP_PARTICIPANTS (GROUP_ID, PARTICIPANT_ID)
+            VALUES (
                                         %s,
                                         %s
                             )"""
@@ -438,7 +443,8 @@ This method takes parameter user Id and returns the user's participated groups.
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query= """SELECT * FROM GROUP_PARTICIPANTS INNER JOIN GROUPS ON GROUP_PARTICIPANTS.GROUP_ID=GROUPS.GROUP_ID WHERE PARTICIPANT_ID=%s"""
+            query= """SELECT * FROM GROUP_PARTICIPANTS INNER JOIN GROUPS
+            ON GROUP_PARTICIPANTS.GROUP_ID=GROUPS.GROUP_ID WHERE PARTICIPANT_ID=%s"""
             group_data = []
             try:
                 cursor.execute(query, (user_id,))
@@ -468,7 +474,8 @@ Users can quit from a group by clicking the join button of the group page. This 
  def exit_group_participation(cls, group_id, user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
-            query = """DELETE FROM GROUP_PARTICIPANTS WHERE PARTICIPANT_ID=%s AND GROUP_ID=%s """
+            query = """DELETE FROM GROUP_PARTICIPANTS WHERE PARTICIPANT_ID=%s
+            AND GROUP_ID=%s """
 
             try:
                 cursor.execute(query, (group_id, user_id))

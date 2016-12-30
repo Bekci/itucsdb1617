@@ -31,8 +31,10 @@ we keep those in a table called like_reknot.
 .. code-block:: python
 
   query = """CREATE TABLE IF NOT EXISTS LIKE_REKNOT(
-                    KNOT_ID INTEGER references KNOTS(KNOT_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                    USER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                    KNOT_ID INTEGER references KNOTS(KNOT_ID)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                    USER_ID INTEGER references USERS(USER_ID)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
                     IS_LIKE BOOLEAN
              )"""
   cursor.execute(query)
@@ -107,7 +109,8 @@ Polls are stored in a table called Polls, which is created with the following sc
 
     query = """CREATE TABLE IF NOT EXISTS POLLS(
                     POLL_ID SERIAL PRIMARY KEY,
-                    OWNER_ID INTEGER references USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                    OWNER_ID INTEGER references USERS(USER_ID)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
                     POLL_CONTENT varchar(255) NOT NULL,
                     POLL_OPTION_1_CONTENT varchar(255) NOT NULL,
                     POLL_OPTION_1_COUNTER INTEGER DEFAULT 0,
@@ -123,7 +126,8 @@ When a user votes a poll, it is stored in a relation table named user_poll. By d
 
 .. code-block:: python
 
-    query = """UPDATE POLLS SET POLL_OPTION_1_COUNTER= POLL_OPTION_1_COUNTER+1 WHERE POLL_ID=%s"""
+    query = """UPDATE POLLS SET POLL_OPTION_1_COUNTER= POLL_OPTION_1_COUNTER+1
+    WHERE POLL_ID=%s"""
 
     cursor.execute(query, (poll_id))
     
@@ -164,7 +168,8 @@ In user_profile page, user can see the users that he/she already follow. Followi
 
 .. code-block:: python
 
-    query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID  FROM USER_INTERACTION
+    query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID
+            FROM USER_INTERACTION
            INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
            WHERE USER_INTERACTION.BASE_USER_ID = %s
                     """
@@ -178,7 +183,8 @@ In user_profile page, user can see the users that already follow him/her. Follow
 
 .. code-block:: python
 
-    query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID FROM USER_INTERACTION
+    query = """SELECT USERS.PROFILE_PIC, USERS.USERNAME, USERS.USER_ID
+                FROM USER_INTERACTION
                INNER JOIN USERS ON USERS.USER_ID=USER_INTERACTION.BASE_USER_ID
                WHERE USER_INTERACTION.TARGET_USER_ID = %s
             """
@@ -196,8 +202,9 @@ In user_profile page, user can see the knots that he/she liked before. Liked kno
 
 .. code-block:: python
 
-    query = """SELECT KNOTS.KNOT_ID, KNOTS.OWNER_ID, KNOTS.KNOT_CONTENT, KNOTS.LIKE_COUNTER,
-                  KNOTS.REKNOT_COUNTER, KNOTS.IS_GROUP, KNOTS.POST_DATE,
+    query = """SELECT KNOTS.KNOT_ID, KNOTS.OWNER_ID, KNOTS.KNOT_CONTENT,
+                KNOTS.LIKE_COUNTER, KNOTS.REKNOT_COUNTER, KNOTS.IS_GROUP,
+                KNOTS.POST_DATE,
                 FROM LIKE_REKNOT
                 INNER JOIN KNOTS on KNOTS.KNOT_ID = LIKE_REKNOT.KNOT_ID
                 WHERE LIKE_REKNOT.USER_ID = %s
@@ -223,7 +230,8 @@ handlers.py for notifications_page
         polls = PollDatabaseOPS.select_poll(user.id)
 
         if request.method == 'GET':
-            return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user, polls = polls)
+            return render_template('notifications.html', signedin=True,
+            trends=trends,knots=knots, user = user, polls = polls)
 
         else:
             if 'delete_knot' in request.form:
@@ -255,10 +263,13 @@ handlers.py for notifications_page
                     NotificationDatabaseOPS.increase_knot_reknot(knot_id)
 
             elif 'create' in request.form:
-                PollDatabaseOPS.add_poll(user.id, request.form['poll_content'], request.form['answer_1'], request.form['answer_2'], datetime.now().date().isoformat(), request.form['end_date'])
+                PollDatabaseOPS.add_poll(user.id, request.form['poll_content'],
+                            request.form['answer_1'], request.form['answer_2'],
+                            datetime.now().date().isoformat(), request.form['end_date'])
 
             elif 'vote' in request.form:
-                PollDatabaseOPS.update_poll(int(request.form['optionsRadios']),request.form['id'])
+                PollDatabaseOPS.update_poll(int(request.form['optionsRadios']),
+                                            request.form['id'])
                 PollDatabaseOPS.add_relation(user.id,request.form['id'])
 
             elif 'delete_poll' in request.form:
@@ -269,7 +280,8 @@ handlers.py for notifications_page
 
             polls = PollDatabaseOPS.select_poll(user.id)
             knots = NotificationDatabaseOPS.select_notifications(user)
-            return render_template('notifications.html', signedin=True,trends=trends,knots=knots, user = user, polls = polls)
+            return render_template('notifications.html', signedin=True,
+            trends=trends,knots=knots, user = user, polls = polls)
 
 
 handlers.py for search_page
@@ -285,7 +297,8 @@ handlers.py for search_page
         if request.method == 'GET':
             query_in_users = UserDatabaseOPS.select_users_for_search(query,user_id)
             query_in_knots = KnotDatabaseOPS.select_knots_for_search(query)
-            return render_template('search_page.html',signed_in=True,user=user,users=query_in_users, knots=query_in_knots, query=query)
+            return render_template('search_page.html',signed_in=True,user=user,
+            users=query_in_users, knots=query_in_knots, query=query)
         else:
             if 'delete_knot' in request.form:
                 knot_id = request.form['delete_knot']
@@ -328,4 +341,5 @@ handlers.py for search_page
 
             query_in_users = UserDatabaseOPS.select_users_for_search(query,user_id)
             query_in_knots = KnotDatabaseOPS.select_knots_for_search(query)
-            return render_template('search_page.html',signed_in=True,user=user,users=query_in_users, knots=query_in_knots, query=query)
+            return render_template('search_page.html',signed_in=True,user=user,
+                            users=query_in_users, knots=query_in_knots, query=query)

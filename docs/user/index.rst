@@ -12,8 +12,8 @@ not a member they can divert to sign up page and get a new membership.
 
 .. centered:: *The login page of Knitter*
 
-After the user logs in, he/she can see variety of choices from his/her profile page. All of the Knitter's functionalities
-are just one click away now !
+After the user logs in, he/she can see variety of choices from his/her profile page. All of the Knitter's
+functionalities are just one click away now !
 
 .. image:: /images/profile_page.png
     :alt: login page

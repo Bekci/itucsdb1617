@@ -36,11 +36,13 @@ In knot.py file KnotDatabaseOPS class is created and all knot related functions 
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
-            query = """INSERT INTO KNOTS (OWNER_ID, KNOT_CONTENT, LIKE_COUNTER, REKNOT_COUNTER, IS_GROUP, POST_DATE) VALUES (
+            query = """INSERT INTO KNOTS (OWNER_ID, KNOT_CONTENT, LIKE_COUNTER,
+            REKNOT_COUNTER, IS_GROUP, POST_DATE) VALUES (
                                           %s, %s, %s, %s, %s, %s
                         ) RETURNING KNOT_ID"""
             try:
-                cursor.execute(query, (owner_id, knot_content, likes, reknots, is_group, post_date))
+                cursor.execute(query, (owner_id, knot_content, likes, reknots,
+                is_group, post_date))
                 knot_id = cursor.fetchone()
             except dbapi2.IntegrityError:
                 connection.rollback()
@@ -54,23 +56,28 @@ In knot.py file KnotDatabaseOPS class is created and all knot related functions 
 ^^^^^^^^^^^^^^^
 
 .. code-block:: python
+
+    def update_knot(self, owner_id, knot_content, likes, reknots, is_group, post_date,
+                    knot_id):
+            with dbapi2.connect(database.config) as connection:
+                cursor = connection.cursor()
+
+                # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
+
+                query = """UPDATE KNOTS SET OWNER_ID=%s, KNOT_CONTENT=%s, LIKE_COUNTER=%s,
+                                REKNOT_COUNTER=%s, IS_GROUP=%s, POST_DATE=%s
+                                WHERE KNOT_ID=%s"""
+                try:
+                    cursor.execute(query, (owner_id, knot_content, likes, reknots,
+                                           is_group, post_date, knot_id))
+                except dbapi2.IntegrityError:
+                    connection.rollback()
+                else:
+                    connection.commit()
+
+                cursor.close()
 	
-     def update_knot(self, owner_id, knot_content, likes, reknots, is_group, post_date, knot_id):
-        with dbapi2.connect(database.config) as connection:
-            cursor = connection.cursor()
 
-            # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
-
-            query = """UPDATE KNOTS SET OWNER_ID=%s, KNOT_CONTENT=%s, LIKE_COUNTER=%s,
-                            REKNOT_COUNTER=%s, IS_GROUP=%s, POST_DATE=%s  WHERE KNOT_ID=%s"""
-            try:
-                cursor.execute(query, (owner_id, knot_content, likes, reknots, is_group, post_date, knot_id))
-            except dbapi2.IntegrityError:
-                connection.rollback()
-            else:
-                connection.commit()
-
-            cursor.close()
 
 *Deleting Knot*
 ^^^^^^^^^^^^^^^^
@@ -133,7 +140,8 @@ Secondly, knot can be selected by using owner id.
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
-            query = """SELECT * FROM KNOTS WHERE OWNER_ID=%s AND IS_GROUP=False ORDER BY POST_DATE DESC"""
+            query = """SELECT * FROM KNOTS WHERE OWNER_ID=%s AND IS_GROUP=False
+            ORDER BY POST_DATE DESC"""
             knot_data = []
             knot_list = []
             try:
@@ -162,7 +170,8 @@ Thirdly, search page is using select_knots_for_search function. It filters whole
 
             # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
             formatted_string = "%{}%".format(content)
-            query = """SELECT * FROM KNOTS WHERE KNOT_CONTENT LIKE %s AND IS_GROUP=False ORDER BY POST_DATE DESC"""
+            query = """SELECT * FROM KNOTS WHERE KNOT_CONTENT LIKE %s
+            AND IS_GROUP=False ORDER BY POST_DATE DESC"""
             knot_data = []
             knot_list = []
             try:
@@ -204,49 +213,57 @@ In events.py file EventDatabaseOPS class is created.
 *Adding Event*
 ^^^^^^^^^^^^^^
 
-.. code-block:: python 
+.. code-block:: python
 
-   def add_event(self, owner_id, event_content, start_date, end_date, is_user):
-        with dbapi2.connect(database.config) as connection:
-            cursor = connection.cursor()
+    def add_event(self, owner_id, event_content, start_date, end_date, is_user):
+            with dbapi2.connect(database.config) as connection:
+                cursor = connection.cursor()
 
-            # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
+                    # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """INSERT INTO EVENTS (OWNER_ID, EVENT_CONTENT, EVENT_START_DATE, EVENT_END_DATE, IS_USER) VALUES (
-                                          %s, %s, %s, %s, %s
-                        ) RETURNING EVENT_ID"""
-            try:
-                cursor.execute(query, (owner_id, event_content, start_date, end_date, is_user))
-                event_id = cursor.fetchone()
-            except dbapi2.IntegrityError:
-                connection.rollback()
-            else:
-                connection.commit()
+                    query = """INSERT INTO EVENTS (OWNER_ID, EVENT_CONTENT,
+                    EVENT_START_DATE, EVENT_END_DATE, IS_USER) VALUES (
+                                                  %s, %s, %s, %s, %s
+                                ) RETURNING EVENT_ID"""
+                    try:
+                        cursor.execute(query, (owner_id, event_content, start_date,
+                        end_date, is_user))
+                        event_id = cursor.fetchone()
+                    except dbapi2.IntegrityError:
+                        connection.rollback()
+                    else:
+                        connection.commit()
 
-            cursor.close()
+                    cursor.close()
 
-        return event_id
+                return event_id
+
+
 
 *Updating Event*
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: python    
- 
+.. code-block:: python
+
     def update_event(self, event_content, start_date, end_date, event_id):
         with dbapi2.connect(database.config) as connection:
-            cursor = connection.cursor()
+                cursor = connection.cursor()
 
-            # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
+                # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """UPDATE EVENTS SET EVENT_CONTENT=%s, EVENT_START_DATE=%s, EVENT_END_DATE=%s  WHERE EVENT_ID=%s"""
-            try:
-                cursor.execute(query, (event_content, start_date, end_date, event_id))
-            except dbapi2.IntegrityError:
-                connection.rollback()
-            else:
-                connection.commit()
+                query = """UPDATE EVENTS SET EVENT_CONTENT=%s, EVENT_START_DATE=%s,
+                EVENT_END_DATE=%s  WHERE EVENT_ID=%s"""
+                try:
+                    cursor.execute(query, (event_content, start_date, end_date,
+                                           event_id))
+                except dbapi2.IntegrityError:
+                    connection.rollback()
+                else:
+                    connection.commit()
 
-            cursor.close()
+                cursor.close()
+ 
+
 
 *Deleting Event*
 ^^^^^^^^^^^^^^^
@@ -282,7 +299,9 @@ There are 5 select functions for event table. First of all event can be selected
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE EVENT_ID=%s ORDER BY EVENT_END_DATE DESC"""
+            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS
+            ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE EVENT_ID=%s ORDER BY
+            EVENT_END_DATE DESC"""
             event_list = []
             event_data = []
             participants = []
@@ -316,7 +335,9 @@ Secondly, events can be selected by using user id. Below function is selecting e
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID=%s AND IS_USER=True ORDER BY EVENT_END_DATE DESC"""
+            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS
+            ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID=%s
+            AND IS_USER=True ORDER BY EVENT_END_DATE DESC"""
             event_data = []
             participants = []
             event_list = []
@@ -352,7 +373,9 @@ Thirdly, events can be selected by group id. Below function is selecting events 
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID=%s AND IS_USER=False ORDER BY EVENT_END_DATE DESC"""
+            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS
+            ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID=%s
+            AND IS_USER=False ORDER BY EVENT_END_DATE DESC"""
             event_data = []
             participants = []
             event_list = []
@@ -388,7 +411,9 @@ Fourthly, events can be selected with using user id. It is different from the on
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID<>%s AND PARTICIPANT_ID=%s ORDER BY EVENT_END_DATE DESC"""
+            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS
+            ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID<>%s
+            AND PARTICIPANT_ID=%s ORDER BY EVENT_END_DATE DESC"""
             event_data = []
             participants = []
             event_list = []
@@ -425,7 +450,11 @@ At last, events can be selected by using id. It is different from the ones above
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID<>%s AND PARTICIPANT_ID<>%s AND DATE_PART('day', EVENT_END_DATE::timestamp - CURRENT_DATE::timestamp)>=0 ORDER BY EVENT_END_DATE DESC"""
+            query = """SELECT * FROM EVENTS INNER JOIN EVENT_PARTICIPANTS
+            ON EVENTS.EVENT_ID=EVENT_PARTICIPANTS.EVENT_ID WHERE OWNER_ID<>%s
+            AND PARTICIPANT_ID<>%s
+            AND DATE_PART('day', EVENT_END_DATE::timestamp - CURRENT_DATE::timestamp)>=0
+            ORDER BY EVENT_END_DATE DESC"""
             event_data = []
             participants = []
             event_list = []
@@ -474,7 +503,8 @@ The columns of Event Participant table is given below.
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """INSERT INTO EVENT_PARTICIPANTS (EVENT_ID, PARTICIPANT_ID) VALUES (
+            query = """INSERT INTO EVENT_PARTICIPANTS (EVENT_ID, PARTICIPANT_ID)
+            VALUES (
                                           %s, %s
                         )"""
             try:
@@ -497,7 +527,8 @@ The columns of Event Participant table is given below.
 
             # ----------- Tolga Bilbey - EVENTS TABLE ----------------------
 
-            query = """DELETE FROM EVENT_PARTICIPANTS WHERE EVENT_ID=%s AND PARTICIPANT_ID=%s"""
+            query = """DELETE FROM EVENT_PARTICIPANTS WHERE EVENT_ID=%s
+            AND PARTICIPANT_ID=%s"""
             try:
                 cursor.execute(query, (event_id,user_id))
             except dbapi2.IntegrityError:
@@ -550,7 +581,8 @@ Another implementation that I do is using context_processors in templates which 
         group = GroupDatabaseOPS.select_group(group_id)
         return group
 
-    return dict(get_real_name=get_real_name, get_user_info=get_user_info, get_group_info=get_group_info)
+    return dict(get_real_name=get_real_name, get_user_info=get_user_info,
+                get_group_info=get_group_info)
 
 Flask-Login implementation which is in the documents and errorhandler for 403 and 404 is done by me.
 

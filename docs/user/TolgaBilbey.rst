@@ -1,7 +1,7 @@
 Parts Implemented by Tolga Bilbey
 ================================
 
-Events Page:
+Events Page
 -----------------------
 
 .. image:: /images/events-home.png
@@ -88,7 +88,7 @@ To delete an event:
 
 2. Click the Delete This Event button.
 
-Settings Page:
+Settings Page
 -------------------------
 
 .. image:: /images/account-settings.png

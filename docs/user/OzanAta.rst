@@ -1,5 +1,5 @@
 Parts Implemented by Ozan Ata
-================================
+=============================
 
 Notifications Page
 ------------------
@@ -21,16 +21,21 @@ To re-knot a knot, user may use the re-knot button below the knot.
 
 To delete a knot, user should firsr click the ... button on the top right corner of the knot, then should click to the delete this knot button.
 
-.. image:: https://cloud.githubusercontent.com/assets/15929904/21542352/3068b104-cdce-11e6-8a6d-9a9a36b49195.png
-   :scale: 50 %
-   :alt: Login screenshot
+.. image:: /images/first_ozan.png
+    :alt: account settings page
+    :width: 640px
+    :height: 360px
+    :align: center
+
 
 Search Page
-----------------
+-----------
 To make a search in both users and knots' content, user should first click on the search bar on the top right corner of the screen, and type in the search querys that one may want to search. 
 
 After searching is done, user can follow/unfollow other users by clicking on the follow and unfollow buttons. Or user can like or re-knot other users' knots.
 
-.. image:: https://cloud.githubusercontent.com/assets/15929904/21542353/306ae848-cdce-11e6-97fe-1e3337e8d008.png
-   :scale: 50 %
-   :alt: Login screenshot
+.. image:: /images/second_ozan.png
+    :alt: account settings page
+    :width: 640px
+    :height: 360px
+    :align: center
