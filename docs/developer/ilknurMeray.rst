@@ -177,6 +177,7 @@ This method selects the current user's followings and followers from USER_INTERA
 
 
 *Why there is no update operation for USER_INTERACTION table?*
+
 An update operation can not be performed on USER_INTERACTION table.
 When a base user unfollows another target user, that means, there is no interaction between each other and it requires a delete operation.
 Also, when a base user follows another target user, that requires an insert operation because of the follow interaction between users.
@@ -546,6 +547,8 @@ BOOK table is used to store user's books. Its columns are:
 
 This method used to add new book to shelf with given id. New book's all information are sent as parameters to this function.
 This will increase the book_cunter of the shelf since a new book is added.
+
+
 .. code-block:: python
 
     def add_book(cls, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
