@@ -109,7 +109,8 @@ structure. Creation of tables can be seen below.
                                                   SALE_ID SERIAL PRIMARY KEY,
                                                   SELLER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE,
                                                   ITEM_ID INTEGER REFERENCES ITEMS(ITEM_ID) ON DELETE CASCADE,
-                                                  CITY_ID INTEGER REFERENCES CITIES(CITY_ID) ON DELETE CASCADE ON UPDATE CASCADE,
+                                                  CITY_ID INTEGER REFERENCES CITIES(CITY_ID) ON DELETE CASCADE
+                                                  ON UPDATE CASCADE,
                                                   START_DATE date NOT NULL,
                                                   END_DATE date NOT NULL
                                                 )"""
@@ -119,7 +120,8 @@ structure. Creation of tables can be seen below.
             # ----------- Can Altinigne - USER_DETAIL TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS USER_DETAIL (
-                                                  USERNAME varchar(20) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE,
+                                                  USERNAME varchar(20) REFERENCES USERS(USERNAME) ON DELETE CASCADE
+                                                  ON UPDATE CASCADE,
                                                   U_NAME varchar(30) NOT NULL,
                                                   U_SURNAME varchar(30) NOT NULL,
                                                   CITY_ID INTEGER REFERENCES CITIES(CITY_ID)
@@ -157,8 +159,10 @@ structure. Creation of tables can be seen below.
             # ----------- Tolga Bilbey - EVENT-PARTICIPANTS TABLE ----------------------
 
             query = """CREATE TABLE IF NOT EXISTS EVENT_PARTICIPANTS(
-                            EVENT_ID INTEGER NOT NULL REFERENCES EVENTS(EVENT_ID) ON DELETE CASCADE ON UPDATE CASCADE,
-                            PARTICIPANT_ID INTEGER NOT NULL REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+                            EVENT_ID INTEGER NOT NULL REFERENCES EVENTS(EVENT_ID) ON DELETE CASCADE
+                            ON UPDATE CASCADE,
+                            PARTICIPANT_ID INTEGER NOT NULL REFERENCES USERS(USER_ID) ON DELETE CASCADE
+                            ON UPDATE CASCADE
             )"""
 
             cursor.execute(query)
