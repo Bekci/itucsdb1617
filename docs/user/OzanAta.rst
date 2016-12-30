@@ -27,7 +27,7 @@ To delete a knot, user should firsr click the ... button on the top right corner
 
 Search Page:
 ----------------
-You can search users and knots containing the given word. User can also follow and unfollow users from this page
+To make a search in both users and knots' content, user should first click on the search bar on the top right corner of the screen, and type in the search querys that one may want to search. 
 
 .. figure:: https://cloud.githubusercontent.com/assets/15929904/21542353/306ae848-cdce-11e6-97fe-1e3337e8d008.png
    :scale: 50 %
