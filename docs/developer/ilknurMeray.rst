@@ -10,26 +10,33 @@ USER_INTERACTION Table and Operations
 USER_INTERACTION table is used to hold following/follower relation between users. Table's columns are
 
 1. BASE_USER_ID
+
 - Its type is integer and it references USERS table.
+
 - It is used to hold current user's id.
 
 2. TARGET_USER_ID
+
 - Its type is integer and it references USERS table.
+
 - It is used to hold user's id who is followed by current user.
 
 
 *Query for creating USER_INTERACTION table *
-.. code-block::python
+
+.. code-block:: python
 
     query = """CREATE TABLE IF NOT EXISTS USER_INTERACTION(
                         BASE_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE,
                         TARGET_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
+
 *add_user_interaction Method*
 
 This method adds a row to USER_INTERACTION table which includes the information of current user's id and her/his followed user's id.
-.. code-block::python
+
+.. code-block:: python
 
     def add_user_interaction(cls, base_id, target_id):
         with dbapi2.connect(database.config) as connection:
@@ -51,10 +58,12 @@ This method adds a row to USER_INTERACTION table which includes the information 
 
             cursor.close()
 
+
 *delete_user_interaction Method*
 
 This method deletes a row from USER_INTERACTION table when current user unfollows the other user.
-.. code-block::python
+
+.. code-block:: python
 
     def delete_user_interaction(cls, base_id, target_id):
         with dbapi2.connect(database.config) as connection:
@@ -73,10 +82,12 @@ This method deletes a row from USER_INTERACTION table when current user unfollow
 
             cursor.close()
 
+
 *select_followings_from_user_interaction Method*
 
 This method selects the followings' id from USER_INTERACTION table.
-.. code-block::python
+
+.. code-block:: python
 
     def select_followings_from_user_interaction(cls, base_id):  # base id keeps followers
         with dbapi2.connect(database.config) as connection:
@@ -99,10 +110,12 @@ This method selects the followings' id from USER_INTERACTION table.
 
             return followings_ids
 
+
 *select_followers_from_user_interaction Method*
 
 This method selects the followers' id from USER_INTERACTION table.
-.. code-block::python
+
+.. code-block:: python
 
     def select_followers_from_user_interaction(cls, target_id):  # target_id keeps followings
         with dbapi2.connect(database.config) as connection:
@@ -126,10 +139,12 @@ This method selects the followers' id from USER_INTERACTION table.
 
             return followers_ids
 
+
 *select_interactions_for_search Method*
 
 This method selects the current user's followings and followers from USER_INTERACTION table.
-.. code-block::python
+
+.. code-block:: python
 
     def select_interactions_for_search(cls, base_id):
         with dbapi2.connect(database.config) as connection:
@@ -160,40 +175,53 @@ This method selects the current user's followings and followers from USER_INTERA
                 )
             return interactions_list
 
+
 *Why there is no update operation for USER_INTERACTION table?*
 An update operation can not be performed on USER_INTERACTION table.
 When a base user unfollows another target user, that means, there is no interaction between each other and it requires a delete operation.
- Also, when a base user follows another target user, that requires an insert operation because of the follow interaction between users.
- As a result of that, any record in USER_INTERACTION table is not updated for follow/unfollow operations.
+Also, when a base user follows another target user, that requires an insert operation because of the follow interaction between users.
+As a result of that, any record in USER_INTERACTION table is not updated for follow/unfollow operations.
+
 
 SHELF Table and Operations
-==========================
+--------------------------
 
 SHELF table is used to store user's shelf. Its columns are:
 
 
 1. SHELF_ID
+
 - It is serial number which is generated automatically and primary key of the table.
+
 - It is used to hold shelf's id.
 
 2. SHELF_NAME
+
 - Its type is varchar(50) and it is unique, at the same time it can not be null.
+
 - It holds the shelf's name.
 
 3. IS_MAIN
+
 - Its type is boolean.
+
 - It is used while detecting whether the shelf will be the user's first shelf or not. If its value equals to true, it means shelf will be first shelf on the bookshelf. On the other hand, it it is equals to false, shelf will not located to first shelf on the bookshelf.
 
 4. BOOK_COUNTER
+
 - Its type is integer and when a new shelf is created there is no book within this shelf so its book counter will be 0 as default.
+
 - It holds the number of books inside the shelf.
 
 5. SHELF_USER_ID
+
 - Its type is integer and it references USERS table.
+
 - It holds the shelf's owner id.
 
 
 *Query for creating SHELF table*
+
 .. code-block::python
 
     query = """CREATE TABLE IF NOT EXISTS SHELF(
@@ -203,10 +231,13 @@ SHELF table is used to store user's shelf. Its columns are:
                             BOOK_COUNTER INTEGER DEFAULT 0,
                             SHELF_USER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
+
+
 *add_shelf Method*
+
 This method adds new shelf to SHELF table. It takes new shelf's information as parameter.
 
-.. code-block::python
+.. code-block:: python
 
     def add_shelf(cls, shelf_name, is_main, shelf_user_id):
         with dbapi2.connect(database.config) as connection:
@@ -230,10 +261,12 @@ This method adds new shelf to SHELF table. It takes new shelf's information as p
 
             cursor.close()
 
+
 *update_shelf_name Method*
+
 This method is used to update shelf's name. shelf_id and new_shelf_name parameters come via form attribute in html file of books_page.
 
-.. code-block::python
+.. code-block:: python
 
     def update_shelf_name(cls, shelf_id, new_shelf_name):
         with dbapi2.connect(database.config) as connection:
@@ -252,10 +285,12 @@ This method is used to update shelf's name. shelf_id and new_shelf_name paramete
 
             cursor.close()
 
+
 *update_main_shelf Method*
+
 This method is used to update first shelf of the bookcase.
 
-.. code-block::python
+.. code-block:: python
 
     def update_main_shelf(cls, shelf_id, is_main):
         with dbapi2.connect(database.config) as connection:
@@ -309,10 +344,12 @@ This method is used to update first shelf of the bookcase.
 
                 cursor.close()
 
+
 *delete_shelf Method*
+
 This method deletes shelf with given id from bookcase.
 
-.. code-block::python
+.. code-block:: python
 
     def delete_shelf(cls, shelf_id):
         with dbapi2.connect(database.config) as connection:
@@ -331,10 +368,12 @@ This method deletes shelf with given id from bookcase.
 
             cursor.close()
 
+
 *select_shelves Method*
+
 This method selects the shelves of bookcase. It sorts taken shelfs again, if one shelf's is_main value is true.
 
-.. code-block::python
+.. code-block:: python
 
     def select_shelves(cls, shelf_user_id):
         with dbapi2.connect(database.config) as connection:
@@ -368,10 +407,12 @@ This method selects the shelves of bookcase. It sorts taken shelfs again, if one
 
             return shelf_list
 
+
 *increase_book_counter Method*
+
 This method increases book_counter value of the shelf with given id when a new book is added to this shelf.
 
-.. code-block::python
+.. code-block:: python
 
     def increase_book_counter(cls, shelf_id):
         with dbapi2.connect(database.config) as connection:
@@ -390,10 +431,12 @@ This method increases book_counter value of the shelf with given id when a new b
 
             cursor.close()
 
+
 *decrease_book_counter Method*
+
 This method decreases book_counter value of the shelf with given id when a book is deleted from this shelf.
 
-.. code-block::python
+.. code-block:: python
 
     def decrease_book_counter(cls, shelf_id):
         with dbapi2.connect(database.config) as connection:
@@ -412,55 +455,78 @@ This method decreases book_counter value of the shelf with given id when a book 
 
             cursor.close()
 
+
 BOOK Table and Operations
-==========================
+-------------------------
 
 BOOK table is used to store user's books. Its columns are:
 
 
 1. BOOK_ID
+
 - It is serial primary key, so it is generated automatically.
+
 - It holds book's id.
 
 2. BOOK_TITLE
+
 - Its type is varchar(50) and it can not be NULL.
+
 - It holds book's title.
 
 3. BOOK_COVER
+
 - Its type is varchar(255) and it can not be NULL.
+
 - It holds book's cover picture's URL.
 
 4. BOOK_WRITER
+
 - Its type is varchar(50) and it can not be NULL.
+
 - It holds book's author's name and surname.
 
 5. BOOK_GENRE
+
 - Its type is varchar(50) and it can not be NULL.
+
 - It holds book's genre.
 
 6. DATE_READ
+
 - Its type is date and it can not be NULL.
+
 - It holds book's read date.
 
 7. USER_RATE
+
 - Its type is integer and 0 as default because when table is created, there is no book to rate.
+
 - It holds user's rate about book from 1 to 5.
 
 8. BOOK_REVIEW
+
 - Its type is text.
+
 - It is used for user's comments about book.
 
 9. BOOK_SHELF_ID
+
 - Its type is integer and it references SHELF table.
+
 - It holds shelf_id of book.
 
 10. BOOK_READER_ID
+
 - Its type is integer and it references USERS table.
+
 - It holds user_id of book.
 
 
 *Query for creating the BOOK table*
-.. code-block::python
+
+
+.. code-block:: python
 
     query = """CREATE TABLE IF NOT EXISTS BOOK(
                             BOOK_ID SERIAL PRIMARY KEY,
@@ -475,10 +541,12 @@ BOOK table is used to store user's books. Its columns are:
                             BOOK_READER_ID INTEGER REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
                     )"""
 
+
 *add_book Method*
+
 This method used to add new book to shelf with given id. New book's all information are sent as parameters to this function.
  This will increase the book_cunter of the shelf since a new book is added.
-.. code-block::python
+.. code-block:: python
 
     def add_book(cls, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
@@ -508,10 +576,12 @@ This method used to add new book to shelf with given id. New book's all informat
             cursor.close()
             ShelfDatabaseOPS.increase_book_counter(book_shelf)
 
+
 *update_book Method*
+
 This method used to update book with given book_id and user_id. Book's all information are sent as parameters to this function for update operation.
 
-.. code-block::python
+.. code-block:: python
 
     def update_book(cls, book_id, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
@@ -537,10 +607,12 @@ This method used to update book with given book_id and user_id. Book's all infor
 
             cursor.close()
 
+
 *find_shelf_from_id Method*
+
 This method is used to find shelf of the book with given id.
 
-.. code-block::python
+.. code-block:: python
 
     def find_shelf_from_id(cls, book_id):
         with dbapi2.connect(database.config) as connection:
@@ -562,10 +634,12 @@ This method is used to find shelf of the book with given id.
 
             return book_data
 
+
 *delete_book Method*
+
 This method deletes the book with given id from BOOK table.
 
-.. code-block::python
+.. code-block:: python
 
     def delete_book(cls, book_id):
         shelf_id = BookDatabaseOPS.find_shelf_from_id(book_id)
@@ -586,10 +660,12 @@ This method deletes the book with given id from BOOK table.
 
             cursor.close()
 
+
 *select_all_books_of_user Method*
+
 When books page is opened first, all books should be viewed, so this function is used for select all booksof the user with given id in the all shelves.
 
-.. code-block::python
+.. code-block:: python
 
     def select_all_books_of_user(cls, book_reader_id):
         with dbapi2.connect(database.config) as connection:
@@ -620,10 +696,12 @@ When books page is opened first, all books should be viewed, so this function is
 
             return book_list
 
+
 *select_books_from_shelf Method*
+
 When user clicks to a specific shelf, all books in this shelf is shown, so this function is used for selecting all books of user with given id in the specified shelf.
 
-.. code-block::python
+.. code-block:: python
 
     def select_books_from_shelf(cls, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
@@ -653,30 +731,42 @@ When user clicks to a specific shelf, all books in this shelf is shown, so this 
 
             return book_list
 
+
 QUOTE Table and Operations
-==========================
+--------------------------
 
 QUOTE table is used to store quotes which are chosen from the user's books by user. Its columns are:
 
 
 1. QUOTE_ID
+
 - It is serial primary key, so it is incremented automatically.
+
 - It holds quote's id.
 
 2. QUOTE_CONTENT
+
 - Its type is text and it can not be NULL.
+
 - It stores the quote content.
 
 3. QUOTE_BOOK_ID
+
 - Its type is integer and it references BOOK table.
+
 - It is used for determining the book that the quote is taken from.
 
 4. QUOTE_USER_ID
+
 - Its type is integer and it references USERS table.
+
 - It holds the user id who quoted something from the books.
 
+
 *Query for creating QUOTE table*
-.. code-block::python
+
+
+.. code-block:: python
 
     query = """CREATE TABLE IF NOT EXISTS QUOTE(
                             QUOTE_ID SERIAL PRIMARY KEY,
@@ -687,9 +777,11 @@ QUOTE table is used to store quotes which are chosen from the user's books by us
 
 
 *add_quote Method*
+
 This method adds quote to QUOTE table and new quote's information are sent as parameter.
 
-.. code-block::python
+
+.. code-block:: python
 
     def add_quote(cls, quote_content, quoted_book_id, quote_user_id):
         with dbapi2.connect(database.config) as connection:
@@ -712,9 +804,11 @@ This method adds quote to QUOTE table and new quote's information are sent as pa
             cursor.close()
 
 *update_quote Method*
+
 This method updates quote in QUOTE table and quote's updated information are sent as parameter.
 
-.. code-block::python
+
+.. code-block:: python
 
     def update_quote(cls, quote_id, new_quote_content, new_quoted_book):
         with dbapi2.connect(database.config) as connection:
@@ -735,9 +829,11 @@ This method updates quote in QUOTE table and quote's updated information are sen
             cursor.close()
 
 *delete_quote Method*
+
 This method deletes quote with given id from QUOTE table.
 
-.. code-block::python
+
+.. code-block:: python
 
     def delete_quote(cls, quote_id):
         with dbapi2.connect(database.config) as connection:
@@ -757,9 +853,11 @@ This method deletes quote with given id from QUOTE table.
             cursor.close()
 
 *select_quotes Method*
+
 This method selects quotes of user with given user id from QUOTE table.
 
-.. code-block::python
+
+.. code-block:: python
 
     def select_quotes(cls, quote_user_id):
         with dbapi2.connect(database.config) as connection:
@@ -790,14 +888,15 @@ This method selects quotes of user with given user id from QUOTE table.
             return quote_list
 
 Pages of Knitter
-================
+----------------
 
 I implemented home page and books page for Knitter.
 
 Function for Home Page in handlers.py
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block::python
+
+.. code-block:: python
 
     @site.route('/home/<int:user_id>', methods=['GET', 'POST'])
     @login_required
@@ -865,9 +964,10 @@ Function for Home Page in handlers.py
 
 
 Function for Books Page in handlers.py
---------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. code-block::python
+
+.. code-block:: python
 
     @site.route('/books_page/<int:user_id>', methods=['GET', 'POST'])
     @login_required
