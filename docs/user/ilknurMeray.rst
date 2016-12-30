@@ -35,8 +35,8 @@ There are not any "..." button in the knots which belong to user's followings fo
 
     *Delete and update buttons of a knot*
 
-    If the user clicks the "Delete This Knot" button, selected knot is removed.
-    If the user clicks the "Update This Knot" button, a modal is opened and user can enter new content of the knot and update it.
+If the user clicks the "Delete This Knot" button, selected knot is removed.
+If the user clicks the "Update This Knot" button, a modal is opened and user can enter new content of the knot and update it.
 
 .. figure:: /images/home_page_update_knot.png
     :alt: home page
