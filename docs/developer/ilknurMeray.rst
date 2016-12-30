@@ -32,8 +32,8 @@ USER_INTERACTION table is used to hold following/follower relation between users
                     )"""
 
 
-*add_user_interaction Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*add_user_interaction Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method adds a row to USER_INTERACTION table which includes the information of current user's id and her/his followed user's id.
 
@@ -60,8 +60,8 @@ This method adds a row to USER_INTERACTION table which includes the information 
             cursor.close()
 
 
-*delete_user_interaction Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*delete_user_interaction Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method deletes a row from USER_INTERACTION table when current user unfollows the other user.
 
@@ -85,8 +85,8 @@ This method deletes a row from USER_INTERACTION table when current user unfollow
             cursor.close()
 
 
-*select_followings_from_user_interaction Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*select_followings_from_user_interaction Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method selects the followings' id from USER_INTERACTION table.
 
@@ -114,8 +114,8 @@ This method selects the followings' id from USER_INTERACTION table.
             return followings_ids
 
 
-*select_followers_from_user_interaction Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*select_followers_from_user_interaction Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method selects the followers' id from USER_INTERACTION table.
 
@@ -144,8 +144,8 @@ This method selects the followers' id from USER_INTERACTION table.
             return followers_ids
 
 
-*select_interactions_for_search Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*select_interactions_for_search Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method selects the current user's followings and followers from USER_INTERACTION table.
 
@@ -239,8 +239,8 @@ SHELF table is used to store user's shelf. Its columns are:
                     )"""
 
 
-*add_shelf Method*
-^^^^^^^^^^^^^^^^^^
+*add_shelf Function*
+^^^^^^^^^^^^^^^^^^^^
 
 This method adds new shelf to SHELF table. It takes new shelf's information as parameter.
 
@@ -269,8 +269,8 @@ This method adds new shelf to SHELF table. It takes new shelf's information as p
             cursor.close()
 
 
-*update_shelf_name Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+*update_shelf_name Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method is used to update shelf's name. shelf_id and new_shelf_name parameters come via form attribute in html file of books_page.
 
@@ -294,8 +294,8 @@ This method is used to update shelf's name. shelf_id and new_shelf_name paramete
             cursor.close()
 
 
-*update_main_shelf Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+*update_main_shelf Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method is used to update first shelf of the bookcase.
 
@@ -354,8 +354,8 @@ This method is used to update first shelf of the bookcase.
                 cursor.close()
 
 
-*delete_shelf Method*
-^^^^^^^^^^^^^^^^^^^^^
+*delete_shelf Function*
+^^^^^^^^^^^^^^^^^^^^^^^
 
 This method deletes shelf with given id from bookcase.
 
@@ -379,8 +379,8 @@ This method deletes shelf with given id from bookcase.
             cursor.close()
 
 
-*select_shelves Method*
-^^^^^^^^^^^^^^^^^^^^^^^
+*select_shelves Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method selects the shelves of bookcase. It sorts taken shelfs again, if one shelf's is_main value is true.
 
@@ -419,8 +419,8 @@ This method selects the shelves of bookcase. It sorts taken shelfs again, if one
             return shelf_list
 
 
-*increase_book_counter Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*increase_book_counter Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method increases book_counter value of the shelf with given id when a new book is added to this shelf.
 
@@ -444,8 +444,8 @@ This method increases book_counter value of the shelf with given id when a new b
             cursor.close()
 
 
-*decrease_book_counter Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*decrease_book_counter Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method decreases book_counter value of the shelf with given id when a book is deleted from this shelf.
 
@@ -555,8 +555,8 @@ BOOK table is used to store user's books. Its columns are:
                     )"""
 
 
-*add_book Method*
-^^^^^^^^^^^^^^^^^
+*add_book Function*
+^^^^^^^^^^^^^^^^^^^
 
 This method used to add new book to shelf with given id. New book's all information are sent as parameters to this function.
 This will increase the book_cunter of the shelf since a new book is added.
@@ -593,8 +593,8 @@ This will increase the book_cunter of the shelf since a new book is added.
             ShelfDatabaseOPS.increase_book_counter(book_shelf)
 
 
-*update_book Method*
-^^^^^^^^^^^^^^^^^^^^
+*update_book Function*
+^^^^^^^^^^^^^^^^^^^^^^
 
 This method used to update book with given book_id and user_id. Book's all information are sent as parameters to this function for update operation.
 
@@ -625,8 +625,8 @@ This method used to update book with given book_id and user_id. Book's all infor
             cursor.close()
 
 
-*find_shelf_from_id Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*find_shelf_from_id Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method is used to find shelf of the book with given id.
 
@@ -653,8 +653,8 @@ This method is used to find shelf of the book with given id.
             return book_data
 
 
-*delete_book Method*
-^^^^^^^^^^^^^^^^^^^^
+*delete_book Function*
+^^^^^^^^^^^^^^^^^^^^^^
 
 This method deletes the book with given id from BOOK table.
 
@@ -680,8 +680,8 @@ This method deletes the book with given id from BOOK table.
             cursor.close()
 
 
-*select_all_books_of_user Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*select_all_books_of_user Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When books page is opened first, all books should be viewed, so this function is used for select all booksof the user with given id in the all shelves.
 
@@ -717,8 +717,8 @@ When books page is opened first, all books should be viewed, so this function is
             return book_list
 
 
-*select_books_from_shelf Method*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*select_books_from_shelf Function*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 When user clicks to a specific shelf, all books in this shelf is shown, so this function is used for selecting all books of user with given id in the specified shelf.
 
@@ -797,8 +797,8 @@ QUOTE table is used to store quotes which are chosen from the user's books by us
                     )"""
 
 
-*add_quote Method*
-^^^^^^^^^^^^^^^^^^
+*add_quote Function*
+^^^^^^^^^^^^^^^^^^^^
 
 This method adds quote to QUOTE table and new quote's information are sent as parameter.
 
@@ -825,8 +825,8 @@ This method adds quote to QUOTE table and new quote's information are sent as pa
 
             cursor.close()
 
-*update_quote Method*
-^^^^^^^^^^^^^^^^^^^^^
+*update_quote Function*
+^^^^^^^^^^^^^^^^^^^^^^^
 
 This method updates quote in QUOTE table and quote's updated information are sent as parameter.
 
@@ -851,8 +851,8 @@ This method updates quote in QUOTE table and quote's updated information are sen
 
             cursor.close()
 
-*delete_quote Method*
-^^^^^^^^^^^^^^^^^^^^^
+*delete_quote Function*
+^^^^^^^^^^^^^^^^^^^^^^^
 
 This method deletes quote with given id from QUOTE table.
 
@@ -876,8 +876,8 @@ This method deletes quote with given id from QUOTE table.
 
             cursor.close()
 
-*select_quotes Method*
-^^^^^^^^^^^^^^^^^^^^^^
+*select_quotes Function*
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method selects quotes of user with given user id from QUOTE table.
 
