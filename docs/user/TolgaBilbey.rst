@@ -4,7 +4,7 @@ Parts Implemented by Tolga Bilbey
 Events Page:
 -----------------------
 
-.. figure:: /images/events-home.png
+.. image:: /images/events-home.png
     :alt: events page
     :width: 800px
     :height: 400px
@@ -52,13 +52,13 @@ To see the events which is created by groups:
 
 1. Click the tab named Group Events.
 
-.. figure:: /images/events-groups.png
+.. image:: /images/events-groups.png
     :alt: group events page
     :width: 800px
     :height: 400px
     :align: center
 
-    Group Events Screen
+.. centered:: *Group Events Screen*
 
 User can update an his/her event or group event.
 
@@ -72,13 +72,13 @@ To update selected event:
 
 4. Click the submit button.
 
-.. figure:: /images/event-update.png
+.. image:: /images/event-update.png
     :alt: update event page
     :width: 800px
     :height: 400px
     :align: center
 
-    Update Event Screen
+.. centered:: *Update Event Screen*
 
 User can delete an his/her event or group event.
 
@@ -91,13 +91,13 @@ To delete an event:
 Settings Page:
 -------------------------
 
-.. figure:: /images/account-settings.png
+.. image:: /images/account-settings.png
     :alt: account settings page
     :width: 800px
     :height: 400px
     :align: center
 
-    Account Settings Screen
+.. centered:: *Account Settings Screen*
  
 User can see the little info of his/her account on the left top of the screen and also select the desired tab from under the info.
 
@@ -109,13 +109,13 @@ In the Account Settings tab:
 
 3. User can also delete his/her account with clicking  Delete my account link on the bottom.
 
-.. figure:: /images/delete-account.png
+.. image:: /images/delete-account.png
     :alt: delete account page
     :width: 800px
     :height: 400px
     :align: center
 
-    Delete Account Screen
+.. centered:: *Delete Account Screen*
 
 In the Change Password tab:
 
@@ -127,11 +127,11 @@ User can change password with these steps:
 
 3. User clicks the submit button.
 
-.. figure:: /images/password-setting.png
+.. image:: /images/password-setting.png
     :alt: password settings page
     :width: 800px
     :height: 400px
     :align: center
 
-    Password Settings Screen
+.. centered:: *Password Settings Screen*
 

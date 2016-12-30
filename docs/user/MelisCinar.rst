@@ -8,7 +8,7 @@ Messages Page
 
 Messages entity includes message content with user identifications, date information and message identification. User can select the other users in order to send message from a list of friends’ names.
 
-.. figure:: /images/messages1.png
+.. image:: /images/messages1.png
     :alt: messages page
     :width: 800px
     :height: 200px
@@ -16,13 +16,13 @@ Messages entity includes message content with user identifications, date informa
  
 All of the conversations between current user and other users will be listed on the messages page automatically. User can select one conversation from the main page in order to show the whole chat.
  
-.. figure:: /images/messages2.png
+.. image:: /images/messages2.png
     :alt: messages page
     :width: 800px
     :height: 400px
     :align: center
 
-.. figure:: /images/messages3.png
+.. image:: /images/messages3.png
     :alt: messages page
     :width: 600px
     :height: 400px
@@ -30,18 +30,18 @@ All of the conversations between current user and other users will be listed on 
 
 Deleting a message section included every message component. User can click the “delete” button to delete the whole conversation from messages.
 
-.. figure:: /images/messages4.png
+.. image:: /images/messages4.png
     :alt: messages page
     :width: 800px
     :height: 100px
     :align: center
  
 Groups Page
----------------------
+-----------
 
 Users create groups in order to find friends which shares same ideas. Groups can be created from the settings page which can be reached from the user tab’s settings section in the navigation bar.
 
-.. figure:: /images/groups.png
+.. image:: /images/groups.png
     :alt: groups page
     :width: 800px
     :height: 400px
@@ -49,7 +49,7 @@ Users create groups in order to find friends which shares same ideas. Groups can
  
 Groups includes name, description and cover picture values. User must enter this fields and adds the groups into the database.
  
-.. figure:: /images/groups1.png
+.. image:: /images/groups1.png
     :alt: groups page
     :width: 800px
     :height: 400px
@@ -57,7 +57,7 @@ Groups includes name, description and cover picture values. User must enter this
 
 After a successful adding operation, message occurs in the settings page.
  
-.. figure:: /images/groups3.png
+.. image:: /images/groups3.png
     :alt: groups page
     :width: 800px
     :height: 400px
@@ -65,7 +65,7 @@ After a successful adding operation, message occurs in the settings page.
 
 Groups can be viewed and accessed in the home page.
  
-.. figure:: /images/groups4.png
+.. image:: /images/groups4.png
     :alt: groups page
     :width: 800px
     :height: 400px
@@ -73,7 +73,7 @@ Groups can be viewed and accessed in the home page.
 
 Every user becomes participant of the his/her own created group.
  
-.. figure:: /images/groups5.png
+.. image:: /images/groups5.png
     :alt: groups page
     :width: 800px
     :height: 400px
@@ -81,7 +81,7 @@ Every user becomes participant of the his/her own created group.
 
 Other users can join group from the main page’s join button.
  
-.. figure:: /images/groups6.png
+.. image:: /images/groups6.png
     :alt: groups page
     :width: 800px
     :height: 400px
@@ -89,7 +89,7 @@ Other users can join group from the main page’s join button.
 
 Users can update the group content and delete content from the settings section of the group page.
  
-.. figure:: /images/groups7.png
+.. image:: /images/groups7.png
     :alt: groups page
     :width: 800px
     :height: 400px
