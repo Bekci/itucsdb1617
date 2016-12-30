@@ -1,8 +1,30 @@
 Parts Implemented by Ozan Ata
 ================================
 
-Getting the Notifications
+Notifications Table
 -----------------------------
+Notifications table is the source of notifications and consist of following rows
+
+1. Knot_ID
+
+- Its type is integer and it references KNOTS table.
+
+- It is used to hold knot's id.
+
+2. USER_ID
+
+- Its type is integer and it references USERS table.
+
+- It is used to hold current action soruce user's id.
+
+3. IS_LIKE
+
+- Its type is boolean
+
+- It is used to hold decide whether the action is like or reknot
+
+** Getting the Notifications
+
 To get the notifications, we need to keep track of the knot(target), user(action_source) and action_type(is it a like or not)
 we keep those in a table called like_reknot.
 
@@ -39,8 +61,7 @@ And to get notifications we use the following query to get all the notifications
         
 How this query works? It selects knots with active_user.id as knot.owner.id, with two inner join, returns the target_knot's information and action_source user's information.
 
-Like and Re-Knot
------------------------------
+** Like and Re-Knot
 
 How like and re-knot works? When the active user clicks the like button it runs the following script
 
@@ -112,8 +133,11 @@ When a user votes a poll, it is stored in a relation table named user_poll. By d
 
     cursor.execute(query, (poll_id,user_id))
     
-Following and Unfollowing Users
+Operations on Users Table
 -----------------------------
+Knitter is a social media website, and social medias are based on the user interaction. User's can follow, unfollow each other.
+
+** Following and Unfollowing Users
 
 Following and unfollowing processes are handled on the user_interaction table. It only has two columns called base_user_id and target_user_id ,in other words action_source and action_target. Follow and unfollow operations insert  a new relation to this table or removes a row from this table.
 
@@ -134,9 +158,9 @@ Following and unfollowing processes are handled on the user_interaction table. I
     cursor.execute(query, (user_id, target_user))
     
     
-Get Followings
------------------------------
-In user_profile page, user can see the users that he/she already follow. Followings are selected with the following query
+** Get Followings
+
+In user_profile page, user can see the users that he/she already follow. Followings are selected with the following query. To get the details of the user that active_user follows, we use a simple inner join to match the users's who the active_user follows to the user's id in users table.
 
 .. code-block:: python
 
@@ -148,9 +172,9 @@ In user_profile page, user can see the users that he/she already follow. Followi
     cursor.execute(query, (user_id,))
 
 
-Get Followers
------------------------------
-In user_profile page, user can see the users that already follow him/her. Followers are selected with the following query
+** Get Followers
+
+In user_profile page, user can see the users that already follow him/her. Followers are selected with the following query.To get the details of the user that follows active_user, we use a simple inner join to match the users's who follows the active_user to the user's id in users table.
 
 .. code-block:: python
 
@@ -162,9 +186,12 @@ In user_profile page, user can see the users that already follow him/her. Follow
     cursor.execute(query, (user_id,))
                 
                 
-                
-Get Likes
+Operations on Knots Table
 -----------------------------
+In knitter users can access the knots of people that he/she liked.
+
+** Get Likes
+
 In user_profile page, user can see the knots that he/she liked before. Liked knots selected with the following query
 
 .. code-block:: python
