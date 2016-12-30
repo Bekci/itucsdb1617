@@ -47,7 +47,8 @@ This method adds a row to USER_INTERACTION table which includes the information 
 
             # ----------- ilknur Meray - USER_INTERACTION TABLE -----------------------
 
-            query = """INSERT INTO USER_INTERACTION(BASE_USER_ID, TARGET_USER_ID) VALUES(
+            query = """INSERT INTO USER_INTERACTION(BASE_USER_ID, TARGET_USER_ID)
+            VALUES(
                                                     %s,
                                                     %s
                         )"""
@@ -95,7 +96,8 @@ This method selects the followings' id from USER_INTERACTION table.
 
 .. code-block:: python
 
-    def select_followings_from_user_interaction(cls, base_id):  # base id keeps followers
+    def select_followings_from_user_interaction(cls, base_id):
+    # base id keeps followers
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -125,7 +127,8 @@ This method selects the followers' id from USER_INTERACTION table.
 
 .. code-block:: python
 
-    def select_followers_from_user_interaction(cls, target_id):  # target_id keeps followings
+    def select_followers_from_user_interaction(cls, target_id):
+    # target_id keeps followings
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -258,7 +261,8 @@ This method adds new shelf to SHELF table. It takes new shelf's information as p
             book_counter = 0
             # ----------- ilknur Meray - SHELF TABLE -----------------------
 
-            query = """INSERT INTO SHELF (SHELF_NAME, IS_MAIN, BOOK_COUNTER, SHELF_USER_ID) VALUES (
+            query = """INSERT INTO SHELF (SHELF_NAME, IS_MAIN, BOOK_COUNTER,
+                       SHELF_USER_ID) VALUES (
                                                 %s,
                                                 %s,
                                                 %s,
@@ -416,7 +420,8 @@ This method selects the shelves of bookcase. It sorts taken shelfs again, if one
             for element in shelf_data:
                 shelf_list.append(
                     Shelf(shelf_id=element[0], shelf_name=element[1],
-                    is_main=element[2], book_counter=element[3], shelf_user_id=element[4]))
+                    is_main=element[2], book_counter=element[3],
+                    shelf_user_id=element[4]))
 
             for j in shelf_list:
                 if j.is_main:
@@ -575,7 +580,8 @@ This will increase the book_cunter of the shelf since a new book is added.
 
 .. code-block:: python
 
-    def add_book(cls, book_title, book_cover, book_writer, book_genre, date_read, user_rate, book_review, book_shelf, book_reader_id):
+    def add_book(cls, book_title, book_cover, book_writer, book_genre, date_read,
+                 user_rate, book_review, book_shelf, book_reader_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -710,7 +716,8 @@ When books page is opened first, all books should be viewed, so this function is
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
 
-            query = """SELECT * FROM BOOK WHERE BOOK_READER_ID=%s ORDER BY USER_RATE DESC"""
+            query = """SELECT * FROM BOOK WHERE BOOK_READER_ID=%s ORDER BY
+                        USER_RATE DESC"""
 
             book_data = []
 
@@ -728,9 +735,11 @@ When books page is opened first, all books should be viewed, so this function is
 
             for element in book_data:
                 book_list.append(
-                    Book(book_id=element[0], book_title=element[1], book_cover=element[2],
+                    Book(book_id=element[0], book_title=element[1],
+                         book_cover=element[2],
                     book_writer=element[3], book_genre=element[4],
-                         date_read=element[5], user_rate=element[6], book_review=element[7],
+                         date_read=element[5], user_rate=element[6],
+                         book_review=element[7],
                          book_shelf=element[8], book_reader_id=element[9]))
 
             return book_list
@@ -748,7 +757,8 @@ When user clicks to a specific shelf, all books in this shelf is shown, so this 
             cursor = connection.cursor()
 
             # ----------- ilknur Meray - BOOK TABLE -----------------------
-            query = """SELECT * FROM BOOK WHERE BOOK_SHELF_ID=%s AND BOOK_READER_ID = %s"""
+            query = """SELECT * FROM BOOK WHERE BOOK_SHELF_ID=%s
+                        AND BOOK_READER_ID = %s"""
 
             book_data = []
 
@@ -766,8 +776,12 @@ When user clicks to a specific shelf, all books in this shelf is shown, so this 
 
             for element in book_data:
                 book_list.append(
-                    Book(book_id=element[0], book_title=element[1], book_cover=element[2], book_writer=element[3], book_genre=element[4],
-                         date_read=element[5], user_rate=element[6], book_review=element[7], book_shelf=element[8], book_reader_id=element[9]))
+                    Book(book_id=element[0], book_title=element[1],
+                    book_cover=element[2], book_writer=element[3],
+                    book_genre=element[4],
+                         date_read=element[5], user_rate=element[6],
+                         book_review=element[7], book_shelf=element[8],
+                         book_reader_id=element[9]))
 
             return book_list
 
@@ -982,13 +996,17 @@ Function for Home Page in handlers.py :
                 KnotDatabaseOPS.delete_knot(request.form['delete'])
                 return redirect(url_for('site.home_page', user_id=user.id))
             elif 'update_knot' in request.form:
-                KnotDatabaseOPS.update_knot(user.id, request.form['update_knot_content'],
-                 0, 0, False, datetime.now().date().isoformat(), request.form['update_knot'])
+                KnotDatabaseOPS.update_knot(user.id,
+                                            request.form['update_knot_content'],
+                                             0, 0, False,
+                                             datetime.now().date().isoformat(),
+                                             request.form['update_knot'])
                 return redirect(url_for('site.home_page', user_id=user.id))
             elif 'search' in request.form:
                 query = request.form['search_bar']
                 print(query)
-                return redirect(url_for('site.search_page', user_id=user.id, query=query))
+                return redirect(url_for('site.search_page', user_id=user.id,
+                                        query=query))
             elif 'like' in request.form:
                 is_like = NotificationDatabaseOPS.check_like(request.form['like'],
                                                              user.id, True)

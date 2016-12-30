@@ -66,7 +66,8 @@ This method updates the user in database. It takes user columns as parameters.
 
 .. code-block:: python
 
-    def update_user(cls, username, password, profile_picture, cover_picture, mail_address):
+    def update_user(cls, username, password, profile_picture, cover_picture,
+                    mail_address):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -160,8 +161,8 @@ users and in the third query we find if we follow those users or not.
                        ON USERS.USER_ID=USER_INTERACTION.BASE_USER_ID
                        WHERE USERS.USERNAME LIKE %s
                        GROUP BY
-                       USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC, USERS.PROFILE_PIC,
-                       USER_INTERACTION.BASE_USER_ID
+                       USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC,
+                       USERS.PROFILE_PIC, USER_INTERACTION.BASE_USER_ID
                        ORDER BY USERS.USER_ID
                     """
 
@@ -201,7 +202,8 @@ users and in the third query we find if we follow those users or not.
             query = """SELECT USERS.USER_ID FROM USERS
                        INNER JOIN USER_INTERACTION
                        ON USERS.USER_ID=USER_INTERACTION.TARGET_USER_ID
-                       WHERE USER_INTERACTION.BASE_USER_ID=%s AND (USERS.USERNAME LIKE %s)
+                       WHERE USER_INTERACTION.BASE_USER_ID=%s
+                       AND (USERS.USERNAME LIKE %s)
                     """
 
             people_that_i_follow = []
@@ -228,10 +230,11 @@ users and in the third query we find if we follow those users or not.
                 i_am_following = row[0] in i_followed
 
                 user_list.append(
-                    SearchedUser(id=row[0], username=row[1], follower_number=followers[i],
+                    SearchedUser(id=row[0], username=row[1],
+                                 follower_number=followers[i],
                                  following_number=row[4], profile_picture=row[3],
                                  cover_picture=row[2], maybe_i_am=i_am_following
-                                 )
+                           )
                 )
 
                 i+=1
@@ -282,7 +285,8 @@ User Detail Table references to Users Table with username column and references 
 
 The columns of User Detail table are given below.
 
-* USERNAME varchar(20) REFERENCES USERS(USERNAME) ON DELETE CASCADE ON UPDATE CASCADE
+* USERNAME varchar(20) REFERENCES USERS(USERNAME)
+ON DELETE CASCADE ON UPDATE CASCADE
    This column references to Users table
 * U_NAME varchar(30) NOT NULL
    Real name of user is kept here
@@ -435,7 +439,8 @@ which is on the left side of page.
 
 .. code-block:: python
 
-    def add_item(cls, item_name, item_picture, item_price, item_description, item_currency):
+    def add_item(cls, item_name, item_picture, item_price, item_description,
+                 item_currency):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -472,7 +477,8 @@ selects item by newest order.
             cursor = connection.cursor()
 
             query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS,
-            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
+            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS
+            AS u
                            INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                            INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                            INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -521,7 +527,8 @@ The function shown below selects item by currency value.
             cursor = connection.cursor()
 
             query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS,
-            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
+            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS
+            AS u
                                INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                INNER JOIN CURRENCIES AS c
@@ -619,15 +626,18 @@ The function shown below selects item by their price. It shows items which have 
             cursor = connection.cursor()
 
             query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS,
-            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
-                                           INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
+            s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS
+            AS u
+                                           INNER JOIN SALES AS s
+                                           ON s.SELLER_ID=u.USER_ID
                                            INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                            INNER JOIN CURRENCIES AS c
                                            ON i.ITEM_CURRENCY=c.CURRENCY_NAME
                                            INNER JOIN CITIES ON s.CITY_ID=CITIES.CITY_ID
                                            WHERE u.USERNAME<>%s
                                            AND
-                                           i.ITEM_PRICE * c.CURRENCY_TO_TL < %s * (SELECT CURRENCY_TO_TL
+                                           i.ITEM_PRICE * c.CURRENCY_TO_TL <
+                                           %s * (SELECT CURRENCY_TO_TL
                                            FROM CURRENCIES WHERE CURRENCY_NAME=%s)
                                            """
 
@@ -674,7 +684,8 @@ The columns of Sale table are given below.
    Seller id which references to Users table is kept here
 * ITEM_ID INTEGER REFERENCES ITEMS(ITEM_ID) ON DELETE CASCADE
    Item id which references to Items table is kept here
-* CITY_ID INTEGER REFERENCES CITIES(CITY_ID) ON DELETE CASCADE ON UPDATE CASCADE
+* CITY_ID INTEGER REFERENCES CITIES(CITY_ID)
+ON DELETE CASCADE ON UPDATE CASCADE
    City id which references to Cities table is kept here
 * START_DATE date NOT NULL
    The date that the sale is added
@@ -694,7 +705,8 @@ which is on the left side of page. First item is added then *add_sale()* functio
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """INSERT INTO SALES (SELLER_ID, ITEM_ID, CITY_ID, START_DATE, END_DATE)
+            query = """INSERT INTO SALES (SELLER_ID, ITEM_ID, CITY_ID,
+            START_DATE, END_DATE)
             VALUES (
                                               %s,
                                               %s,
@@ -971,7 +983,8 @@ I have added Bootstrap-Validator JS library for a great-looking form validation 
 
 .. code-block:: javascript
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/
+                0.11.5/validator.min.js"></script>
 
 Also for profile page I use some scripts for navigation bar which user can use for checking followings, followers and
 likes.
@@ -1095,7 +1108,8 @@ For login page in handlers.py file, the function below is defined.
                 if user and user != -1:
                     if request.form['knotword'] == user.password:
                         login_user(user)
-                        return redirect(url_for('site.user_profile_page', user_id=user.id))
+                        return redirect(url_for('site.user_profile_page',
+                                        user_id=user.id))
 
             return render_template('login_page.html', error=True, signedin=False)
 
@@ -1107,7 +1121,8 @@ For sign up page in handlers.py file, the function below is defined.
     def signup_page():
         if request.method == 'GET':
             all_cities = CityDatabaseOPS.select_all_cities()
-            return render_template('signup_page.html', signedin=False, cities=all_cities)
+            return render_template('signup_page.html', signedin=False,
+                                    cities=all_cities)
         else:
             if 'signup' in request.form:
                 user = UserDatabaseOPS.select_user(request.form['knittername'])
@@ -1266,8 +1281,8 @@ For profile page in handlers.py file, the function below is defined.
                     UserDatabaseOPS.add_user_detail(user.username, my_name, my_surname,
                     city_id)
                 else:
-                    UserDatabaseOPS.update_user_detail(user.username, my_name, my_surname,
-                     city_id)
+                    UserDatabaseOPS.update_user_detail(user.username, my_name,
+                    my_surname, city_id)
 
                 UserDatabaseOPS.update_user(user.username, user.password,
                                             user.profile_pic, user.cover_pic,

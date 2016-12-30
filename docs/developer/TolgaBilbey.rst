@@ -64,7 +64,8 @@ In knot.py file KnotDatabaseOPS class is created and all knot related functions 
 
                 # ----------- Tolga Bilbey - KNOTS TABLE ----------------------
 
-                query = """UPDATE KNOTS SET OWNER_ID=%s, KNOT_CONTENT=%s, LIKE_COUNTER=%s,
+                query = """UPDATE KNOTS SET OWNER_ID=%s, KNOT_CONTENT=%s,
+                                LIKE_COUNTER=%s,
                                 REKNOT_COUNTER=%s, IS_GROUP=%s, POST_DATE=%s
                                 WHERE KNOT_ID=%s"""
                 try:
@@ -487,9 +488,11 @@ Event Participant table is created for Events table. It stores the participant o
 
 The columns of Event Participant table is given below.
 
-* EVENT_ID INTEGER NOT NULL REFERENCES EVENTS(EVENT_ID) ON DELETE CASCADE ON UPDATE CASCADE
+* EVENT_ID INTEGER NOT NULL REFERENCES EVENTS(EVENT_ID)
+ON DELETE CASCADE ON UPDATE CASCADE
     This column kepts the event information.
-* PARTICIPANT_ID INTEGER NOT NULL REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+* PARTICIPANT_ID INTEGER NOT NULL REFERENCES USERS(USER_ID)
+ON DELETE CASCADE ON UPDATE CASCADE
     This column stores the user information that is a participant of an event.
 
 *Adding Participant*

@@ -143,7 +143,8 @@ When user wanted to see the message coming from different user, we must take the
                 cursor.close()
  
             if message_data:
-                return Message(message_data[0], message_data[1], message_data[2], message_data[3], message_data[4])
+                return Message(message_data[0], message_data[1], message_data[2],
+                                message_data[3], message_data[4])
             else:
                 return -1
 
@@ -161,7 +162,8 @@ Related method’s code blow:
             cursor = connection.cursor()
  
             query = """SELECT * FROM MESSAGES WHERE FROM_USER_ID=%s
-            AND TO_USER_ID=%s OR FROM_USER_ID=%s AND TO_USER_ID=%s ORDER BY MESSAGE_DATE"""
+            AND TO_USER_ID=%s OR FROM_USER_ID=%s AND TO_USER_ID=%s
+            ORDER BY MESSAGE_DATE"""
  
             try:
                 cursor.execute(query, (from_user_id, to_user_id, to_user_id,
@@ -192,7 +194,8 @@ This method includes messages sent to another user selecting operation by sendin
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
  
-            query = """SELECT * FROM MESSAGES WHERE FROM_USER_ID=%s ORDER BY MESSAGE_DATE"""
+            query = """SELECT * FROM MESSAGES WHERE FROM_USER_ID=%s
+                        ORDER BY MESSAGE_DATE"""
  
             try:
                 cursor.execute(query, (from_user_id, ))
