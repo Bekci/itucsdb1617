@@ -3,8 +3,8 @@ Parts Implemented by Nurşah Melis Çinar
 
 Knitter’s Messages and Groups parts are consist of the basic operations on a social media website specialties. Messages of the users can be accessed from the navigation bar while groups and group knots are accessible from the home page.
 
-Messages
------------------
+Messages Page
+-------------------------
 
 Messages entity includes message content with user identifications, date information and message identification. User can select the other users in order to send message from a list of friends’ names.
 
@@ -36,8 +36,8 @@ Deleting a message section included every message component. User can click the 
     :height: 100px
     :align: center
  
-Groups
---------------
+Groups Page
+---------------------
 
 Users create groups in order to find friends which shares same ideas. Groups can be created from the settings page which can be reached from the user tab’s settings section in the navigation bar.
 
@@ -100,3 +100,5 @@ Quitting from the group can be performed by the clicking joined button again.
 Joined users can send knots on the group page from the text area.
  
 Also attended groups can add events which will be included in the events part by Tolga Bilbey.
+
+

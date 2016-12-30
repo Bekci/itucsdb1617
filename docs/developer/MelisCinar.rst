@@ -347,7 +347,7 @@ Method’s code is below:
 
 .. code-block:: python
 
-def delete_group(cls,group_id):
+ def delete_group(cls,group_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM GROUPS WHERE GROUP_ID= %s"""
@@ -405,7 +405,7 @@ This method finds the users which has been already joined to group in order to l
 
 .. code-block:: python
 
-def select_group_participation(cls, group_id):
+ def select_group_participation(cls, group_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             query= """SELECT * FROM GROUP_PARTICIPANTS WHERE GROUP_ID=%s"""
@@ -434,7 +434,7 @@ This method takes parameter user Id and returns the user's participated groups.
 
 .. code-block:: python
 
-def select_participated_groups(cls, user_id):
+ def select_participated_groups(cls, user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
@@ -465,7 +465,7 @@ Users can quit from a group by clicking the join button of the group page. This 
 
 .. code-block:: python
 
-def exit_group_participation(cls, group_id, user_id):
+ def exit_group_participation(cls, group_id, user_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM GROUP_PARTICIPANTS WHERE PARTICIPANT_ID=%s AND GROUP_ID=%s """
@@ -525,7 +525,7 @@ Knots can be selected by sending the group id as a parameter an returns the knot
 
 .. code-block:: python
 
-def select_group_knot(cls, group_id):
+ def select_group_knot(cls, group_id):
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
             query= """SELECT * FROM GROUP_KNOT WHERE GROUP_ID=%s"""
