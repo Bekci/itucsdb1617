@@ -21,7 +21,7 @@ These methods removes the elements from tables according to given parameters.
 Basically it creates the tables if they do not exist already in the system.
 
 Messages Implementation
-=====================
+---------------------------
 
 Messages table has been designed for keeping private interactions between users. In order to use messages database operations, messages class has been defined at the beginning with parameters in object oriented method.
 
@@ -139,7 +139,6 @@ When user wanted to see the message coming from different user, we must take the
                 return -1
 
 *select_messages_for_chat* Method
-
 ---------------------------------------------------------------
 User can see the whole conversation between him/her and selected user by clicking name of the user. So the messages must be pulled from the database by giving user ID’s.
 Related method’s code blow:
@@ -198,7 +197,7 @@ This method includes messages sent to another user selecting operation by sendin
             return message_list
 
 Groups Implementation
-===================
+---------------------------
 
 Groups forms important part of the Knitter implementation. It helps users to find new friends from joined groups.
 
