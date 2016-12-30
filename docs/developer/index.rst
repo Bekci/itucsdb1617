@@ -41,6 +41,10 @@ page.
         database.create_tables()
         return redirect(url_for('site.login_page'))
 
+
+
+.. note:: We did not create a method to drop tables. We just use drop database command from pgAdmin if we need to.
+
 The tables are created in *create_tables()* function of database class. In this function all tables are created in order
 we first created tables which do not reference to any other table such as User table. These tables constitute the main
 structure. Creation of tables can be seen below.
