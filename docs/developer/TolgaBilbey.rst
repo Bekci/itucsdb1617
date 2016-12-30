@@ -10,7 +10,7 @@ The columns of Knots table are given below.
 
 * KNOT_ID SERIAL PRIMARY KEY
     This is serial primary key for knots
-*  OWNER_ID INTEGER NOT NULL REFERENCES USERS(USER_ID) ON DELETE CASCADE ON UPDATE CASCADE
+*  OWNER_ID INTEGER NOT NULL REFERENCES USERS(USER_ID)
     Owner information kept by using foreign key
 *  KNOT_CONTENT TEXT
      Content of knot is kept here
