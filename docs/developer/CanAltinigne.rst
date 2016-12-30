@@ -40,7 +40,8 @@ This method inserts the new user to database. It takes user columns as parameter
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """INSERT INTO USERS (USERNAME, USER_PASSWORD, PROFILE_PIC, COVER_PIC, MAIL_ADDRESS, REGISTER_DATE) VALUES (
+            query = """INSERT INTO USERS (USERNAME, USER_PASSWORD, PROFILE_PIC, COVER_PIC, MAIL_ADDRESS, REGISTER_DATE)
+            VALUES (
                                               %s,
                                               %s,
                                               %s,
@@ -149,11 +150,13 @@ users and in the third query we find if we follow those users or not.
 
             str = "%{}%".format(username)
 
-            query = """SELECT USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC, USERS.PROFILE_PIC, COUNT(USER_INTERACTION.BASE_USER_ID) FROM USERS
+            query = """SELECT USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC, USERS.PROFILE_PIC,
+            COUNT(USER_INTERACTION.BASE_USER_ID) FROM USERS
                        INNER JOIN USER_DETAIL ON USERS.USERNAME=USER_DETAIL.USERNAME
                        LEFT JOIN USER_INTERACTION ON USERS.USER_ID=USER_INTERACTION.BASE_USER_ID
                        WHERE USERS.USERNAME LIKE %s
-                       GROUP BY USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC, USERS.PROFILE_PIC, USER_INTERACTION.BASE_USER_ID
+                       GROUP BY USERS.USER_ID, USERS.USERNAME, USERS.COVER_PIC, USERS.PROFILE_PIC,
+                       USER_INTERACTION.BASE_USER_ID
                        ORDER BY USERS.USER_ID
                     """
 
@@ -392,7 +395,7 @@ which is under the profile picture.
             cursor.close()
 
 Item Table & Functions
------------------------------
+----------------------
 Item Table references to Currency Table with item currency column.
 
 The columns of Item table are given below.
@@ -452,7 +455,8 @@ selects item by newest order.
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*,
+            CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                            INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                            INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                            INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -498,7 +502,8 @@ The function shown below selects item by currency value.
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*,
+            CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                                INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -543,7 +548,8 @@ The function shown below selects item by their location.
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*,
+            CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                                    INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                    INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                    INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
@@ -588,13 +594,15 @@ The function shown below selects item by their price. It shows items which have 
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*,
+            CITIES.CITY_NAME, CITIES.COUNTRY FROM USERS AS u
                                            INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                                            INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
                                            INNER JOIN CURRENCIES AS c ON i.ITEM_CURRENCY=c.CURRENCY_NAME
                                            INNER JOIN CITIES ON s.CITY_ID=CITIES.CITY_ID
                                            WHERE u.USERNAME<>%s
-                                           AND i.ITEM_PRICE * c.CURRENCY_TO_TL < %s * (SELECT CURRENCY_TO_TL FROM CURRENCIES WHERE CURRENCY_NAME=%s)
+                                           AND i.ITEM_PRICE * c.CURRENCY_TO_TL < %s * (SELECT CURRENCY_TO_TL FROM
+                                           CURRENCIES WHERE CURRENCY_NAME=%s)
                                            """
 
             user_data = []
@@ -729,7 +737,8 @@ This method selects the sale that a user created. It takes the username as param
         with dbapi2.connect(database.config) as connection:
             cursor = connection.cursor()
 
-            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*, CITIES.CITY_NAME, CITIES.COUNTRY
+            query = """SELECT s.SALE_ID, u.USERNAME, u.PROFILE_PIC, u.MAIL_ADDRESS, s.START_DATE, s.END_DATE, i.*,
+            CITIES.CITY_NAME, CITIES.COUNTRY
                        FROM USERS AS u
                        INNER JOIN SALES AS s ON s.SELLER_ID=u.USER_ID
                        INNER JOIN ITEMS AS i ON s.ITEM_ID=i.ITEM_ID
@@ -778,7 +787,11 @@ The columns of City table are given below.
 * CITY_NAME varchar(50) NOT NULL
    City name is kept here
 * DISTANCE_TO_CENTER integer NOT NULL
-   This column has a funny story. I was trying to write a item finding function which finds the closest items to users. So I give this value to every cities. There is a function named *select_closest_items()* in sales.py. I tried to find closest items by benefiting this variable. Then I realized we live on Earth. I need at least two coordinates to define specific location. Because I am ashamed, I did not put that function in documentation and it was a very sad moment when I realized the situation :)
+   This column has a funny story. I was trying to write a item finding function which finds the closest items to users.
+   So I give this value to every cities. There is a function named *select_closest_items()* in sales.py.
+   I tried to find closest items by benefiting this variable. Then I realized we live on Earth.
+   I need at least two coordinates to define specific location. Because I am ashamed, I did not put that function
+   in documentation and it was a very sad moment when I realized the situation :)
 * COUNTRY varchar(3) NOT NULL
    Country code is kept here
 
@@ -1113,7 +1126,8 @@ For sales page in handlers.py file, the function below is defined.
                                          request.form['item_price_form'],
                                          request.form['item_description_form'], request.form['item_change_currency'])
 
-                SaleDatabaseOPS.add_sale(user_id, SaleDatabaseOPS.select_new_item_id(request.form['item_name_form'], request.form['item_picture_form'],
+                SaleDatabaseOPS.add_sale(user_id, SaleDatabaseOPS.select_new_item_id(request.form['item_name_form'],
+                request.form['item_picture_form'],
                                                                                      request.form['item_price_form']),
                                          my_city.id, request.form['sale_end_date'])
                 my_item_list = SaleDatabaseOPS.select_sales_of_a_user(user.username)
@@ -1142,9 +1156,11 @@ For sales page in handlers.py file, the function below is defined.
                 elif request.form['choose_search'] == 'closest':
                     my_item_list = SaleDatabaseOPS.select_closest_items(user.username, my_city.id)
                 elif request.form['choose_search'] == 'price':
-                    my_item_list = SaleDatabaseOPS.select_items_by_price(user.username, request.form['keyword'], request.form['currency_select'])
+                    my_item_list = SaleDatabaseOPS.select_items_by_price(user.username, request.form['keyword'],
+                    request.form['currency_select'])
                 elif request.form['choose_search'] == 'currency':
-                    my_item_list = SaleDatabaseOPS.select_items_by_currency(request.form['currency_select'], user.username)
+                    my_item_list = SaleDatabaseOPS.select_items_by_currency(request.form['currency_select'],
+                    user.username)
                 elif request.form['choose_search'] == 'place':
                     my_item_list = SaleDatabaseOPS.select_items_by_place(request.form['city_select'])
                 elif request.form['choose_search'] == 'newest':
@@ -1152,7 +1168,8 @@ For sales page in handlers.py file, the function below is defined.
 
 
         return render_template('sales_knitter.html', signedin=True, user=user, real_name=real_name,
-                                   my_city=my_city, cities=cities, currency_list=currency_list, my_item_list=my_item_list,isSearched=_isSearched)
+                                   my_city=my_city, cities=cities, currency_list=currency_list,
+                                   my_item_list=my_item_list, isSearched=_isSearched)
 
 For profile page in handlers.py file, the function below is defined.
 
